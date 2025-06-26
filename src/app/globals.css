@@ -1,26 +1,221 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-background: oklch(0.99 0.0146 98.28);
+    --color-foreground: oklch(0.2 0.0079 285.67);
+    --color-card: oklch(0.98 0.006 100);
+    --color-foreground-secondary: oklch(0.5 0.01 270);
+    --color-border: oklch(0.85 0.008 270);
+    --color-focus-ring: oklch(0.5 0.2 250);
+    --color-disabled: oklch(0.85 0.01 260);
+    --color-hover: oklch(0.92 0.02 260);
+
+    /* button status */
+    --color-button: oklch(0.5461 0.2152 262.88);
+    --color-button-foreground: oklch(0.99 0.0146 98.28);
+    --color-button-ghost: oklch(0.5 0.02 270);
+    --color-button-ghost-foreground: oklch(0.99 0.0146 98.28);
+
+    /* badge status */
+    --color-badge: oklch(0.6 0.15 220);
+    --color-badge-foreground: oklch(0.99 0.0146 98.28);
+
+    /* feedback colors */
+    --color-destructive: oklch(0.5771 0.2152 27.33);
+    --color-destructive-foreground: oklch(0.99 0.0146 98.28);
+    --color-success: oklch(0.7227 0.192 149.58);
+    --color-success-foreground: oklch(0.99 0.0146 98.28);
+    --color-warning: oklch(0.8369 0.1644 84.43);
+    --color-warning-foreground: oklch(0.2 0.0079 285.67);
+    --color-info: oklch(0.6 0.12 200);
+    --color-info-foreground: oklch(0.99 0.0146 98.28);
+
+    --font-poppins: var(--font-poppins, sans-serif);
+    --font-montserrat: var(--font-montserrat, sans-serif);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      --color-background: oklch(0.2 0.0079 285.67);
+      --color-foreground: oklch(0.99 0.0146 98.28);
+      --color-card: oklch(0.24 0.01 285);
+      --color-foreground-secondary: oklch(0.7 0.008 270);
+      --color-border: oklch(0.3 0.01 270);
+      --color-focus-ring: oklch(0.65 0.2 275);
+      --color-disabled: oklch(0.4 0.01 260);
+      --color-hover: oklch(0.28 0.02 260);
+
+      /* button status darkmode */
+      --color-button: oklch(0.59 0.2143 289.47);
+      --color-button-foreground: oklch(0.99 0.0146 98.28);
+      --color-button-ghost: oklch(0.6 0.03 270);
+      --color-button-ghost-foreground: oklch(0.99 0.0146 98.28);
+
+      /* badge status darkmode */
+      --color-badge: oklch(0.7 0.18 280);
+      --color-badge-foreground: oklch(0.99 0.0146 98.28);
+
+      /* feedback colors darkmode */
+      --color-destructive: oklch(0.6368 0.2078 25.33);
+      --color-destructive-foreground: oklch(0.99 0.0146 98.28);
+      --color-success: oklch(0.7729 0.1535 163.22);
+      --color-success-foreground: oklch(0.99 0.0146 98.28);
+      --color-warning: oklch(0.879 0.1534 91.61);
+      --color-warning-foreground: oklch(0.2 0.0079 285.67);
+      --color-info: oklch(0.7 0.15 210);
+      --color-info-foreground: oklch(0.99 0.0146 98.28);
+    }
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentcolor);
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-poppins);
+    & :focus-visible {
+      @apply outline-none ring-2 ring-focus-ring;
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-montserrat);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-card: var(--color-card);
+  --color-foreground-secondary: var(--color-foreground-secondary);
+  --color-border: var(--color-border);
+  --color-focus-ring: var(--color-focus-ring);
+  --color-disabled: var(--color-disabled);
+  --color-hover: var(--color-hover);
+
+  --color-button: var(--color-button);
+  --color-button-foreground: var(--color-button-foreground);
+  --color-button-ghost: var(--color-button-ghost);
+  --color-button-ghost-foreground: var(--color-button-ghost-foreground);
+
+  --color-badge: var(--color-badge);
+  --color-badge-foreground: var(--color-badge-foreground);
+
+  --color-destructive: var(--color-destructive);
+  --color-destructive-foreground: var(--color-destructive-foreground);
+  --color-success: var(--color-success);
+  --color-success-foreground: var(--color-success-foreground);
+  --color-warning: var(--color-warning);
+  --color-warning-foreground: var(--color-warning-foreground);
+  --color-info: var(--color-info);
+  --color-info-foreground: var(--color-info-foreground);
+
+  --font-poppins: var(--font-poppins);
+  --font-montserrat: var(--font-montserrat);
+}
+
+@layer theme {
+  .dark {
+    --color-background: oklch(0.2 0.0079 285.67);
+    --color-foreground: oklch(0.99 0.0146 98.28);
+    --color-card: oklch(0.24 0.01 285);
+    --color-foreground-secondary: oklch(0.7 0.008 270);
+    --color-border: oklch(0.3 0.01 270);
+    --color-focus-ring: oklch(0.65 0.2 275);
+    --color-disabled: oklch(0.4 0.01 260);
+    --color-hover: oklch(0.28 0.02 260);
+
+    /* button status darkmode */
+    --color-button: oklch(0.59 0.2143 289.47);
+    --color-button-foreground: oklch(0.99 0.0146 98.28);
+    --color-button-ghost: oklch(0.6 0.03 270);
+    --color-button-ghost-foreground: oklch(0.99 0.0146 98.28);
+
+    /* badge status darkmode */
+    --color-badge: oklch(0.7 0.18 280);
+    --color-badge-foreground: oklch(0.99 0.0146 98.28);
+
+    /* feedback colors darkmode */
+    --color-destructive: oklch(0.6368 0.2078 25.33);
+    --color-destructive-foreground: oklch(0.99 0.0146 98.28);
+    --color-success: oklch(0.7729 0.1535 163.22);
+    --color-success-foreground: oklch(0.99 0.0146 98.28);
+    --color-warning: oklch(0.879 0.1534 91.61);
+    --color-warning-foreground: oklch(0.2 0.0079 285.67);
+    --color-info: oklch(0.7 0.15 210);
+    --color-info-foreground: oklch(0.99 0.0146 98.28);
+  }
+}
+
+@layer utilities {
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-foreground-secondary) var(--color-card);
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: var(--color-foreground-secondary);
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background-color: var(--color-card);
+  }
+
+  input[type='search']::-webkit-search-cancel-button {
+    display: none;
+    -webkit-appearance: none;
+  }
+
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-card) inset !important;
+    -webkit-text-fill-color: var(--color-foreground-secondary) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px var(--color-card) inset !important; /* bg desejado */
+      -webkit-text-fill-color: var(--color-card) !important;
+    }
+    .scrollbar-custom {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-foreground-secondary) var(--color-card);
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-thumb {
+      background-color: var(--color-card);
+      border-radius: 4px;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-track {
+      background-color: var(--color-foreground-secondary);
+    }
+  }
+}
+
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner[type='number'] {
+  -moz-appearance: textfield;
 }
