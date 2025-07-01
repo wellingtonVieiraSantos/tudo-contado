@@ -44,6 +44,7 @@ import incomesPostAction from './incomesPostAction'
 import incomesGetAction from './incomesGetAction'
 import { IncomeType } from '@/types/income'
 import formatedCurrency from '@/lib/formatedCurrency'
+import { ptBR } from 'date-fns/locale'
 
 export const incomeSchema = z.object({
   value: z.coerce
@@ -78,14 +79,20 @@ export default function Income() {
       if (!data) return
 
       const months = [
-        ...new Set(data?.map(income => format(income.date, 'MM-yy')))
+        ...new Set(
+          data?.map(income =>
+            format(income.date, "MMMM 'de' yyyy", { locale: ptBR })
+          )
+        )
       ]
 
       setSelectMonths(months)
       setOriginalIncomes(data)
 
       const actualMonthData = data.filter(
-        income => format(income.date, 'MM-yy') === format(new Date(), 'MM-yy')
+        income =>
+          format(income.date, "MMMM 'de' yyyy", { locale: ptBR }) ===
+          format(new Date(), "MMMM 'de' yyyy", { locale: ptBR })
       )
       setIncomes(actualMonthData)
       setTotalIncome(
@@ -127,7 +134,8 @@ export default function Income() {
       return
     }
     const filteredIncomes = originalIncomes?.filter(
-      income => format(income.date, 'MM-yy') === value
+      income =>
+        format(income.date, "MMMM 'de' yyyy", { locale: ptBR }) === value
     )
     setIncomes(filteredIncomes || [])
 
@@ -155,7 +163,7 @@ export default function Income() {
       </Card>
       <div className='max-w-[200px]'>
         <Select
-          defaultValue={format(new Date(), 'MM-yy')}
+          defaultValue={format(new Date(), "MMMM 'de' yyyy", { locale: ptBR })}
           onValueChange={handleMonthFilter}
         >
           <SelectTrigger>
@@ -163,7 +171,7 @@ export default function Income() {
           </SelectTrigger>
           {selectMonths && (
             <SelectContent>
-              <SelectItem value='default'>Sem filtro</SelectItem>
+              <SelectItem value='default'>Todos os Ganhos</SelectItem>
               {selectMonths.map(month => (
                 <SelectItem key={month} value={month}>
                   {month}

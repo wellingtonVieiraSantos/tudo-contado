@@ -46,6 +46,7 @@ import formatedCurrency from '@/lib/formatedCurrency'
 import { ExpenseType } from '@/types/expense'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Label } from '@/components/ui/Label'
+import { ptBR } from 'date-fns/locale'
 
 export const expenseSchema = z.object({
   value: z.coerce
@@ -81,14 +82,20 @@ export default function Expense() {
       if (!data) return
 
       const months = [
-        ...new Set(data?.map(expense => format(expense.date, 'MM-yy')))
+        ...new Set(
+          data?.map(expense =>
+            format(expense.date, "MMMM 'de' yyyy", { locale: ptBR })
+          )
+        )
       ]
 
       setSelectMonths(months)
       setOriginalExpense(data)
 
       const actualMonthData = data.filter(
-        expense => format(expense.date, 'MM-yy') === format(new Date(), 'MM-yy')
+        expense =>
+          format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) ===
+          format(new Date(), "MMMM 'de' yyyy", { locale: ptBR })
       )
       setExpense(actualMonthData)
       setTotalExpense(
@@ -130,7 +137,8 @@ export default function Expense() {
       return
     }
     const filteredexpenses = originalExpense?.filter(
-      expense => format(expense.date, 'MM-yy') === value
+      expense =>
+        format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) === value
     )
     setExpense(filteredexpenses || [])
 
@@ -153,7 +161,7 @@ export default function Expense() {
           <CardDescription className='text-foreground-secondary'>
             Total de gastos pagos:
           </CardDescription>
-          <CardTitle className='text-4xl'>
+          <CardTitle className='text-4xl tracking-wide'>
             {formatedCurrency(totalExpense)}
           </CardTitle>
         </Card>
@@ -161,14 +169,14 @@ export default function Expense() {
           <CardDescription className='text-foreground-secondary'>
             Total de gastos não pagos:
           </CardDescription>
-          <CardTitle className='text-4xl'>
+          <CardTitle className='text-4xl tracking-wide'>
             {formatedCurrency(totalExpense)}
           </CardTitle>
         </Card>
       </div>
       <div className='max-w-[200px]'>
         <Select
-          defaultValue={format(new Date(), 'MM-yy')}
+          defaultValue={format(new Date(), "MMMM 'de' yyyy", { locale: ptBR })}
           onValueChange={handleMonthFilter}
         >
           <SelectTrigger>
@@ -176,7 +184,7 @@ export default function Expense() {
           </SelectTrigger>
           {selectMonths && (
             <SelectContent>
-              <SelectItem value='default'>Sem filtro</SelectItem>
+              <SelectItem value='default'>Todos os Gastos</SelectItem>
               {selectMonths.map(month => (
                 <SelectItem key={month} value={month}>
                   {month}
@@ -191,7 +199,7 @@ export default function Expense() {
           <Card key={i} className='py-1 px-2 h-full w-[300px]'>
             <CardContent className='h-full flex-row justify-between items-center'>
               <div>
-                <p className='text-xl font-montserrat'>
+                <p className='text-xl font-montserrat tracking-wide'>
                   {formatedCurrency(expense.value)}
                 </p>
                 <p className='text-sm text-foreground-secondary'>
