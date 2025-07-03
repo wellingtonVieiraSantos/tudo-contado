@@ -47,6 +47,7 @@ import { ExpenseType } from '@/types/expense'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Label } from '@/components/ui/Label'
 import { ptBR } from 'date-fns/locale'
+import { ProgressBar } from '@/components/ui/ProgressBar'
 
 export const expenseSchema = z.object({
   value: z.coerce
@@ -69,12 +70,20 @@ export type expenseType = z.infer<typeof expenseSchema>
 
 export default function Expense() {
   const [formIsOpen, setFormISOpen] = useState(false)
-  const [totalExpense, setTotalExpense] = useState(0)
   const [originalExpense, setOriginalExpense] = useState<ExpenseType[] | null>(
     null
   )
   const [expense, setExpense] = useState<ExpenseType[] | null>(null)
+  const [expenseAmount, setExpenseAmount] = useState(0)
+  const [notPaidExpenseAmount, setNotPaidExpenseAmount] = useState(0)
   const [selectMonths, setSelectMonths] = useState<string[] | null>(null)
+  const [filters, setFilters] = useState<{
+    mouth: string
+    paid: string | boolean
+  }>({
+    mouth: format(new Date(), "MMMM 'de' yyyy", { locale: ptBR }),
+    paid: 'default'
+  })
 
   useEffect(() => {
     const handleExpensesGet = async () => {
@@ -97,15 +106,59 @@ export default function Expense() {
           format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) ===
           format(new Date(), "MMMM 'de' yyyy", { locale: ptBR })
       )
+
       setExpense(actualMonthData)
-      setTotalExpense(
+
+      setExpenseAmount(
         actualMonthData
+          .map(expense => Number(expense.value))
+          .reduce((acc, current) => acc + current, 0)
+      )
+
+      setNotPaidExpenseAmount(
+        actualMonthData
+          .filter(expense => !expense.paid)
           .map(expense => Number(expense.value))
           .reduce((acc, current) => acc + current, 0)
       )
     }
     handleExpensesGet()
   }, [])
+
+  useEffect(() => {
+    if (!originalExpense) return
+
+    const isMouthActive = filters.mouth !== 'default'
+    const isPaidActive = filters.paid !== 'default'
+
+    const mouthFiltered = originalExpense.filter(expense => {
+      if (
+        isMouthActive &&
+        format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) !==
+          filters.mouth
+      )
+        return false
+
+      return true
+    })
+
+    const fullFiltered = isPaidActive
+      ? mouthFiltered.filter(expense => expense.paid === filters.paid)
+      : mouthFiltered
+
+    setExpense(fullFiltered)
+
+    const total = mouthFiltered.reduce(
+      (acc, current) => acc + Number(current.value),
+      0
+    )
+    const notPaidTotal = mouthFiltered
+      .filter(expense => !expense.paid)
+      .reduce((acc, current) => acc + Number(current.value), 0)
+
+    setExpenseAmount(total)
+    setNotPaidExpenseAmount(notPaidTotal)
+  }, [filters.mouth, filters.paid, originalExpense])
 
   const {
     register,
@@ -116,9 +169,13 @@ export default function Expense() {
   } = useForm<expenseType>({ resolver: zodResolver(expenseSchema) })
 
   const onSubmit = async (data: expenseType) => {
-    await expensesPostAction(data)
-    reset()
-    setFormISOpen(false)
+    try {
+      await expensesPostAction(data)
+      reset()
+      setFormISOpen(false)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const handleDeleteexpense = async (id: string) => {
@@ -126,32 +183,13 @@ export default function Expense() {
   }
 
   const handleMonthFilter = (value: string) => {
-    if (value === 'default') {
-      setExpense(originalExpense)
-      if (!originalExpense) return
-      setTotalExpense(
-        originalExpense
-          .map(expense => Number(expense.value))
-          .reduce((acc, current) => acc + current, 0)
-      )
-      return
-    }
-    const filteredexpenses = originalExpense?.filter(
-      expense =>
-        format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) === value
-    )
-    setExpense(filteredexpenses || [])
+    setFilters(prev => ({ ...prev, mouth: value }))
+  }
 
-    if (!filteredexpenses) {
-      setTotalExpense(0)
-      return
-    }
-
-    setTotalExpense(
-      filteredexpenses
-        .map(expense => Number(expense.value))
-        .reduce((acc, current) => acc + current, 0)
-    )
+  const handleStatusFilter = (value: string) => {
+    const option =
+      value === 'paid' ? true : value === 'notPaid' ? false : 'default'
+    setFilters(prev => ({ ...prev, paid: option }))
   }
 
   return (
@@ -159,40 +197,58 @@ export default function Expense() {
       <div className='flex gap-10'>
         <Card className='w-fit px-6 py-2'>
           <CardDescription className='text-foreground-secondary'>
-            Total de gastos pagos:
+            Total de gastos:
           </CardDescription>
-          <CardTitle className='text-4xl tracking-wide'>
-            {formatedCurrency(totalExpense)}
+          <CardTitle className='text-xl tracking-wide'>
+            {formatedCurrency(expenseAmount)}
           </CardTitle>
-        </Card>
-        <Card className='w-fit px-6 py-2'>
-          <CardDescription className='text-foreground-secondary'>
-            Total de gastos não pagos:
-          </CardDescription>
-          <CardTitle className='text-4xl tracking-wide'>
-            {formatedCurrency(totalExpense)}
-          </CardTitle>
+          <ProgressBar
+            max={expenseAmount || 100}
+            value={expenseAmount - notPaidExpenseAmount}
+          />
+          <div className='text-3xl flex gap-2 items-center'>
+            <p className='text-sm text-foreground-secondary'>Contas à pagar:</p>
+            <span className=' font-montserrat tracking-wide'>
+              {formatedCurrency(notPaidExpenseAmount)}
+            </span>
+          </div>
         </Card>
       </div>
-      <div className='max-w-[200px]'>
-        <Select
-          defaultValue={format(new Date(), "MMMM 'de' yyyy", { locale: ptBR })}
-          onValueChange={handleMonthFilter}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder='Filtrar por mês' />
-          </SelectTrigger>
-          {selectMonths && (
+      <div className='max-w-[400px] flex gap-1'>
+        <div>
+          <Select
+            defaultValue={format(new Date(), "MMMM 'de' yyyy", {
+              locale: ptBR
+            })}
+            onValueChange={handleMonthFilter}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder='Filtrar por mês' />
+            </SelectTrigger>
+            {selectMonths && (
+              <SelectContent>
+                <SelectItem value='default'>Todos os Gastos</SelectItem>
+                {selectMonths.map(month => (
+                  <SelectItem key={month} value={month}>
+                    {month}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            )}
+          </Select>
+        </div>
+        <div>
+          <Select onValueChange={handleStatusFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder='Filtrar por status' />
+            </SelectTrigger>
             <SelectContent>
-              <SelectItem value='default'>Todos os Gastos</SelectItem>
-              {selectMonths.map(month => (
-                <SelectItem key={month} value={month}>
-                  {month}
-                </SelectItem>
-              ))}
+              <SelectItem value='default'>sem filtro</SelectItem>
+              <SelectItem value='paid'>pago</SelectItem>
+              <SelectItem value='notPaid'>não pago</SelectItem>
             </SelectContent>
-          )}
-        </Select>
+          </Select>
+        </div>
       </div>
       {expense &&
         expense.map((expense, i) => (
@@ -209,6 +265,9 @@ export default function Expense() {
               <div className='text-sm flex flex-col gap-2 items-center'>
                 <p>{format(expense.date, 'dd-MM-yyyy')}</p>
                 <Badge>{expense.type}</Badge>
+                <Badge variant={expense.paid ? 'success' : 'error'}>
+                  {expense.paid ? 'Pago' : 'A Pagar'}
+                </Badge>
               </div>
               <Button
                 variant='border'

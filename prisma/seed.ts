@@ -9,13 +9,13 @@ async function main() {
         create: [
           {
             type: 'FIXED',
-            value: new Prisma.Decimal(5000),
+            value: 340050,
             date: new Date(),
             description: 'salário'
           },
           {
             type: 'VARIABLE',
-            value: new Prisma.Decimal(500),
+            value: 25000,
             date: new Date(),
             description: 'freela'
           }
@@ -25,14 +25,14 @@ async function main() {
         create: [
           {
             type: 'FIXED',
-            value: new Prisma.Decimal(1500),
+            value: 125050,
             date: new Date(),
             description: 'aluguel',
             paid: true
           },
           {
             type: 'VARIABLE',
-            value: new Prisma.Decimal(1000),
+            value: 104095,
             date: new Date(),
             description: 'Alimentação',
             paid: false
@@ -44,8 +44,21 @@ async function main() {
           {
             name: 'Pipoca',
             category: 'Alimentação',
-            quantity: 3,
-            purchaseDate: new Date()
+            quantity: new Prisma.Decimal(3),
+            unit: 'UNIT',
+            purchaseDate: new Date(),
+            price: 399,
+            brand: 'yoki',
+            rating: 'FOUR_STAR',
+            review: 'Muito boa, compensa a compra.'
+          },
+          {
+            name: 'Batata',
+            category: 'Alimentação',
+            quantity: new Prisma.Decimal(0.467),
+            unit: 'KG',
+            purchaseDate: new Date(),
+            price: 599
           }
         ]
       }
