@@ -12,16 +12,20 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/Avatar'
+import { signOut, useSession } from 'next-auth/react'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const SideBar = ({ session }: any) => {
+const pages = [
+  { name: 'Dashboard', icon: HomeIcon, url: '/dashboard' },
+  { name: 'Renda', icon: BanknoteArrowUp, url: '/incomes' },
+  { name: 'Despesas', icon: BanknoteArrowDown, url: '/expenses' },
+  { name: 'Produtos', icon: Barcode, url: '/products' }
+]
+
+const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const pages = [
-    { name: 'Dashboard', icon: HomeIcon, url: '/dashboard' },
-    { name: 'Renda', icon: BanknoteArrowUp, url: '/incomes' },
-    { name: 'Despesas', icon: BanknoteArrowDown, url: '/expenses' },
-    { name: 'Produtos', icon: Barcode, url: '/products' }
-  ]
+
+  const { data: session } = useSession()
+
   return (
     <div
       className={`hidden z-10 fixed inset-0 p-2 h-full w-40 bg-card border-r lg:flex flex-col items-center ${
@@ -71,12 +75,12 @@ const SideBar = ({ session }: any) => {
             isOpen ? 'size-16' : 'size-11 text-sm'
           } border-foreground -mr-1`}
         >
-          <AvatarImage src={session.user.image}></AvatarImage>
+          <AvatarImage src={session?.user?.image || ''}></AvatarImage>
           <AvatarFallback>
-            {session.user.name.slice(0, 2).toUpperCase()}
+            {session?.user?.name?.slice(0, 2).toUpperCase() || '??'}
           </AvatarFallback>
         </Avatar>
-        <Button className={`${isOpen && 'w-full'}`}>
+        <Button className={`${isOpen && 'w-full'}`} onClick={() => signOut()}>
           <LogOut />
           {isOpen && 'Sair'}
         </Button>

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Poppins, Montserrat } from 'next/font/google'
 import './globals.css'
-import { auth } from '../../auth'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import { SessionProvider } from 'next-auth/react'
 
@@ -31,8 +30,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await auth()
-
   return (
     <html
       lang='pt-BR'
@@ -42,7 +39,7 @@ export default async function RootLayout({
       <body
         className={`w-full min-h-dvh grid grid-flow-col ${montserrat.variable} ${poppins.variable}`}
       >
-        <SessionProvider session={session}>
+        <SessionProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
         </SessionProvider>
       </body>

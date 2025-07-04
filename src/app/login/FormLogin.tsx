@@ -2,13 +2,25 @@
 import Form from 'next/form'
 import loginAction from './loginAction'
 import { useActionState, useEffect } from 'react'
-import { redirect } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function FormLogin() {
+  const router = useRouter()
   const [state, formAction, isPending] = useActionState(loginAction, null)
+
   useEffect(() => {
-    if (state?.success) redirect('/dashboard')
-  }, [state])
+    if (state?.success && state.credentials) {
+      signIn('credentials', {
+        ...state.credentials,
+        redirect: false
+      }).then(res => {
+        if (!res?.error) {
+          router.push('/dashboard')
+        }
+      })
+    }
+  }, [state, router])
 
   return (
     <>
@@ -27,7 +39,6 @@ export default function FormLogin() {
           {isPending ? 'Logando' : 'Logar'}
         </button>
       </Form>
-      <span>ou faça login com:</span>
     </>
   )
 }
