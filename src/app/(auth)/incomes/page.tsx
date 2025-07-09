@@ -43,7 +43,7 @@ import incomesDeleteAction from './incomesDeleteAction'
 import incomesPostAction from './incomesPostAction'
 import incomesGetAction from './incomesGetAction'
 import { IncomeType } from '@/types/income'
-import formatedCurrency from '@/lib/formatedCurrency'
+import formatedCurrency from '@/lib/valueFormatter'
 import { ptBR } from 'date-fns/locale'
 
 export const incomeSchema = z.object({

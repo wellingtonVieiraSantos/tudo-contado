@@ -18,9 +18,9 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const showSidebar = isProtected && status === 'authenticated'
 
   return (
-    <div className=''>
+    <>
       {showSidebar && <SideBar />}
       <main className='h-screen w-full pl-45'>{children}</main>
-    </div>
+    </>
   )
 }

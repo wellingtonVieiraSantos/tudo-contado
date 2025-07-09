@@ -7,12 +7,9 @@ import {
   BanknoteArrowUp,
   BanknoteArrowDown,
   Barcode,
-  HomeIcon,
-  LogOut
+  HomeIcon
 } from 'lucide-react'
 import { useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/Avatar'
-import { signOut, useSession } from 'next-auth/react'
 
 const pages = [
   { name: 'Dashboard', icon: HomeIcon, url: '/dashboard' },
@@ -23,8 +20,6 @@ const pages = [
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false)
-
-  const { data: session } = useSession()
 
   return (
     <div
@@ -64,26 +59,6 @@ const SideBar = () => {
             </Button>
           </Link>
         ))}
-      </div>
-      <div
-        className={`w-full mt-auto mb-5 flex flex-col ${
-          isOpen ? 'items-center' : 'items-end'
-        } gap-4`}
-      >
-        <Avatar
-          className={`${
-            isOpen ? 'size-16' : 'size-11 text-sm'
-          } border-foreground -mr-1`}
-        >
-          <AvatarImage src={session?.user?.image || ''}></AvatarImage>
-          <AvatarFallback>
-            {session?.user?.name?.slice(0, 2).toUpperCase() || '??'}
-          </AvatarFallback>
-        </Avatar>
-        <Button className={`${isOpen && 'w-full'}`} onClick={() => signOut()}>
-          <LogOut />
-          {isOpen && 'Sair'}
-        </Button>
       </div>
     </div>
   )

@@ -62,7 +62,7 @@ const CardContent = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
       <div
-        className={twMerge(`p-4 pt-0 flex flex-col gap-1.5`, className)}
+        className={twMerge(`px-4 flex flex-col gap-1.5`, className)}
         ref={ref}
         {...props}
       />
@@ -77,7 +77,7 @@ const CardFooter = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
     return (
       <div
         className={twMerge(
-          `p-4 pt-0 flex items-center gap-2 justify-end`,
+          `px-4 flex items-center gap-2 justify-end`,
           className
         )}
         ref={ref}
