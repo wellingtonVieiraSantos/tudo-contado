@@ -8,7 +8,7 @@ export default async function expensesPostAction(data: expenseType) {
 
   try {
     //normalize value for db, get in reais, return in centavos
-    const { type, value: rawValue, date, description, paid } = data
+    const { type, value: rawValue, date, description, paid, category } = data
     const value = rawValue * 100
 
     if (!session?.user?.email) {
@@ -19,6 +19,7 @@ export default async function expensesPostAction(data: expenseType) {
         type,
         value,
         date,
+        category,
         description,
         paid,
         user: {

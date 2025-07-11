@@ -15,13 +15,16 @@ model User {
   password      String?
   image         String?
 
-  income        Income[]
-  expense       Expense[]
-  products      Product[]
-  accounts      Account[]
-  sessions      Session[]
+  income          Income[]
+  expense         Expense[]
+  productLifetime ProductLifetime[]
+  productPrice    ProductPrice[]
+  comments        Comment[]
+  ratings         Rating[]
+  accounts        Account[]
+  sessions        Session[]
   // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  Authenticator   Authenticator[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -96,36 +99,100 @@ model Income {
 }
 
 model Expense {
-  id          String      @id @default(cuid())
+  id          String       @id @default(cuid())
   userId      String
   type        ExpenseType
   value       Int
   date        DateTime
   description String
-  paid        Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  category    CateroryType
+  paid        Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   user User @relation(fields: [userId], references: [id])
 }
 
 model Product {
-  id           String      @id @default(cuid())
-  userId       String
-  name         String
-  price        Int
-  category     String
-  rating       RatingType?
-  brand        String?
-  review       String?
-  purchaseDate DateTime
-  endDate      DateTime?
-  quantity     Decimal
-  unit         UnitType
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id        String       @id @default(cuid())
+  name      String
+  category  CateroryType
+  createdAt DateTime     @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  variants ProductVariant[]
+}
+
+model ProductVariant {
+  id          String  @id @default(cuid())
+  productId   String
+  brand       String
+  description String?
+
+  productLifetime ProductLifetime[]
+  productPrice     ProductPrice[]
+  comments         Comment[]
+  ratings          Rating[]
+
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model ProductPrice {
+  id               String   @id @default(cuid())
+  productVariantId String
+  userId           String
+  value            Int
+  location         String
+  date             DateTime
+
+  createdAt DateTime @default(now())
+
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, productVariantId, location, date])
+}
+
+model Comment {
+  id               String   @id @default(cuid())
+  productVariantId String
+  userId           String
+  content          String
+  createdAt        DateTime @default(now())
+  updateAt         DateTime @updatedAt
+
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+
+  @@unique([productVariantId, userId])
+}
+
+model Rating {
+  id               String     @id @default(cuid())
+  productVariantId String
+  userId           String
+  value            RatingType
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+
+  @@unique([productVariantId, userId])
+}
+
+model ProductLifetime {
+  id               String    @id @default(cuid())
+  productVariantId String
+  userId           String
+  purchaseDate     DateTime
+  endDate          DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, productVariantId])
 }
 
 enum IncomeType {
@@ -151,4 +218,19 @@ enum UnitType {
   KG
   L
   M
+}
+
+enum CateroryType {
+  HOUSE
+  FOOD
+  TRANSPORT
+  EDUCATION
+  HEALTH
+  CLOTHING
+  TECH
+  PERSONAL_CARE
+  ENTERTAINMENT
+  PETS
+  FINANCIAL
+  OTHER
 }

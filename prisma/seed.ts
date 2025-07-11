@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 
 async function main() {
   await prisma.user.upsert({
@@ -26,6 +25,7 @@ async function main() {
           {
             type: 'FIXED',
             value: 125050,
+            category: 'HOUSE',
             date: new Date(),
             description: 'aluguel',
             paid: true
@@ -33,36 +33,15 @@ async function main() {
           {
             type: 'VARIABLE',
             value: 104095,
+            category: 'FOOD',
             date: new Date(),
             description: 'Alimentação',
             paid: false
           }
         ]
-      },
-      products: {
-        create: [
-          {
-            name: 'Pipoca',
-            category: 'Alimentação',
-            quantity: new Prisma.Decimal(3),
-            unit: 'UNIT',
-            purchaseDate: new Date(),
-            price: 399,
-            brand: 'yoki',
-            rating: 'FOUR_STAR',
-            review: 'Muito boa, compensa a compra.'
-          },
-          {
-            name: 'Batata',
-            category: 'Alimentação',
-            quantity: new Prisma.Decimal(0.467),
-            unit: 'KG',
-            purchaseDate: new Date(),
-            price: 599
-          }
-        ]
       }
     },
+
     create: {
       email: 'teste@email.com'
     }

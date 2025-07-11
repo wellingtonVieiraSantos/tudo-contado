@@ -1,7 +1,7 @@
 export type IncomeType = {
   id: string
   type: string
-  value: Decimal
+  value: number
   date: Date
   description: string
 }

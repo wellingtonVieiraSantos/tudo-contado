@@ -2,40 +2,38 @@
 import { prisma } from '@/lib/prisma'
 import { auth } from '../../../../auth'
 
-export default async function expensesGetAction() {
+export default async function productsGetAction() {
   const session = await auth()
 
   try {
     if (!session?.user?.email) {
       return { success: false, error: { message: 'Usuário não autorizado.' } }
     }
-    const rawExpense = await prisma.expense.findMany({
+
+    const rawProducts = await prisma.product.findMany({
       where: {
         user: { email: session.user.email }
       },
       select: {
         id: true,
-        value: true,
-        description: true,
+        name: true,
+        price: true,
         category: true,
-        date: true,
-        type: true,
-        paid: true
+        rating: true,
+        brand: true,
+        review: true,
+        purchaseDate: true,
+        endDate: true,
+        quantity: true,
+        unit: true
       },
       orderBy: {
-        date: 'desc'
+        purchaseDate: 'desc'
       }
     })
-    //normalize value and type to show in component, get in centavos, return in reais
-    const expenses = rawExpense.map(expense => ({
-      ...expense,
-      type: expense.type === 'FIXED' ? 'Fixo' : 'Variável',
-      value: expense.value / 100
-    }))
-    return { success: true, data: expenses }
+    return { success: true, data: rawProducts }
   } catch (e) {
     console.log(e)
-
     return {
       success: false,
       error: { message: 'Ops, algo inesperado aconteceu.' }

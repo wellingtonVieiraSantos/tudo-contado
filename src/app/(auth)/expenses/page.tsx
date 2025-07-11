@@ -58,6 +58,20 @@ export const expenseSchema = z.object({
     }),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
   type: z.enum(['FIXED', 'VARIABLE']),
+  category: z.enum([
+    'HOUSE',
+    'FOOD',
+    'TRANSPORT',
+    'EDUCATION',
+    'HEALTH',
+    'CLOTHING',
+    'TECH',
+    'PERSONAL_CARE',
+    'ENTERTAINMENT',
+    'PETS',
+    'FINANCIAL',
+    'OTHER'
+  ]),
   paid: z.boolean(),
   date: z.coerce.date({
     errorMap: (issue, { defaultError }) => ({
@@ -261,6 +275,7 @@ export default function Expense() {
                 <p className='text-sm text-foreground-secondary'>
                   {expense.description}
                 </p>
+                <Badge variant='outline'>{expense.category}</Badge>
               </div>
               <div className='text-sm flex flex-col gap-2 items-center'>
                 <p>{format(expense.date, 'dd-MM-yyyy')}</p>
@@ -326,6 +341,7 @@ export default function Expense() {
                 </FormMessage>
               )}
             </FormField>
+
             <FormField name='type' className='mt-2'>
               <FormLabel>Tipo de gasto</FormLabel>
               <Controller
@@ -360,6 +376,41 @@ export default function Expense() {
                   {errors.date?.message}
                 </FormMessage>
               )}
+            </FormField>
+            <FormField name='category' className='mt-2'>
+              <FormLabel>Categoria do gasto</FormLabel>
+              <Controller
+                name='category'
+                control={control}
+                defaultValue='OTHER'
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='HOUSE'>Moradia</SelectItem>
+                      <SelectItem value='FOOD'>Alimentação</SelectItem>
+                      <SelectItem value='TRANSPORT'>Transporte</SelectItem>
+                      <SelectItem value='EDUCATION'>Educação</SelectItem>
+                      <SelectItem value='HEALTH'>Saúde</SelectItem>
+                      <SelectItem value='CLOTHING'>Vestuário</SelectItem>
+                      <SelectItem value='TECH'>
+                        Tecnologia e comunicação
+                      </SelectItem>
+                      <SelectItem value='PERSONAL_CARE'>
+                        Higiene e cuidados pessoais
+                      </SelectItem>
+                      <SelectItem value='ENTERTAINMENT'>
+                        Lazer e entretenimento
+                      </SelectItem>
+                      <SelectItem value='PETS'>Pets</SelectItem>
+                      <SelectItem value='FINANCIAL'>Financeiro</SelectItem>
+                      <SelectItem value='OTHER'>Outro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </FormField>
             <FormField name='paid' className='mt-2'>
               <FormLabel>Status do gasto</FormLabel>
