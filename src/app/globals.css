@@ -83,7 +83,7 @@
     color: var(--color-foreground);
     font-family: var(--font-poppins);
     & :focus-visible {
-      @apply outline-none ring-2 ring-focus-ring;
+      @apply outline-none /* ring-2 ring-focus-ring */;
     }
   }
 

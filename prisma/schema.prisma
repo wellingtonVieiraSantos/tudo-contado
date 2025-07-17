@@ -122,18 +122,27 @@ model Product {
   variants ProductVariant[]
 }
 
+model Brand {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  variants ProductVariant[]
+}
+
 model ProductVariant {
   id          String  @id @default(cuid())
   productId   String
-  brand       String
+  brandId     String
   description String?
 
   productLifetime ProductLifetime[]
-  productPrice     ProductPrice[]
-  comments         Comment[]
-  ratings          Rating[]
+  productPrice    ProductPrice[]
+  comments        Comment[]
+  ratings         Rating[]
 
   product Product @relation(fields: [productId], references: [id])
+  brand   Brand   @relation(fields: [brandId], references: [id])
 }
 
 model ProductPrice {

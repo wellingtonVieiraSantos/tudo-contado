@@ -11,7 +11,7 @@ export default function RegisterUser() {
     null
   )
   useEffect(() => {
-    if (state?.success) redirect('/')
+    if (state?.success) redirect('/login')
   }, [state])
   return (
     <div className='w-[400px] min-h-[500px] flex flex-col border p-6 gap-10'>

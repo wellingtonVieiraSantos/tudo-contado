@@ -1,9 +1,21 @@
 import { prisma } from '@/lib/prisma'
 
 async function main() {
+  const user2 = await prisma.user.create({
+    data: {
+      email: 'teste2@email.com',
+      password: '12345',
+      name: 'Joan Doe'
+    }
+  })
+
   await prisma.user.upsert({
     where: { email: 'teste@email.com' },
-    update: {
+    update: {},
+    create: {
+      email: 'teste@email.com',
+      password: '12345',
+      name: 'John Doe',
       income: {
         create: [
           {
@@ -40,10 +52,39 @@ async function main() {
           }
         ]
       }
-    },
+    }
+  })
 
-    create: {
-      email: 'teste@email.com'
+  await prisma.product.createMany({
+    data: [
+      { name: 'cenoura', category: 'FOOD' },
+      { name: 'batata', category: 'FOOD' }
+    ]
+  })
+
+  const sabonete = await prisma.product.create({
+    data: { name: 'sabonete', category: 'PERSONAL_CARE' }
+  })
+
+  await prisma.productVariant.create({
+    data: {
+      brand: 'Palmolive',
+      productId: sabonete.id
+    }
+  })
+  const dove = await prisma.productVariant.create({
+    data: {
+      brand: 'Dove',
+      productId: sabonete.id
+    }
+  })
+  await prisma.productPrice.create({
+    data: {
+      value: 250,
+      date: new Date(),
+      location: 'Comper Planaltina',
+      productVariantId: dove.id,
+      userId: user2.id
     }
   })
 }
