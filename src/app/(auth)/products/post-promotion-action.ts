@@ -1,7 +1,7 @@
 'use server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '../../../../auth'
-import { productsPostType } from './page'
+import { productsPostType } from './register/page'
 
 export default async function promotionPostAction(data: productsPostType) {
   const session = await auth()

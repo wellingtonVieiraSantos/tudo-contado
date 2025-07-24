@@ -39,16 +39,15 @@ Saída:
     where: { name: { equals: productName, mode: 'insensitive' } }
   })
 
-  const existingBrand = await prisma.productVariant.findFirst({
-    where: { brand: { equals: brandName, mode: 'insensitive' } }
+  const existingBrand = await prisma.brand.findFirst({
+    where: { name: { equals: brandName, mode: 'insensitive' } }
   })
 
   const brand =
     existingBrand ||
-    (await prisma.productVariant.create({
+    (await prisma.brand.create({
       data: {
-        brand: brandName,
-        product: { connect: { id: existingProduct?.id } }
+        name: brandName
       }
     }))
 
@@ -56,7 +55,7 @@ Saída:
 
   if (existingProduct) {
     // Verifica se marca é diferente
-    if (existingProduct.brandId !== brand.id) {
+    if (existingProduct.id !== brand.id) {
       // Opcional: atualizar marca
       await prisma.product.update({
         where: { id: existingProduct.id },

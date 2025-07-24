@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 
 async function main() {
-  const user2 = await prisma.user.create({
+  /*   const user2 = await prisma.user.create({
     data: {
       email: 'teste2@email.com',
       password: '12345',
@@ -53,26 +53,43 @@ async function main() {
         ]
       }
     }
-  })
+  }) */
 
-  await prisma.product.createMany({
+  /*   await prisma.product.createMany({
     data: [
       { name: 'cenoura', category: 'FOOD' },
       { name: 'batata', category: 'FOOD' }
     ]
   })
 
-  const sabonete = await prisma.product.create({
-    data: { name: 'sabonete', category: 'PERSONAL_CARE' }
+  const sabonete = await prisma.product.findFirst({
+    where: { name: 'sabonete', category: 'PERSONAL_CARE' }
+  }) */
+
+  const brands2 = await prisma.brand.findFirst({
+    where: { name: 'Dove' }
+  })
+  const brands3 = await prisma.brand.findFirst({
+    where: { name: 'Lux' }
   })
 
-  await prisma.productVariant.create({
-    data: {
-      brand: 'Palmolive',
-      productId: sabonete.id
-    }
+  const productId = await prisma.product.findFirst({
+    where: { name: 'sabonete' }
   })
-  const dove = await prisma.productVariant.create({
+
+  await prisma.productVariant.createMany({
+    data: [
+      {
+        productId: productId!.id,
+        brandId: brands2!.id
+      },
+      {
+        productId: productId!.id,
+        brandId: brands3!.id
+      }
+    ]
+  })
+  /*   const dove = await prisma.productVariant.create({
     data: {
       brand: 'Dove',
       productId: sabonete.id
@@ -86,7 +103,7 @@ async function main() {
       productVariantId: dove.id,
       userId: user2.id
     }
-  })
+  }) */
 }
 main()
   .then(async () => {

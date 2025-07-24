@@ -14,24 +14,19 @@ export default async function brandNameGetAction(query: string) {
       }
     }
 
-    const rawData = await prisma.productVariant.findMany({
+    const data = await prisma.brand.findMany({
       where: {
-        product: { name: query }
+        name: {
+          contains: query,
+          mode: 'insensitive'
+        }
       },
       select: {
-        brand: {
-          select: {
-            id: true,
-            name: true
-          }
-        }
-      }
+        id: true,
+        name: true
+      },
+      take: 10
     })
-
-    const data = rawData?.map(item => ({
-      id: item.brand.id,
-      name: item.brand.name
-    }))
 
     return { success: true, data: data }
   } catch (e) {

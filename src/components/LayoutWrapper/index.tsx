@@ -20,7 +20,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   return (
     <>
       {showSidebar && <SideBar />}
-      <main className='h-screen w-full pl-45'>{children}</main>
+      <main className='size-screen pl-45'>{children}</main>
     </>
   )
 }
