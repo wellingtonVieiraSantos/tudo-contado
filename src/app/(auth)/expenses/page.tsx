@@ -37,50 +37,17 @@ import {
   SelectValue
 } from '@/components/ui/Select'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { useEffect, useState } from 'react'
-import expensesDeleteAction from './expensesDeleteAction'
-import expensesPostAction from './expensesPostAction'
-import expensesGetAction from './expensesGetAction'
+import { deleteExpenseAction } from './actions/del-expense-action'
+import { postExpenseAction } from './actions/post-expense-action'
+import { getExpenseAction } from './actions/get-expense-action'
 import formatedCurrency from '@/lib/valueFormatter'
 import { ExpenseType } from '@/types/expense'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Label } from '@/components/ui/Label'
 import { ptBR } from 'date-fns/locale'
 import { ProgressBar } from '@/components/ui/ProgressBar'
-
-export const expenseSchema = z.object({
-  value: z.coerce
-    .number({ message: 'Campo obrigatório' })
-    .positive({ message: 'Apenas valores positivos' })
-    .refine(val => Math.round(val * 100) / 100 === val, {
-      message: 'Máximo 2 casas decimais'
-    }),
-  description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
-  type: z.enum(['FIXED', 'VARIABLE']),
-  category: z.enum([
-    'HOUSE',
-    'FOOD',
-    'TRANSPORT',
-    'EDUCATION',
-    'HEALTH',
-    'CLOTHING',
-    'TECH',
-    'PERSONAL_CARE',
-    'ENTERTAINMENT',
-    'PETS',
-    'FINANCIAL',
-    'OTHER'
-  ]),
-  paid: z.boolean(),
-  date: z.coerce.date({
-    errorMap: (issue, { defaultError }) => ({
-      message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-    })
-  })
-})
-
-export type expenseType = z.infer<typeof expenseSchema>
+import { expenseSchema, expenseType } from '@/validators/formExpense'
 
 export default function Expense() {
   const [formIsOpen, setFormISOpen] = useState(false)
@@ -101,7 +68,7 @@ export default function Expense() {
 
   useEffect(() => {
     const handleExpensesGet = async () => {
-      const { data } = await expensesGetAction()
+      const { data } = await getExpenseAction()
       if (!data) return
 
       const months = [
@@ -184,7 +151,7 @@ export default function Expense() {
 
   const onSubmit = async (data: expenseType) => {
     try {
-      await expensesPostAction(data)
+      await postExpenseAction(data)
       reset()
       setFormISOpen(false)
     } catch (e) {
@@ -193,7 +160,7 @@ export default function Expense() {
   }
 
   const handleDeleteexpense = async (id: string) => {
-    await expensesDeleteAction(id)
+    await deleteExpenseAction(id)
   }
 
   const handleMonthFilter = (value: string) => {

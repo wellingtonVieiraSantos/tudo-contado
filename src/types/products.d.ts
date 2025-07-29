@@ -1,3 +1,5 @@
+import { ProductCategory } from '@prisma/client'
+
 export type ProductsPriceType = {
   id: string
   date: Date
@@ -10,23 +12,11 @@ export type ProductsPriceType = {
     brand: {
       id: string
       name: string
-    }
+    } | null
     product: {
       id: string
       name: string
-      category:
-        | 'HOUSE'
-        | 'FOOD'
-        | 'TRANSPORT'
-        | 'EDUCATION'
-        | 'HEALTH'
-        | 'CLOTHING'
-        | 'TECH'
-        | 'PERSONAL_CARE'
-        | 'ENTERTAINMENT'
-        | 'PETS'
-        | 'FINANCIAL'
-        | 'OTHER'
+      category: ProductCategory
     }
   }
 }

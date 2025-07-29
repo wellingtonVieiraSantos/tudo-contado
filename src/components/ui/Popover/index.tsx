@@ -16,7 +16,7 @@ const PopoverContent = forwardRef<
   return (
     <PopoverRadix.Content
       className={twMerge(
-        `bg-card w-[450px] h-fit border rounded p-2 focus-visible:ring-0`,
+        `relative bg-card w-[350px] max-w-5xl z-20 h-fit border rounded p-2 focus-visible:ring-0`,
         className
       )}
       ref={ref}

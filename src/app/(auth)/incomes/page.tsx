@@ -37,32 +37,14 @@ import {
   SelectValue
 } from '@/components/ui/Select'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { useEffect, useState } from 'react'
-import incomesDeleteAction from './incomesDeleteAction'
-import incomesPostAction from './incomesPostAction'
-import incomesGetAction from './incomesGetAction'
+import { deleteIncomeAction } from './actions/del-income-action'
+import { postIncomeAction } from './actions/post-income-action'
+import { getIncomeAction } from './actions/get-income-action'
 import { IncomeType } from '@/types/income'
 import formatedCurrency from '@/lib/valueFormatter'
 import { ptBR } from 'date-fns/locale'
-
-export const incomeSchema = z.object({
-  value: z.coerce
-    .number({ message: 'Campo obrigatório' })
-    .positive({ message: 'Apenas valores positivos' })
-    .refine(val => Math.round(val * 100) / 100 === val, {
-      message: 'Máximo 2 casas decimais'
-    }),
-  description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
-  type: z.enum(['FIXED', 'VARIABLE']),
-  date: z.coerce.date({
-    errorMap: (issue, { defaultError }) => ({
-      message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-    })
-  })
-})
-
-export type incomeType = z.infer<typeof incomeSchema>
+import { incomeSchema, incomeType } from '@/validators/formIncome'
 
 export default function Income() {
   const [formIsOpen, setFormISOpen] = useState(false)
@@ -75,7 +57,7 @@ export default function Income() {
 
   useEffect(() => {
     const handleIncomesGet = async () => {
-      const { data } = await incomesGetAction()
+      const { data } = await getIncomeAction()
       if (!data) return
 
       const months = [
@@ -113,13 +95,13 @@ export default function Income() {
   } = useForm<incomeType>({ resolver: zodResolver(incomeSchema) })
 
   const onSubmit = async (data: incomeType) => {
-    await incomesPostAction(data)
+    await postIncomeAction(data)
     reset()
     setFormISOpen(false)
   }
 
   const handleDeleteIncome = async (id: string) => {
-    await incomesDeleteAction(id)
+    await deleteIncomeAction(id)
   }
 
   const handleMonthFilter = (value: string) => {

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '../auth'
-import { privateRoutes } from './data/privateRoutes'
-import { publicRoutes } from './data/publicRoutes'
+import { privateRoutes } from './lib/privateRoutes'
+import { publicRoutes } from './lib/publicRoutes'
 
 export default auth(async req => {
   const isLogged = !!req.auth

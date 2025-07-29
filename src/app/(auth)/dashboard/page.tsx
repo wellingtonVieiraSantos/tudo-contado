@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import dashboardGetAction from './dashboardGetAction'
+import { getDataForDashboardAction } from './actions/get-dashboard-action'
 import valueFormatter from '@/lib/valueFormatter'
 import { ptBR } from 'date-fns/locale'
 import { format } from 'date-fns'
@@ -43,7 +43,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const dashboardGetData = async () => {
-      const { data } = await dashboardGetAction()
+      const { data } = await getDataForDashboardAction()
       if (!data) return
 
       const incomes = data.map(d => d.income).flat()

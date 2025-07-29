@@ -1,5 +1,5 @@
 'use client'
-import { privateRoutes } from '@/data/privateRoutes'
+import { privateRoutes } from '@/lib/privateRoutes'
 import { usePathname } from 'next/navigation'
 import { SideBar } from '@/components/SideBar'
 import { useSession } from 'next-auth/react'
@@ -20,7 +20,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   return (
     <>
       {showSidebar && <SideBar />}
-      <main className='size-screen pl-45'>{children}</main>
+      <main className='size-screen lg:pl-45'>{children}</main>
     </>
   )
 }
