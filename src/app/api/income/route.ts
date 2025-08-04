@@ -1,38 +1,23 @@
-import { incomeType } from '@/app/(auth)/incomes/page'
-import { auth } from '../../../../auth'
-import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
+import { getIncomes, postIncome } from '@/lib/dal/incomes'
+import { incomeSchema } from '@/validators/formIncome'
 
 export async function GET() {
   try {
-    const session = await auth()
+    const rawIncomes = await getIncomes()
 
-    if (!session?.user?.email)
-      return NextResponse.json(
-        { error: 'Usuário não autorizado.' },
-        { status: 401 }
-      )
+    //normalize value and type to show in component, get in centavos, return in reais
+    const incomes = rawIncomes.map(income => ({
+      ...income,
+      type: income.type === 'FIXED' ? 'Fixo' : 'Variável',
+      value: income.value / 100
+    }))
 
-    const incomes = await prisma.income.findMany({
-      where: {
-        user: { email: session.user.email }
-      },
-      select: {
-        id: true,
-        value: true,
-        description: true,
-        date: true,
-        type: true
-      },
-      orderBy: {
-        date: 'desc'
-      }
-    })
-    return NextResponse.json({ data: incomes, success: true })
+    return NextResponse.json({ data: incomes, success: true }, { status: 200 })
   } catch (e) {
     console.log(e)
     return NextResponse.json(
-      { error: 'Ops, algo inesperado aconteceu.' },
+      { error: 'Erro ao buscar dados da renda.' },
       { status: 500 }
     )
   }
@@ -40,36 +25,28 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth()
-    const { type, value, date, description }: incomeType = await req.json()
+    const result = incomeSchema.safeParse(await req.json())
+    if (!result.success) {
+      return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
+    }
 
-    if (!session?.user?.email)
-      return NextResponse.json(
-        { error: 'Usuário não autorizado' },
-        { status: 401 }
-      )
+    const { type, value: rawValue, date, description } = result.data
+    const value = rawValue * 100
 
-    await prisma.income.create({
-      data: {
-        type,
-        value,
-        date,
-        description,
-        user: {
-          connect: { email: session.user.email }
-        }
-      }
-    })
-    return NextResponse.json({ success: true }, { status: 201 })
+    const postedIncome = await postIncome(type, value, date, description)
+    return NextResponse.json(
+      { success: true, data: postedIncome },
+      { status: 201 }
+    )
   } catch (e) {
     console.log(e)
     return NextResponse.json(
-      { error: 'Ops, algo inesperado aconteceu.' },
+      { error: 'Erro ao cadastrar nova renda.' },
       { status: 500 }
     )
   }
 }
-
+/* 
 export async function DELETE(req: NextRequest) {
   try {
     const session = await auth()
@@ -99,4 +76,4 @@ export async function DELETE(req: NextRequest) {
       { status: 500 }
     )
   }
-}
+} */

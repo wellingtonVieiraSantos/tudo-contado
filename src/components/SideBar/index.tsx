@@ -1,66 +1,56 @@
-'use client'
 import Link from 'next/link'
 import { Button } from '../ui/Button'
 import {
-  ArrowLeft,
-  ArrowRight,
   BanknoteArrowUp,
   BanknoteArrowDown,
   Barcode,
   HomeIcon
 } from 'lucide-react'
-import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 const pages = [
   { name: 'Dashboard', icon: HomeIcon, url: '/dashboard' },
   { name: 'Renda', icon: BanknoteArrowUp, url: '/incomes' },
   { name: 'Despesas', icon: BanknoteArrowDown, url: '/expenses' },
-  { name: 'Produtos', icon: Barcode, url: '/products' }
+  { name: 'Promoções', icon: Barcode, url: '/products' }
 ]
 
 const SideBar = () => {
-  const [isOpen, setIsOpen] = useState(false)
-
+  const pathName = usePathname()
   return (
-    <div
-      className={`hidden z-10 fixed inset-0 p-2 h-full w-40 bg-card border-r lg:flex flex-col items-center ${
-        isOpen ? 'translate-0' : '-translate-x-2/3'
-      }`}
-    >
-      <h1
-        className={`w-full p-2 pointer-events-none ${
-          !isOpen && 'text-right text-xl'
-        }`}
+    <>
+      <div
+        className={`hidden inset-0 p-2 bg-card h-full w-40 border-r lg:grid grid-rows-[auto_1fr]`}
       >
-        {isOpen ? 'Tudo Contado' : 'TC'}
-      </h1>
-      <Button
-        variant='border'
-        size='icon'
-        onClick={() => setIsOpen(!isOpen)}
-        className='self-end size-7 -mr-6'
-      >
-        {isOpen ? <ArrowLeft /> : <ArrowRight />}
-      </Button>
-      <div className='w-full flex flex-col items-center gap-4 mt-30'>
+        <h1 className={`w-full text-center pointer-events-none pt-5`}>
+          Tudo Contado
+        </h1>
+        <div className=' flex flex-col pt-20 gap-2'>
+          {pages.map((page, i) => (
+            <Link href={page.url} className='w-full' key={i}>
+              <Button variant='ghost' className='w-full justify-normal'>
+                <page.icon />
+                {page.name}
+              </Button>
+            </Link>
+          ))}
+        </div>
+      </div>
+      <div className='flex items-center justify-center w-full h-20 z-100 fixed bottom-0 left-0 bg-card lg:hidden border-t'>
         {pages.map((page, i) => (
-          <Link href={page.url} className='w-full' key={i}>
-            <Button
-              variant='ghost'
-              size='icon'
-              className={` ${
-                isOpen
-                  ? 'w-full justify-normal gap-4 px-2'
-                  : ' justify-self-end mr-1'
+          <Link href={page.url} className='flex-1' key={i}>
+            <div
+              className={` flex flex-col items-center gap-1 transition duration-300 ${
+                pathName !== page.url && 'text-foreground-secondary  scale-85'
               }`}
             >
               <page.icon />
-              {isOpen && page.name}
-            </Button>
+              <span className='text-[12px]'>{page.name}</span>
+            </div>
           </Link>
         ))}
       </div>
-    </div>
+    </>
   )
 }
 

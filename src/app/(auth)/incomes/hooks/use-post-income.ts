@@ -1,0 +1,32 @@
+import { queryClient } from '@/lib/query-client'
+import { incomeType } from '@/validators/formIncome'
+import { useMutation } from '@tanstack/react-query'
+import { useState } from 'react'
+
+const fetchIncome = async (data: incomeType) => {
+  const res = await fetch('api/income', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' }
+  })
+  if (!res.ok) throw new Error('Erro')
+  return res.json()
+}
+
+export const usePostIncome = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: fetchIncome,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['incomes'] })
+    }
+  })
+
+  const onSubmit = async (data: incomeType) => {
+    mutate(data)
+    setIsOpen(false)
+  }
+
+  return { isOpen, setIsOpen, onSubmit, isPending }
+}

@@ -23,6 +23,8 @@ import {
   SelectValue
 } from '@/components/ui/Select'
 
+import { UserBarSettings } from '@/components/UserBarSettings'
+
 export default function Products() {
   const [promotions, setPromotions] = useState<ProductsPriceType[]>([])
 
@@ -37,7 +39,8 @@ export default function Products() {
   }, [])
 
   return (
-    <div className='flex flex-col gap-4 p-1 pt-5'>
+    <div className='flex flex-col gap-2 p-3'>
+      <UserBarSettings title='Promoções' />
       <Link href={'/products/register'}>
         <Button className='w-full'>
           <Plus />

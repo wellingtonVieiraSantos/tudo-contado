@@ -37,7 +37,7 @@ export default async function RootLayout({
       className='scroll-smooth scrollbar-custom'
     >
       <body
-        className={`w-full min-h-dvh grid grid-flow-col ${montserrat.variable} ${poppins.variable}`}
+        className={`w-full min-h-dvh ${montserrat.variable} ${poppins.variable}`}
       >
         <SessionProvider>
           <LayoutWrapper>{children}</LayoutWrapper>

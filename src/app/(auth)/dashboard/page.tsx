@@ -6,14 +6,8 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
-import {
-  ChevronDown,
-  ChevronUp,
-  LogOut,
-  PiggyBank,
-  Settings
-} from 'lucide-react'
-import { signOut, useSession } from 'next-auth/react'
+import { ChevronDown, ChevronUp, PiggyBank } from 'lucide-react'
+
 import { useEffect, useState } from 'react'
 import { getDataForDashboardAction } from './actions/get-dashboard-action'
 import valueFormatter from '@/lib/valueFormatter'
@@ -24,17 +18,10 @@ import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart'
 import { chartsTooltipClasses } from '@mui/x-charts/ChartsTooltip'
 import { Badge } from '@/components/ui/Badge'
 import { months } from '@/lib/dashboardMonths'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownTrigger
-} from '@/components/ui/Dropdown'
-import { Button } from '@/components/ui/Button'
+
+import { UserBarSettings } from '@/components/UserBarSettings'
 
 export default function Dashboard() {
-  const { data: session } = useSession()
   const [actualIncomeAmount, setActualIncomeAmount] = useState(0)
   const [actualExpenseAmount, setActualExpenseAmount] = useState(0)
   const [barChartData, setBarChartData] = useState<
@@ -108,35 +95,8 @@ export default function Dashboard() {
   )
 
   return (
-    <div>
-      <div className='flex justify-end items-center gap-4 text-right p-2 px-4 text-sm'>
-        <span>{'Bem vindo, ' + session?.user?.name}</span>
-        <Dropdown>
-          <DropdownTrigger asChild>
-            <Button variant='ghost' size='icon'>
-              <Settings />
-            </Button>
-          </DropdownTrigger>
-          <DropdownContent>
-            <DropdownItem onClick={() => signOut()}>
-              <LogOut />
-              Sair
-            </DropdownItem>
-          </DropdownContent>
-        </Dropdown>
-        <Avatar className='size-10'>
-          <AvatarImage src={session?.user?.image || ''}></AvatarImage>
-          <AvatarFallback className='bg-button-ghost'>
-            {session?.user?.name?.slice(0, 2).toUpperCase() || '??'}
-          </AvatarFallback>
-        </Avatar>
-      </div>
-      <div className='text-2xl pb-2'>
-        <h2 className=''>Dashboard</h2>
-        <p className='text-base text-foreground-secondary'>
-          {format(new Date(), "MMMM 'de' yyyy", { locale: ptBR }).toUpperCase()}
-        </p>
-      </div>
+    <div className='p-3 flex flex-col gap-2'>
+      <UserBarSettings title='Dashboard' />
       <div className='flex justify-between gap-4 pr-4'>
         <Card className='w-full flex-1 py-2'>
           <CardHeader>
@@ -189,7 +149,7 @@ export default function Dashboard() {
           </CardHeader>
         </Card>
       </div>
-      <div className='flex mr-4 mt-4 gap-4'>
+      <div className='flex mt-4 gap-4'>
         <Card className='flex flex-col justify-center w-full flex-1'>
           <CardHeader>
             <CardTitle>Controle mensal:</CardTitle>

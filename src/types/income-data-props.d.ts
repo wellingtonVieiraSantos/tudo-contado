@@ -1,7 +1,7 @@
-export type IncomeType = {
-  id: string
+export type IncomeDataProps = {
   type: string
   value: number
+  id: string
   date: Date
   description: string
 }

@@ -14,7 +14,7 @@ const SelectTrigger = forwardRef<
   return (
     <SelectRadix.Trigger
       className={twMerge(
-        `border flex justify-between items-center w-full h-8 px-2 rounded
+        `border flex justify-between gap-2 items-center w-full h-8 px-2 rounded
          data-placeholder:text-foreground-secondary data-[state=open]:[&>svg]:rotate-180 [&>span]:line-clamp-1
          data-disabled:cursor-not-allowed data-disabled:bg-disabled`,
         className

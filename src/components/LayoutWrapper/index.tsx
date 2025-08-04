@@ -3,6 +3,8 @@ import { privateRoutes } from '@/lib/privateRoutes'
 import { usePathname } from 'next/navigation'
 import { SideBar } from '@/components/SideBar'
 import { useSession } from 'next-auth/react'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from '@/lib/query-client'
 
 type LayoutWrapperProps = {
   children: React.ReactNode
@@ -18,9 +20,11 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const showSidebar = isProtected && status === 'authenticated'
 
   return (
-    <>
-      {showSidebar && <SideBar />}
-      <main className='size-screen lg:pl-45'>{children}</main>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <div className='h-screen flex'>
+        {showSidebar && <SideBar />}
+        <main className='w-full'>{children}</main>
+      </div>
+    </QueryClientProvider>
   )
 }

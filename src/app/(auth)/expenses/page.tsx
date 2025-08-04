@@ -8,405 +8,123 @@ import {
   CardTitle
 } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
-import {
-  Modal,
-  ModalContent,
-  ModalDescription,
-  ModalHeader,
-  ModalTitle,
-  ModalTrigger
-} from '@/components/ui/Modal'
+
+import { deleteExpenseAction } from './actions/del-expense-action'
+import formatedCurrency from '@/lib/valueFormatter'
+import { UserBarSettings } from '@/components/UserBarSettings'
+import { useGetExpenses } from './hooks/use-get-expenses'
+import { ModalPostExpense } from './components/ModalPostExpenses'
 import { Button } from '@/components/ui/Button'
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormLabel,
-  FormMessage,
-  FormSubmit
-} from '@/components/ui/Form'
-import { Input } from '@/components/ui/Input'
-import { Send, Wallet } from 'lucide-react'
-import { Textarea } from '@/components/ui/Textarea'
-import { Controller, useForm } from 'react-hook-form'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/Select'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
-import { deleteExpenseAction } from './actions/del-expense-action'
-import { postExpenseAction } from './actions/post-expense-action'
-import { getExpenseAction } from './actions/get-expense-action'
-import formatedCurrency from '@/lib/valueFormatter'
-import { ExpenseType } from '@/types/expense'
-import { Checkbox } from '@/components/ui/Checkbox'
-import { Label } from '@/components/ui/Label'
-import { ptBR } from 'date-fns/locale'
-import { ProgressBar } from '@/components/ui/ProgressBar'
-import { expenseSchema, expenseType } from '@/validators/formExpense'
+  ArrowDown,
+  BanknoteArrowUp,
+  BanknoteX,
+  Plus,
+  TriangleAlert
+} from 'lucide-react'
+import { FilterExpenses } from './components/FilterExpenses'
 
 export default function Expense() {
-  const [formIsOpen, setFormISOpen] = useState(false)
-  const [originalExpense, setOriginalExpense] = useState<ExpenseType[] | null>(
-    null
-  )
-  const [expense, setExpense] = useState<ExpenseType[] | null>(null)
-  const [expenseAmount, setExpenseAmount] = useState(0)
-  const [notPaidExpenseAmount, setNotPaidExpenseAmount] = useState(0)
-  const [selectMonths, setSelectMonths] = useState<string[] | null>(null)
-  const [filters, setFilters] = useState<{
-    mouth: string
-    paid: string | boolean
-  }>({
-    mouth: format(new Date(), "MMMM 'de' yyyy", { locale: ptBR }),
-    paid: 'default'
-  })
-
-  useEffect(() => {
-    const handleExpensesGet = async () => {
-      const { data } = await getExpenseAction()
-      if (!data) return
-
-      const months = [
-        ...new Set(
-          data?.map(expense =>
-            format(expense.date, "MMMM 'de' yyyy", { locale: ptBR })
-          )
-        )
-      ]
-
-      setSelectMonths(months)
-      setOriginalExpense(data)
-
-      const actualMonthData = data.filter(
-        expense =>
-          format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) ===
-          format(new Date(), "MMMM 'de' yyyy", { locale: ptBR })
-      )
-
-      setExpense(actualMonthData)
-
-      setExpenseAmount(
-        actualMonthData
-          .map(expense => Number(expense.value))
-          .reduce((acc, current) => acc + current, 0)
-      )
-
-      setNotPaidExpenseAmount(
-        actualMonthData
-          .filter(expense => !expense.paid)
-          .map(expense => Number(expense.value))
-          .reduce((acc, current) => acc + current, 0)
-      )
-    }
-    handleExpensesGet()
-  }, [])
-
-  useEffect(() => {
-    if (!originalExpense) return
-
-    const isMouthActive = filters.mouth !== 'default'
-    const isPaidActive = filters.paid !== 'default'
-
-    const mouthFiltered = originalExpense.filter(expense => {
-      if (
-        isMouthActive &&
-        format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) !==
-          filters.mouth
-      )
-        return false
-
-      return true
-    })
-
-    const fullFiltered = isPaidActive
-      ? mouthFiltered.filter(expense => expense.paid === filters.paid)
-      : mouthFiltered
-
-    setExpense(fullFiltered)
-
-    const total = mouthFiltered.reduce(
-      (acc, current) => acc + Number(current.value),
-      0
-    )
-    const notPaidTotal = mouthFiltered
-      .filter(expense => !expense.paid)
-      .reduce((acc, current) => acc + Number(current.value), 0)
-
-    setExpenseAmount(total)
-    setNotPaidExpenseAmount(notPaidTotal)
-  }, [filters.mouth, filters.paid, originalExpense])
-
   const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors }
-  } = useForm<expenseType>({ resolver: zodResolver(expenseSchema) })
+    filteredExpenses,
+    months,
+    totals,
+    filters,
+    updateFilters,
+    isLoading
+  } = useGetExpenses()
 
-  const onSubmit = async (data: expenseType) => {
-    try {
-      await postExpenseAction(data)
-      reset()
-      setFormISOpen(false)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  const handleDeleteexpense = async (id: string) => {
+  const handleDeleteExpense = async (id: string) => {
     await deleteExpenseAction(id)
   }
 
-  const handleMonthFilter = (value: string) => {
-    setFilters(prev => ({ ...prev, mouth: value }))
-  }
-
-  const handleStatusFilter = (value: string) => {
-    const option =
-      value === 'paid' ? true : value === 'notPaid' ? false : 'default'
-    setFilters(prev => ({ ...prev, paid: option }))
-  }
-
   return (
-    <div className='flex flex-col flex-wrap p-2 gap-4'>
-      <div className='flex gap-10'>
-        <Card className='w-fit px-6 py-2'>
-          <CardDescription className='text-foreground-secondary'>
-            Total de gastos:
-          </CardDescription>
-          <CardTitle className='text-xl tracking-wide'>
-            {formatedCurrency(expenseAmount)}
-          </CardTitle>
-          <ProgressBar
-            max={expenseAmount || 100}
-            value={expenseAmount - notPaidExpenseAmount}
-          />
-          <div className='text-3xl flex gap-2 items-center'>
-            <p className='text-sm text-foreground-secondary'>Contas à pagar:</p>
-            <span className=' font-montserrat tracking-wide'>
-              {formatedCurrency(notPaidExpenseAmount)}
-            </span>
-          </div>
-        </Card>
-      </div>
-      <div className='max-w-[400px] flex gap-1'>
-        <div>
-          <Select
-            defaultValue={format(new Date(), "MMMM 'de' yyyy", {
-              locale: ptBR
-            })}
-            onValueChange={handleMonthFilter}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder='Filtrar por mês' />
-            </SelectTrigger>
-            {selectMonths && (
-              <SelectContent>
-                <SelectItem value='default'>Todos os Gastos</SelectItem>
-                {selectMonths.map(month => (
-                  <SelectItem key={month} value={month}>
-                    {month}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            )}
-          </Select>
-        </div>
-        <div>
-          <Select onValueChange={handleStatusFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder='Filtrar por status' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='default'>sem filtro</SelectItem>
-              <SelectItem value='paid'>pago</SelectItem>
-              <SelectItem value='notPaid'>não pago</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      {expense &&
-        expense.map((expense, i) => (
-          <Card key={i} className='py-1 px-2 h-full w-[300px]'>
-            <CardContent className='h-full flex-row justify-between items-center'>
-              <div>
-                <p className='text-xl font-montserrat tracking-wide'>
-                  {formatedCurrency(expense.value)}
-                </p>
-                <p className='text-sm text-foreground-secondary'>
-                  {expense.description}
-                </p>
-                <Badge variant='outline'>{expense.category}</Badge>
-              </div>
-              <div className='text-sm flex flex-col gap-2 items-center'>
-                <p>{format(expense.date, 'dd-MM-yyyy')}</p>
-                <Badge>{expense.type}</Badge>
-                <Badge variant={expense.paid ? 'success' : 'error'}>
-                  {expense.paid ? 'Pago' : 'A Pagar'}
-                </Badge>
-              </div>
-              <Button
-                variant='border'
-                size='icon'
-                className='mb-auto'
-                onClick={() => handleDeleteexpense(expense.id)}
-              >
-                x
-              </Button>
-            </CardContent>
+    <div className='h-full flex flex-col flex-wrap p-3 gap-2'>
+      <UserBarSettings title='Despesas' />
+      {isLoading && <p>Carregando...</p>}
+      {filteredExpenses?.length !== 0 && (
+        <div className='grid grid-cols-1 lg:grid-cols-3 place-items-center gap-2'>
+          <Card className='w-full max-w-xl p-3'>
+            <CardDescription className='text-foreground-secondary'>
+              Total de despesas:
+            </CardDescription>
+            <CardTitle className='text-3xl tracking-wide text-center'>
+              {formatedCurrency(totals.total)}
+            </CardTitle>
           </Card>
-        ))}
-      {!expense && <p>Nenhum ganho...</p>}
-      <Modal open={formIsOpen} onOpenChange={setFormISOpen}>
-        <ModalTrigger asChild>
-          <Button>Cadastrar</Button>
-        </ModalTrigger>
-        <ModalContent>
-          <ModalHeader>
-            <ModalTitle>Cadastro de Gastos</ModalTitle>
-            <ModalDescription className='text-sm text-foreground-secondary'>
-              Formulario para cadastro de gastos
-            </ModalDescription>
-          </ModalHeader>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <FormField name='value'>
-              <FormLabel>Valor</FormLabel>
-              <FormControl asChild>
-                <Input
-                  icon={Wallet}
-                  id='value'
-                  {...register('value')}
-                  type='number'
-                  step='0.01'
-                  placeholder='R$ 0000,00'
-                />
-              </FormControl>
-              {errors.value && (
-                <FormMessage className='text-destructive'>
-                  {errors.value?.message}
-                </FormMessage>
-              )}
-            </FormField>
-            <FormField name='description' className='mt-2'>
-              <FormLabel>Descrição</FormLabel>
-              <FormControl asChild>
-                <Textarea
-                  id='description'
-                  {...register('description')}
-                  placeholder='Descreva, em poucas palavras, o gasto'
-                />
-              </FormControl>
-              {errors.description && (
-                <FormMessage className='text-destructive'>
-                  {errors.description?.message}
-                </FormMessage>
-              )}
-            </FormField>
-
-            <FormField name='type' className='mt-2'>
-              <FormLabel>Tipo de gasto</FormLabel>
-              <Controller
-                name='type'
-                control={control}
-                defaultValue={'FIXED'}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value='FIXED'>Gasto fixo</SelectItem>
-                      <SelectItem value='VARIABLE'>Gasto variável</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </FormField>
-            <FormField name='date' className='mt-2'>
-              <FormLabel>Data da compra</FormLabel>
-              <FormControl asChild>
-                <input
-                  type='date'
-                  id='date'
-                  {...register('date')}
-                  className='text-foreground-secondary border p-1 px-2'
-                />
-              </FormControl>
-              {errors.date && (
-                <FormMessage className='text-destructive'>
-                  {errors.date?.message}
-                </FormMessage>
-              )}
-            </FormField>
-            <FormField name='category' className='mt-2'>
-              <FormLabel>Categoria do gasto</FormLabel>
-              <Controller
-                name='category'
-                control={control}
-                defaultValue='OTHER'
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value='HOUSE'>Moradia</SelectItem>
-                      <SelectItem value='FOOD'>Alimentação</SelectItem>
-                      <SelectItem value='TRANSPORT'>Transporte</SelectItem>
-                      <SelectItem value='EDUCATION'>Educação</SelectItem>
-                      <SelectItem value='HEALTH'>Saúde</SelectItem>
-                      <SelectItem value='CLOTHING'>Vestuário</SelectItem>
-                      <SelectItem value='TECH'>
-                        Tecnologia e comunicação
-                      </SelectItem>
-                      <SelectItem value='PERSONAL_CARE'>
-                        Higiene e cuidados pessoais
-                      </SelectItem>
-                      <SelectItem value='ENTERTAINMENT'>
-                        Lazer e entretenimento
-                      </SelectItem>
-                      <SelectItem value='PETS'>Pets</SelectItem>
-                      <SelectItem value='FINANCIAL'>Financeiro</SelectItem>
-                      <SelectItem value='OTHER'>Outro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </FormField>
-            <FormField name='paid' className='mt-2'>
-              <FormLabel>Status do gasto</FormLabel>
-              <FormControl asChild>
-                <Controller
-                  name='paid'
-                  control={control}
-                  defaultValue={false}
-                  render={({ field }) => (
-                    <Label className='flex flex-row items-center gap-4 text-foreground-secondary'>
-                      <span>A despesa ja foi paga?</span>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </Label>
-                  )}
-                />
-              </FormControl>
-            </FormField>
-            <FormSubmit asChild className='mt-5 justify-self-end'>
-              <Button>
-                Cadastrar
-                <Send />
+          <Card className='w-full max-w-xl p-3'>
+            <CardDescription className='text-foreground-secondary'>
+              Despesas à pagar:
+            </CardDescription>
+            <CardTitle className='text-3xl tracking-wide text-destructive text-center'>
+              {formatedCurrency(totals.notPaid)}
+            </CardTitle>
+          </Card>
+          <ModalPostExpense>
+            <Button className='w-full max-w-xl lg:w-fit'>
+              <Plus />
+              Nova despesa
+            </Button>
+          </ModalPostExpense>
+        </div>
+      )}
+      <FilterExpenses
+        months={months}
+        filteredExpenses={filteredExpenses}
+        filters={filters}
+        updateFilters={updateFilters}
+      />
+      <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-2'>
+        {filteredExpenses?.length !== 0 &&
+          filteredExpenses?.map((expense, i) => (
+            <Card key={i} className=' w-full py-3'>
+              <CardContent className='gap-2'>
+                <div className='flex flex-col gap-1'>
+                  <p className='text-foreground-secondary'>
+                    {expense.description}
+                  </p>
+                  <p className='text-xl font-montserrat tracking-wide flex items-center gap-2'>
+                    <ArrowDown className='text-destructive' />
+                    {formatedCurrency(expense.value)}
+                  </p>
+                </div>
+                <div className='absolute top-3 right-3'>
+                  <Badge variant={expense.paid ? 'success' : 'error'}>
+                    {expense.paid ? 'Pago' : 'À pagar'}
+                  </Badge>
+                </div>
+                <div className='text-sm flex justify-between items-center'>
+                  <Button
+                    variant='border'
+                    onClick={() => handleDeleteExpense(expense.id)}
+                  >
+                    <BanknoteX />
+                    Deletar Gasto
+                  </Button>
+                  <p className='text-foreground-secondary'>
+                    {format(expense.date, 'dd-MM-yyyy')}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+      </div>
+      {filteredExpenses?.length === 0 && (
+        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
+          <CardContent className='items-center gap-8'>
+            <TriangleAlert className='size-30 text-foreground-secondary' />
+            <CardDescription className='text-center'>
+              Nenhuma despesa registrada. Que tal adicionar a primeira?
+            </CardDescription>
+            <ModalPostExpense>
+              <Button variant='border' className='w-full max-w-xl lg:w-fit'>
+                <BanknoteArrowUp />
+                Cadastre uma nova despesa
               </Button>
-            </FormSubmit>
-          </Form>
-        </ModalContent>
-      </Modal>
+            </ModalPostExpense>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }
