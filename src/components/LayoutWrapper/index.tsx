@@ -23,7 +23,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
     <QueryClientProvider client={queryClient}>
       <div className='h-screen flex'>
         {showSidebar && <SideBar />}
-        <main className='w-full'>{children}</main>
+        <main className='size-full'>{children}</main>
       </div>
     </QueryClientProvider>
   )

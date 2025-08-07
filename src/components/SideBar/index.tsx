@@ -25,11 +25,11 @@ const SideBar = () => {
         <h1 className={`w-full text-center pointer-events-none pt-5`}>
           Tudo Contado
         </h1>
-        <div className=' flex flex-col pt-20 gap-2'>
+        <div className=' flex flex-col pt-30 gap-3'>
           {pages.map((page, i) => (
             <Link href={page.url} className='w-full' key={i}>
               <Button variant='ghost' className='w-full justify-normal'>
-                <page.icon />
+                <page.icon className='' />
                 {page.name}
               </Button>
             </Link>

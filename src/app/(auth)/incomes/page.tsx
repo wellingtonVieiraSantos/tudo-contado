@@ -11,13 +11,7 @@ import { Badge } from '@/components/ui/Badge'
 
 import { Button } from '@/components/ui/Button'
 
-import {
-  ArrowUp,
-  BanknoteArrowUp,
-  BanknoteX,
-  Plus,
-  TriangleAlert
-} from 'lucide-react'
+import { ArrowUp, BanknoteArrowUp, BanknoteX, Plus } from 'lucide-react'
 
 import { deleteIncomeAction } from './actions/del-income-action'
 import formatedCurrency from '@/lib/valueFormatter'
@@ -25,6 +19,7 @@ import { UserBarSettings } from '@/components/UserBarSettings'
 import { useGetIncomes } from './hooks/use-get-incomes'
 import { ModalPostIncome } from './components/ModalPostIncome'
 import { FilterIncomes } from './components/FilterIncomes'
+import Image from 'next/image'
 
 export default function Income() {
   const { isLoading, filteredIncomes, months, totals, filters, updateFilters } =
@@ -35,7 +30,7 @@ export default function Income() {
   }
 
   return (
-    <div className='h-full flex flex-col flex-wrap p-3 gap-2'>
+    <div className=' flex flex-col flex-wrap p-3 gap-2 pb-22'>
       <UserBarSettings title='Renda' />
       {isLoading && <p>Carregando...</p>}
       {filteredIncomes?.length !== 0 && (
@@ -98,7 +93,13 @@ export default function Income() {
       {filteredIncomes?.length === 0 && (
         <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
           <CardContent className='items-center gap-8'>
-            <TriangleAlert className='size-30 text-foreground-secondary' />
+            <Image
+              src='/empty-wallet.png'
+              alt='empty wallet'
+              width={128}
+              height={128}
+              className='size-40 invert-100 brightness-200'
+            />
             <CardDescription>
               Nenhuma receita por aqui ainda. Vamos registrar sua primeira
               entrada?

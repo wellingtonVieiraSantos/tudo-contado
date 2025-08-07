@@ -15,14 +15,9 @@ import { UserBarSettings } from '@/components/UserBarSettings'
 import { useGetExpenses } from './hooks/use-get-expenses'
 import { ModalPostExpense } from './components/ModalPostExpenses'
 import { Button } from '@/components/ui/Button'
-import {
-  ArrowDown,
-  BanknoteArrowUp,
-  BanknoteX,
-  Plus,
-  TriangleAlert
-} from 'lucide-react'
+import { ArrowDown, BanknoteArrowUp, BanknoteX, Plus } from 'lucide-react'
 import { FilterExpenses } from './components/FilterExpenses'
+import Image from 'next/image'
 
 export default function Expense() {
   const {
@@ -37,9 +32,8 @@ export default function Expense() {
   const handleDeleteExpense = async (id: string) => {
     await deleteExpenseAction(id)
   }
-
   return (
-    <div className='h-full flex flex-col flex-wrap p-3 gap-2'>
+    <div className='flex flex-col flex-wrap p-3 gap-2 pb-22'>
       <UserBarSettings title='Despesas' />
       {isLoading && <p>Carregando...</p>}
       {filteredExpenses?.length !== 0 && (
@@ -56,7 +50,11 @@ export default function Expense() {
             <CardDescription className='text-foreground-secondary'>
               Despesas à pagar:
             </CardDescription>
-            <CardTitle className='text-3xl tracking-wide text-destructive text-center'>
+            <CardTitle
+              className={`text-3xl tracking-wide ${
+                totals.notPaid && 'text-destructive'
+              } text-center`}
+            >
               {formatedCurrency(totals.notPaid)}
             </CardTitle>
           </Card>
@@ -112,7 +110,13 @@ export default function Expense() {
       {filteredExpenses?.length === 0 && (
         <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
           <CardContent className='items-center gap-8'>
-            <TriangleAlert className='size-30 text-foreground-secondary' />
+            <Image
+              src='/empty-wallet.png'
+              alt='empty wallet'
+              width={128}
+              height={128}
+              className='size-40 invert-100 brightness-200'
+            />
             <CardDescription className='text-center'>
               Nenhuma despesa registrada. Que tal adicionar a primeira?
             </CardDescription>

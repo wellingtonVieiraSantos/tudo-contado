@@ -19,7 +19,7 @@ const CardHeader = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
       <div
-        className={twMerge(`p-4 flex flex-col gap-1.5`, className)}
+        className={twMerge(`p-3 flex flex-col gap-1.5`, className)}
         ref={ref}
         {...props}
       />
@@ -62,7 +62,7 @@ const CardContent = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
       <div
-        className={twMerge(`px-4 flex flex-col gap-1.5`, className)}
+        className={twMerge(`px-4 py-1 flex flex-col gap-1.5`, className)}
         ref={ref}
         {...props}
       />
