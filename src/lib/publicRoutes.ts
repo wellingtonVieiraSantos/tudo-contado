@@ -1,1 +1,1 @@
-export const publicRoutes = ['/login', '/register']
+export const publicRoutes = ['/login', '/registro', '/termos', '/privacidade']

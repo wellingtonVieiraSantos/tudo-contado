@@ -1,6 +1,1 @@
-export const privateRoutes = [
-  '/dashboard',
-  '/incomes',
-  '/expenses',
-  '/products'
-]
+export const privateRoutes = ['/painel', '/ganhos', '/despesas']

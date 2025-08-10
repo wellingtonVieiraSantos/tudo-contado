@@ -1,18 +1,13 @@
 import Link from 'next/link'
 import { Button } from '../ui/Button'
-import {
-  BanknoteArrowUp,
-  BanknoteArrowDown,
-  Barcode,
-  HomeIcon
-} from 'lucide-react'
+import { BanknoteArrowUp, BanknoteArrowDown, HomeIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 const pages = [
-  { name: 'Dashboard', icon: HomeIcon, url: '/dashboard' },
-  { name: 'Renda', icon: BanknoteArrowUp, url: '/incomes' },
-  { name: 'Despesas', icon: BanknoteArrowDown, url: '/expenses' },
-  { name: 'Promoções', icon: Barcode, url: '/products' }
+  { name: 'Painel', icon: HomeIcon, url: '/painel' },
+  { name: 'Renda', icon: BanknoteArrowUp, url: '/ganhos' },
+  { name: 'Despesas', icon: BanknoteArrowDown, url: '/despesas' }
+  /* { name: 'Promoções', icon: Barcode, url: '/promocoes' } */
 ]
 
 const SideBar = () => {
@@ -36,7 +31,7 @@ const SideBar = () => {
           ))}
         </div>
       </div>
-      <div className='flex items-center justify-center w-full h-20 z-100 fixed bottom-0 left-0 bg-card lg:hidden border-t'>
+      <div className='flex items-center justify-center w-full h-20 z-10 fixed bottom-0 left-0 bg-card lg:hidden border-t'>
         {pages.map((page, i) => (
           <Link href={page.url} className='flex-1' key={i}>
             <div

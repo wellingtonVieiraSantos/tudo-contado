@@ -16,7 +16,7 @@ export const UserBarSettings = ({ title }: { title: string }) => {
   return (
     <>
       {/* mobile */}
-      <div className='lg:hidden flex justify-between items-center text-sm lg:col-span-3'>
+      <div className='lg:hidden flex justify-between items-center text-sm '>
         <div className='flex items-center gap-2 text-right'>
           <Avatar className='size-10'>
             <AvatarImage src={session?.user?.image || ''}></AvatarImage>
@@ -25,8 +25,8 @@ export const UserBarSettings = ({ title }: { title: string }) => {
             </AvatarFallback>
           </Avatar>
           <div className='text-left'>
-            <p className='text-[10px] text-foreground-secondary'>Bem vindo,</p>
-            <p>{session?.user?.name}</p>
+            <p className='text-[12px] text-foreground-secondary'>Bem vindo,</p>
+            <p className='text-base'>{session?.user?.name}</p>
           </div>
         </div>
         <Dropdown>
@@ -44,7 +44,7 @@ export const UserBarSettings = ({ title }: { title: string }) => {
         </Dropdown>
       </div>
       {/* desktop */}
-      <div className='hidden lg:flex justify-between items-center text-sm lg:col-span-3'>
+      <div className='hidden lg:flex justify-between items-center text-sm lg:col-span-2 xl:col-span-3'>
         <div className='text-xl text-left'>
           <h2 className=''>{title}</h2>
           <p className='text-sm text-foreground-secondary'>
@@ -53,7 +53,7 @@ export const UserBarSettings = ({ title }: { title: string }) => {
             }).toUpperCase()}
           </p>
         </div>
-        <div className='flex items-center gap-3'>
+        <div className='flex items-center gap-2'>
           <p className=''>Bem vindo, {session?.user?.name}</p>
           <Dropdown>
             <DropdownTrigger asChild>

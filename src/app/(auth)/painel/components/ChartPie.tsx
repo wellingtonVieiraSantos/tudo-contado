@@ -30,6 +30,10 @@ export const ChartPie = ({
       </CardHeader>
       <CardContent className='h-full'>
         <PieChart
+          localeText={{
+            loading: 'Carregando dados...',
+            noData: 'Nenhum dado encontrado.'
+          }}
           series={[
             {
               arcLabel: item =>
@@ -55,13 +59,16 @@ export const ChartPie = ({
           height={300}
           sx={{
             '& .MuiChartsLegend-root': {
-              color: '#FFF',
+              color: 'oklch(0.99 0.0146 98.28)',
               fontSize: '12px',
               fontWeight: 'bold'
             },
+            '& .MuiChartsNoDataOverlay-root': {
+              color: 'oklch(0.99 0.0146 98.28)',
+              fontSize: 18
+            },
             [`& .${pieArcLabelClasses.root}`]: {
               fontWeight: 'bold',
-
               fontSize: '18px'
             }
           }}

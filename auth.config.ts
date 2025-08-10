@@ -1,41 +1,36 @@
-import { prisma } from '@/lib/prisma'
 import { NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import GitHub from 'next-auth/providers/github'
-import z from 'zod'
+import Google from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
-
-const credentialsSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(5)
-})
+import { checkEmailExists } from '@/lib/dal/user'
+import { loginSchema } from '@/validators/loginUser'
 
 export default {
   providers: [
     GitHub,
+    Google,
     Credentials({
       credentials: {
         email: {},
         password: {}
       },
       authorize: async credentials => {
-        const parsed = credentialsSchema.safeParse(credentials)
+        const parsed = loginSchema.safeParse(credentials)
 
         if (!parsed.success) return null
 
         const { email, password } = parsed.data
 
         //verifica se o user existe
-        const user = await prisma.user.findFirst({
-          where: { email }
-        })
+        const user = await checkEmailExists(email)
 
         if (!user) {
           return null
         }
 
         //verifica se a senha esta correta
-        const passwordMatch = bcrypt.compareSync(password, user.password!)
+        const passwordMatch = await bcrypt.compare(password, user.password!)
 
         if (passwordMatch) {
           return {

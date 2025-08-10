@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 const sizeClasses = {
-  sm: 'h-8 px-3 text-sm gap-2 [&>svg]:size-4',
+  sm: 'h-9 px-3 text-sm gap-2 [&>svg]:size-4',
   md: 'h-11 px-6 gap-2 [&>svg]:size-5',
   lg: 'h-13 px-9 gap-2 [&>svg]:size-6',
   icon: 'size-8 [&>svg]:size-5'
@@ -34,7 +34,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={twMerge(
-          `w-max relative flex items-center justify-center rounded cursor-pointer transition-color duration-300
+          `w-max relative flex items-center justify-center rounded-full lg:rounded cursor-pointer transition-color duration-300
            disabled:bg-disabled disabled:cursor-not-allowed`,
           sizeClasses[size],
           variantClasses[variant],

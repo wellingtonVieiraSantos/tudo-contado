@@ -72,7 +72,7 @@ export const FilterExpenses = ({
         </Select>
         <Select onValueChange={handleStatusFilter}>
           <SelectTrigger>
-            <SelectValue placeholder='pagamento' />
+            <SelectValue placeholder='status' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='default'>sem filtro</SelectItem>

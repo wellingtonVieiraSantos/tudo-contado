@@ -15,7 +15,7 @@ export default auth(async req => {
   if (!isLogged && isAuthRoute) return
 
   if (isAuthRoute && isLogged) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl.origin))
+    return NextResponse.redirect(new URL('/painel', req.nextUrl.origin))
   }
 
   if (!isLogged && isPrivateRoute) {

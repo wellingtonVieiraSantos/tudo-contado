@@ -14,7 +14,7 @@ const FormField = forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <FormRadix.Field
-      className={twMerge(`flex flex-col gap-1 group`, className)}
+      className={twMerge(`flex flex-col gap-3 group`, className)}
       ref={ref}
       {...props}
     />
@@ -29,10 +29,7 @@ const FormMessage = forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <FormRadix.Message
-      className={twMerge(
-        `text-sm group-data-[invalid]:text-destructive`,
-        className
-      )}
+      className={twMerge(`text-sm text-destructive`, className)}
       ref={ref}
       {...props}
     />

@@ -5,28 +5,28 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
-import { signIn } from '../../../auth'
-import FormLogin from './components/FormLogin'
-import Form from 'next/form'
+import FormRegister from './components/FormRegister'
 import { Divider } from '@/components/ui/Divider'
 import { Button } from '@/components/ui/Button'
+import { Form } from '@/components/ui/Form'
 import Image from 'next/image'
+import { signIn } from '../../../auth'
 
-export default async function Login() {
+export default function RegisterUser() {
   return (
     <div className='size-full flex flex-col justify-center p-3'>
       <Card className='w-full max-w-lg m-auto lg:p-8 py-3'>
         <CardHeader>
           <CardTitle className='text-xl text-center'>
-            Bem-vindo de volta
+            Bem-vindo ao Tudo Contado
           </CardTitle>
-          <CardDescription className=' text-center lg:text-left'>
-            Digite seu e-mail e senha abaixo e faça o login.
+          <CardDescription className='text-center lg:text-left'>
+            Preencha os campos abaixo para ter acesso ao app
           </CardDescription>
           <Divider className='mt-2 bg-gradient-to-r from-transparent via-foreground-secondary to-transparent' />
         </CardHeader>
         <CardContent>
-          <FormLogin />
+          <FormRegister />
           <div className='pt-2 grid gap-3'>
             <div className='flex items-center gap-2 text-sm text-foreground-secondary text-center'>
               <Divider className='flex-1 bg-gradient-to-r from-transparent to-foreground-secondary' />{' '}
