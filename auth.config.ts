@@ -1,19 +1,25 @@
 import { NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
-import GitHub from 'next-auth/providers/github'
-import Google from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
 import { checkEmailExists } from '@/lib/dal/user'
 import { loginSchema } from '@/validators/loginUser'
+import GitHubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
 
 export default {
   providers: [
-    GitHub,
-    Google,
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID || '',
+      clientSecret: process.env.GITHUB_SECRET || ''
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
+    }),
     Credentials({
       credentials: {
-        email: {},
-        password: {}
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Senha', type: 'password' }
       },
       authorize: async credentials => {
         const parsed = loginSchema.safeParse(credentials)
