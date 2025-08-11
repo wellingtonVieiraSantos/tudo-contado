@@ -28,16 +28,21 @@ Clone o repositório:
 
 ```bash
 git clone https://github.com/seu-usuario/tudo-contado.git
+```
 
 Acesse a pasta do projeto:
 
+```bash
 cd tudo-contado
+```
 
 Instale as dependências:
 
+```bash
 npm install
 # ou
 yarn install
+```
 
 Configure as variáveis de ambiente no arquivo .env conforme o .env.example.
 
@@ -45,15 +50,18 @@ Configure as variáveis de ambiente no arquivo .env conforme o .env.example.
 
 Ambiente de desenvolvimento:
 
+```bash
 npm run dev
 # ou
 yarn dev
+```
 
 Ambiente de produção:
 
+```bash
 npm run build
 npm start
-
+```
 
 🛠️ Funcionalidades
 
@@ -88,4 +96,3 @@ Siga as etapas:
 
 Este projeto está licenciado sob a MIT License.
 Consulte o arquivo LICENSE para mais informações.
-```
