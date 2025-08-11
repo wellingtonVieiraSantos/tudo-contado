@@ -26,13 +26,12 @@ O projeto é desenvolvido com foco em **Clean Code**, **responsividade**, **esca
 
 Clone o repositório:
 
-````bash
-git clone https://github.com/seu-usuario/tudo-contado.git ```
+```bash
+git clone https://github.com/seu-usuario/tudo-contado.git
 
 Acesse a pasta do projeto:
 
-```bash
-cd tudo-contado ```
+cd tudo-contado
 
 Instale as dependências:
 
@@ -89,5 +88,4 @@ Siga as etapas:
 
 Este projeto está licenciado sob a MIT License.
 Consulte o arquivo LICENSE para mais informações.
-
-````
+```
