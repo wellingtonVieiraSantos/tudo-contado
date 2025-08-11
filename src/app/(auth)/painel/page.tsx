@@ -164,7 +164,7 @@ export default function Dashboard() {
             </CardDescription>
             <Divider />
           </CardHeader>
-          <CardContent className='lg:h-20 '>
+          <CardContent className='lg:h-20 xl:h-max'>
             {recentTransactions.length === 0 && (
               <p className='text-foreground-secondary text-center'>
                 Nemhuma transação recente...
