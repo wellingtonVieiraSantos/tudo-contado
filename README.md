@@ -26,12 +26,13 @@ O projeto é desenvolvido com foco em **Clean Code**, **responsividade**, **esca
 
 Clone o repositório:
 
-```bash
-git clone https://github.com/seu-usuario/tudo-contado.git
+````bash
+git clone https://github.com/seu-usuario/tudo-contado.git ```
 
 Acesse a pasta do projeto:
 
-cd tudo-contado
+```bash
+cd tudo-contado ```
 
 Instale as dependências:
 
@@ -61,7 +62,7 @@ npm start
 
 - 💸 Cadastro e controle de ganhos e despesas (fixos e variáveis).
 
-- 🛍️ Controle de produtos com datas de compra e validade.
+- 🛍️ Controle de produtos com datas de compra e validade (em breve).
 
 - 🤖 IA integrada para sugestões e otimização da experiência do usuário.
 
@@ -88,4 +89,5 @@ Siga as etapas:
 
 Este projeto está licenciado sob a MIT License.
 Consulte o arquivo LICENSE para mais informações.
-```
+
+````
