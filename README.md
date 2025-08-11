@@ -26,7 +26,7 @@ O projeto é desenvolvido com foco em **Clean Code**, **responsividade**, **esca
 
 Clone o repositório:
 
-````bash
+```bash
 git clone https://github.com/seu-usuario/tudo-contado.git
 
 Acesse a pasta do projeto:
@@ -35,13 +35,14 @@ cd tudo-contado
 
 Instale as dependências:
 
-```npm install
+npm install
 # ou
-yarn install```
+yarn install
 
 Configure as variáveis de ambiente no arquivo .env conforme o .env.example.
 
 ▶️ Executando o Projeto
+
 Ambiente de desenvolvimento:
 
 npm run dev
@@ -55,6 +56,7 @@ npm start
 
 
 🛠️ Funcionalidades
+
 - 📊 Dashboard com estatísticas e gráficos interativos.
 
 - 💸 Cadastro e controle de ganhos e despesas (fixos e variáveis).
@@ -68,6 +70,7 @@ npm start
 - 📱 Layout 100% responsivo.
 
 🤝 Contribuindo
+
 Contribuições são bem-vindas!
 Siga as etapas:
 
@@ -82,6 +85,7 @@ Siga as etapas:
 - Abra um Pull Request.
 
 📄 Licença
+
 Este projeto está licenciado sob a MIT License.
 Consulte o arquivo LICENSE para mais informações.
-````
+```
