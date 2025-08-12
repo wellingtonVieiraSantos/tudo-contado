@@ -9,7 +9,7 @@ const fetchExpense = async (data: expenseType) => {
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }
   })
-  if (!res.ok) throw new Error('Erro')
+  if (!res.ok) throw new Error('Falha ao cadastrar despesa')
   return res.json()
 }
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getExpenses, postExpense } from '@/lib/dal/expenses'
+import { deleteExpenseById, getExpenses, postExpense } from '@/lib/dal/expenses'
 import { expenseSchema } from '@/validators/formExpense'
 
 export async function GET() {
@@ -56,6 +56,26 @@ export async function POST(req: NextRequest) {
     console.log(e)
     return NextResponse.json(
       { error: 'Erro ao cadastrar nova Despesa.' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams
+
+  const id = searchParams.get('id')
+
+  try {
+    if (!id) return NextResponse.json({ success: false }, { status: 404 })
+
+    await deleteExpenseById(id)
+
+    return NextResponse.json({ success: true }, { status: 200 })
+  } catch (e) {
+    console.log(e)
+    return NextResponse.json(
+      { error: 'Erro ao apagar a despesa.' },
       { status: 500 }
     )
   }

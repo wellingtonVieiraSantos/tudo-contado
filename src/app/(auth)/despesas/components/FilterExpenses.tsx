@@ -75,9 +75,9 @@ export const FilterExpenses = ({
             <SelectValue placeholder='status' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='default'>sem filtro</SelectItem>
-            <SelectItem value='paid'>pago</SelectItem>
-            <SelectItem value='notPaid'>não pago</SelectItem>
+            <SelectItem value='default'>Sem filtro</SelectItem>
+            <SelectItem value='paid'>Pago</SelectItem>
+            <SelectItem value='notPaid'>Não pago</SelectItem>
           </SelectContent>
         </Select>
       </div>

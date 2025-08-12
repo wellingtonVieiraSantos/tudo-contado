@@ -11,23 +11,42 @@ import { Badge } from '@/components/ui/Badge'
 
 import { Button } from '@/components/ui/Button'
 
-import { ArrowUp, BanknoteArrowUp, BanknoteX, Plus } from 'lucide-react'
+import {
+  ArrowUp,
+  BanknoteArrowUp,
+  BanknoteX,
+  Plus,
+  Trash,
+  TriangleAlert
+} from 'lucide-react'
 
-import { deleteIncomeAction } from './actions/del-income-action'
 import formatedCurrency from '@/lib/valueFormatter'
 import { UserBarSettings } from '@/components/UserBarSettings'
 import { useGetIncomes } from './hooks/use-get-incomes'
 import { ModalPostIncome } from './components/ModalPostIncome'
 import { FilterIncomes } from './components/FilterIncomes'
 import Image from 'next/image'
+import { useDelIncome } from './hooks/use-del-incomes'
+import {
+  Modal,
+  ModalActions,
+  ModalContent,
+  ModalDescription,
+  ModalHeader,
+  ModalTitle
+} from '@/components/ui/Modal'
 
 export default function Income() {
   const { isLoading, filteredIncomes, months, totals, filters, updateFilters } =
     useGetIncomes()
 
-  const handleDeleteIncome = async (id: string) => {
-    await deleteIncomeAction(id)
-  }
+  const {
+    handleDeleteIncome,
+    isOpen,
+    setIsOpen,
+    openDeleteModal,
+    selectedIncome
+  } = useDelIncome()
 
   return (
     <div className=' flex flex-col flex-wrap p-3 gap-2 pb-22'>
@@ -77,11 +96,12 @@ export default function Income() {
                 <div className='text-sm flex justify-between items-center'>
                   <Button
                     variant='border'
-                    onClick={() => handleDeleteIncome(income.id)}
+                    onClick={() => openDeleteModal(income)}
                   >
                     <BanknoteX />
                     Deletar entrada
                   </Button>
+
                   <p className='text-foreground-secondary'>
                     {format(income.date, 'dd-MM-yyyy')}
                   </p>
@@ -90,6 +110,41 @@ export default function Income() {
             </Card>
           ))}
       </div>
+      <Modal open={isOpen} onOpenChange={setIsOpen}>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Deseja apagar entrada?</ModalTitle>
+            <ModalDescription className='text-sm text-foreground-secondary'>
+              Essa ação apagará permanentemente essa renda, deseja mesmo fazer
+              isso?
+            </ModalDescription>
+          </ModalHeader>
+          <Badge variant='warning' className='justify-self-center gap-4'>
+            <TriangleAlert size={20} />
+            {selectedIncome?.description} -{' '}
+            {formatedCurrency(selectedIncome?.value || 0)}
+          </Badge>
+          <ModalActions>
+            <Button
+              variant='border'
+              onClick={() => setIsOpen(false)}
+              className='flex-1'
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={() => {
+                if (selectedIncome) handleDeleteIncome(selectedIncome.id)
+                setIsOpen(false)
+              }}
+              className='flex-1'
+            >
+              <Trash />
+              Apagar rendimento
+            </Button>
+          </ModalActions>
+        </ModalContent>
+      </Modal>
       {filteredIncomes?.length === 0 && (
         <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
           <CardContent className='items-center gap-8'>

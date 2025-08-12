@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getIncomes, postIncome } from '@/lib/dal/incomes'
+import { deleteIncomeById, getIncomes, postIncome } from '@/lib/dal/incomes'
 import { incomeSchema } from '@/validators/formIncome'
 
 export async function GET() {
@@ -46,34 +46,23 @@ export async function POST(req: NextRequest) {
     )
   }
 }
-/* 
+
 export async function DELETE(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams
+
+  const id = searchParams.get('id')
+
   try {
-    const session = await auth()
-    const { id } = await req.json()
+    if (!id) return NextResponse.json({ success: false }, { status: 404 })
 
-    if (!session?.user?.email)
-      return NextResponse.json(
-        { error: 'Usuário não autorizado' },
-        { status: 401 }
-      )
+    await deleteIncomeById(id)
 
-    const incomes = await prisma.income.delete({
-      where: { id },
-      select: {
-        id: true,
-        value: true,
-        description: true,
-        date: true,
-        type: true
-      }
-    })
-    return NextResponse.json({ data: incomes, success: true }, { status: 200 })
+    return NextResponse.json({ success: true }, { status: 200 })
   } catch (e) {
     console.log(e)
     return NextResponse.json(
-      { error: 'Ops, algo inesperado aconteceu.' },
+      { error: 'Erro ao apagar a renda.' },
       { status: 500 }
     )
   }
-} */
+}

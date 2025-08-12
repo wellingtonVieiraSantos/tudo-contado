@@ -9,15 +9,30 @@ import {
 } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 
-import { deleteExpenseAction } from './actions/del-expense-action'
 import formatedCurrency from '@/lib/valueFormatter'
 import { UserBarSettings } from '@/components/UserBarSettings'
 import { useGetExpenses } from './hooks/use-get-expenses'
 import { ModalPostExpense } from './components/ModalPostExpenses'
 import { Button } from '@/components/ui/Button'
-import { ArrowDown, BanknoteArrowUp, BanknoteX, Plus } from 'lucide-react'
+import {
+  ArrowDown,
+  BanknoteArrowUp,
+  BanknoteX,
+  Plus,
+  Trash,
+  TriangleAlert
+} from 'lucide-react'
 import { FilterExpenses } from './components/FilterExpenses'
 import Image from 'next/image'
+import { useDelExpense } from './hooks/use-del-expense'
+import {
+  Modal,
+  ModalActions,
+  ModalContent,
+  ModalDescription,
+  ModalHeader,
+  ModalTitle
+} from '@/components/ui/Modal'
 
 export default function Expense() {
   const {
@@ -29,9 +44,13 @@ export default function Expense() {
     isLoading
   } = useGetExpenses()
 
-  const handleDeleteExpense = async (id: string) => {
-    await deleteExpenseAction(id)
-  }
+  const {
+    handleDeleteExpense,
+    isOpen,
+    setIsOpen,
+    openDeleteModal,
+    selectedExpense
+  } = useDelExpense()
   return (
     <div className='flex flex-col flex-wrap p-3 gap-2 pb-22'>
       <UserBarSettings title='Despesas' />
@@ -74,8 +93,8 @@ export default function Expense() {
       />
       <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-2'>
         {filteredExpenses?.length !== 0 &&
-          filteredExpenses?.map((expense, i) => (
-            <Card key={i} className=' w-full py-3'>
+          filteredExpenses?.map(expense => (
+            <Card key={expense.id} className=' w-full py-3'>
               <CardContent className='gap-2'>
                 <div className='flex flex-col gap-1'>
                   <p className='text-foreground-secondary'>
@@ -94,10 +113,10 @@ export default function Expense() {
                 <div className='text-sm flex justify-between items-center'>
                   <Button
                     variant='border'
-                    onClick={() => handleDeleteExpense(expense.id)}
+                    onClick={() => openDeleteModal(expense)}
                   >
                     <BanknoteX />
-                    Deletar Gasto
+                    Deletar entrada
                   </Button>
                   <p className='text-foreground-secondary'>
                     {format(expense.date, 'dd-MM-yyyy')}
@@ -107,6 +126,42 @@ export default function Expense() {
             </Card>
           ))}
       </div>
+      <Modal open={isOpen} onOpenChange={setIsOpen}>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Deseja apagar a despesa?</ModalTitle>
+            <ModalDescription className='text-sm text-foreground-secondary'>
+              Essa ação apagará permanentemente essa despesa, deseja mesmo fazer
+              isso?
+            </ModalDescription>
+          </ModalHeader>
+
+          <Badge variant='warning' className='justify-self-center gap-4'>
+            <TriangleAlert size={20} />
+            {selectedExpense?.description} -{' '}
+            {formatedCurrency(selectedExpense?.value || 0)}
+          </Badge>
+          <ModalActions>
+            <Button
+              variant='border'
+              onClick={() => setIsOpen(false)}
+              className='flex-1'
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={() => {
+                if (selectedExpense) handleDeleteExpense(selectedExpense.id)
+                setIsOpen(false)
+              }}
+              className='flex-1'
+            >
+              <Trash />
+              Apagar despesa
+            </Button>
+          </ModalActions>
+        </ModalContent>
+      </Modal>
       {filteredExpenses?.length === 0 && (
         <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
           <CardContent className='items-center gap-8'>
