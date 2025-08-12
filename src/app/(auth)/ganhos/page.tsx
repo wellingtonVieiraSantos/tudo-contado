@@ -119,7 +119,7 @@ export default function Income() {
               isso?
             </ModalDescription>
           </ModalHeader>
-          <Badge variant='warning' className='justify-self-center gap-4'>
+          <Badge variant='warning' className='justify-self-center gap-4 my-4'>
             <TriangleAlert size={20} />
             {selectedIncome?.description} -{' '}
             {formatedCurrency(selectedIncome?.value || 0)}
@@ -128,7 +128,7 @@ export default function Income() {
             <Button
               variant='border'
               onClick={() => setIsOpen(false)}
-              className='flex-1'
+              className='w-full lg:flex-1'
             >
               Cancelar
             </Button>
@@ -137,7 +137,7 @@ export default function Income() {
                 if (selectedIncome) handleDeleteIncome(selectedIncome.id)
                 setIsOpen(false)
               }}
-              className='flex-1'
+              className='w-full lg:flex-1'
             >
               <Trash />
               Apagar rendimento
