@@ -63,7 +63,7 @@ export default function Dashboard() {
           </div>
           <h2
             className={`text-3xl tracking-wide ${
-              totalIncomeCurrent - totalExpenseCurrent > 0
+              totalIncomeCurrent - totalExpenseCurrent < 0
                 ? 'lg:text-destructive'
                 : 'lg:text-success'
             }`}
