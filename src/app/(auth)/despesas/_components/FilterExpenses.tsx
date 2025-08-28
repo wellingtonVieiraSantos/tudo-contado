@@ -43,8 +43,8 @@ export const FilterExpenses = ({
     updateFilters(newFilter)
   }
   return (
-    <div className='w-full bg-card flex items-center gap-2 p-2 border rounded-xl'>
-      <p className='text-foreground-secondary'>Filtrar por:</p>
+    <div className='w-full bg-card flex flex-col lg:flex-row lg:items-center gap-2 p-2 border rounded-xl'>
+      <p className='text-left text-foreground-secondary'>Filtrar por:</p>
       <div className='flex gap-2 w-fit'>
         <Select
           defaultValue={

@@ -95,32 +95,32 @@ export default function Income() {
         {filteredIncomes?.length !== 0 &&
           filteredIncomes?.map((income, i) => (
             <Card key={i} className=' w-full py-3'>
+              <CardHeader>
+                <CardTitle>{format(income.date, 'dd-MM-yyyy')}</CardTitle>
+                <CardDescription>Entrada de rendimento</CardDescription>
+                <Divider />
+              </CardHeader>
               <CardContent className='gap-2'>
                 <div className='flex flex-col gap-1'>
-                  <p className='text-foreground-secondary'>
-                    {income.description}
-                  </p>
                   <p className='text-xl font-montserrat tracking-wide flex items-center gap-2'>
                     <TrendingUp className='text-success' />
                     {formatedCurrency(income.value)}
                   </p>
-                </div>
-                <div className='absolute top-3 right-3'>
-                  <Badge variant='info'>{income.type}</Badge>
-                </div>
-                <div className='text-sm flex justify-between items-center'>
-                  <Button
-                    variant='border'
-                    onClick={() => openDeleteModal(income)}
-                  >
-                    <BanknoteX />
-                    Deletar entrada
-                  </Button>
-
                   <p className='text-foreground-secondary'>
-                    {format(income.date, 'dd-MM-yyyy')}
+                    {income.description}
                   </p>
                 </div>
+                <Badge variant='info' className='absolute top-3 right-3 px-4'>
+                  {income.type}
+                </Badge>
+                <Button
+                  variant='border'
+                  onClick={() => openDeleteModal(income)}
+                  className='self-end bg-destructive/20'
+                >
+                  <BanknoteX />
+                  Deletar entrada
+                </Button>
               </CardContent>
             </Card>
           ))}

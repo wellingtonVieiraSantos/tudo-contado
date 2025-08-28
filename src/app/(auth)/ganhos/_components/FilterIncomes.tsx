@@ -34,7 +34,7 @@ export const FilterIncomes = ({
   }
 
   return (
-    <div className='w-full bg-card flex items-center gap-2 p-2 border rounded-xl'>
+    <div className='w-full bg-card flex flex-col lg:flex-row lg:items-center gap-2 p-2 border rounded-xl'>
       <p className='text-foreground-secondary'>Filtrar por:</p>
       <div className='w-fit'>
         <Select

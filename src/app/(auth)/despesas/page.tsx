@@ -35,6 +35,7 @@ import {
   ModalTitle
 } from '@/components/ui/Modal'
 import { Divider } from '@/components/ui/Divider'
+import { categoryFormatter } from '@/lib/categoryFormatter'
 
 export default function Expense() {
   const {
@@ -88,18 +89,6 @@ export default function Expense() {
               </ModalPostExpense>
             </CardContent>
           </Card>
-          {/* <Card className='w-full max-w-xl p-3'>
-            <CardDescription className='text-foreground-secondary'>
-              Despesas à pagar:
-            </CardDescription>
-            <CardTitle
-              className={`text-3xl tracking-wide ${
-                totals.notPaid && 'text-destructive'
-              } text-center`}
-            >
-              {formatedCurrency(totals.notPaid)}
-            </CardTitle>
-          </Card> */}
         </div>
       )}
       <FilterExpenses
@@ -116,33 +105,37 @@ export default function Expense() {
         {filteredExpenses?.length !== 0 &&
           filteredExpenses?.map(expense => (
             <Card key={expense.id} className=' w-full py-3'>
+              <CardHeader>
+                <CardTitle>{format(expense.date, 'dd-MM-yyyy')}</CardTitle>
+                <CardDescription>
+                  {categoryFormatter(expense.category)}
+                </CardDescription>
+                <Divider />
+              </CardHeader>
               <CardContent className='gap-2'>
                 <div className='flex flex-col gap-1'>
-                  <p className='text-foreground-secondary'>
-                    {expense.description}
-                  </p>
                   <p className='text-xl font-montserrat tracking-wide flex items-center gap-2'>
                     <TrendingDown className='text-destructive' />
                     {formatedCurrency(expense.value)}
                   </p>
-                </div>
-                <div className='absolute top-3 right-3'>
-                  <Badge variant={expense.paid ? 'success' : 'error'}>
-                    {expense.paid ? 'Pago' : 'À pagar'}
-                  </Badge>
-                </div>
-                <div className='text-sm flex justify-between items-center'>
-                  <Button
-                    variant='border'
-                    onClick={() => openDeleteModal(expense)}
-                  >
-                    <BanknoteX />
-                    Deletar entrada
-                  </Button>
                   <p className='text-foreground-secondary'>
-                    {format(expense.date, 'dd-MM-yyyy')}
+                    {expense.description}
                   </p>
                 </div>
+                <Badge
+                  variant={expense.paid ? 'success' : 'error'}
+                  className='absolute top-3 right-3 px-4'
+                >
+                  {expense.paid ? 'Pago' : 'À pagar'}
+                </Badge>
+                <Button
+                  variant='border'
+                  onClick={() => openDeleteModal(expense)}
+                  className='self-end bg-destructive/20'
+                >
+                  <BanknoteX />
+                  Deletar entrada
+                </Button>
               </CardContent>
             </Card>
           ))}
