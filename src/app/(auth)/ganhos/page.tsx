@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle
 } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
@@ -12,21 +13,21 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 
 import {
-  ArrowUp,
   BanknoteArrowUp,
   BanknoteX,
   Plus,
   Trash,
+  TrendingUp,
   TriangleAlert
 } from 'lucide-react'
 
 import formatedCurrency from '@/lib/valueFormatter'
 import { UserBarSettings } from '@/components/UserBarSettings'
-import { useGetIncomes } from './hooks/use-get-incomes'
-import { ModalPostIncome } from './components/ModalPostIncome'
-import { FilterIncomes } from './components/FilterIncomes'
+import { useGetIncomes } from './_hooks/use-get-incomes'
+import { ModalPostIncome } from './_components/ModalPostIncome'
+import { FilterIncomes } from './_components/FilterIncomes'
 import Image from 'next/image'
-import { useDelIncome } from './hooks/use-del-incomes'
+import { useDelIncome } from './_hooks/use-del-incomes'
 import {
   Modal,
   ModalActions,
@@ -35,6 +36,7 @@ import {
   ModalHeader,
   ModalTitle
 } from '@/components/ui/Modal'
+import { Divider } from '@/components/ui/Divider'
 
 export default function Income() {
   const { isLoading, filteredIncomes, months, totals, filters, updateFilters } =
@@ -49,25 +51,34 @@ export default function Income() {
   } = useDelIncome()
 
   return (
-    <div className=' flex flex-col flex-wrap p-3 gap-2 pb-22'>
+    <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 lg:pb-0'>
       <UserBarSettings title='Renda' />
       {isLoading && <p>Carregando...</p>}
       {filteredIncomes?.length !== 0 && (
-        <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-2'>
-          <Card className='w-full max-w-xl p-3'>
-            <CardDescription className='text-foreground-secondary'>
-              Total de ganhos:
-            </CardDescription>
-            <CardTitle className='text-3xl tracking-wide text-center'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
+          <Card className='w-full p-2 lg:bg-none lg:bg-card bg-gradient-to-br from-button to-badge pb-8'>
+            <CardHeader>
+              <CardTitle className=' flex items-center gap-3'>
+                <TrendingUp className='text-success' />
+                Total de rendimentos
+              </CardTitle>
+              <CardDescription className='hidden lg:flex'>
+                Somatório de todos os ganhos
+              </CardDescription>
+              <Divider className='hidden lg:flex' />
+            </CardHeader>
+            <CardContent className='py-3 text-center text-4xl font-montserrat'>
               {formatedCurrency(totals)}
-            </CardTitle>
+              <ModalPostIncome>
+                <Button
+                  size='icon'
+                  className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
+                >
+                  <Plus />
+                </Button>
+              </ModalPostIncome>
+            </CardContent>
           </Card>
-          <ModalPostIncome>
-            <Button className='w-full max-w-xl lg:w-fit'>
-              <Plus />
-              Novo ganho
-            </Button>
-          </ModalPostIncome>
         </div>
       )}
       <FilterIncomes
@@ -76,7 +87,11 @@ export default function Income() {
         months={months}
         updateFilters={updateFilters}
       />
-      <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-2'>
+      <h2>Ganhos</h2>
+      <p className='text-foreground-secondary text-sm -mt-2'>
+        Acompanhamento de ganhos detalhadamente
+      </p>
+      <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
         {filteredIncomes?.length !== 0 &&
           filteredIncomes?.map((income, i) => (
             <Card key={i} className=' w-full py-3'>
@@ -86,7 +101,7 @@ export default function Income() {
                     {income.description}
                   </p>
                   <p className='text-xl font-montserrat tracking-wide flex items-center gap-2'>
-                    <ArrowUp className='text-success' />
+                    <TrendingUp className='text-success' />
                     {formatedCurrency(income.value)}
                   </p>
                 </div>
@@ -149,18 +164,18 @@ export default function Income() {
         <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
           <CardContent className='items-center gap-8'>
             <Image
-              src='/empty-wallet.png'
-              alt='empty wallet'
+              src='/empty-wallet.webp'
+              alt='mão colocando moeda no porquinho'
               width={128}
               height={128}
-              className='size-40 invert-100 brightness-200'
+              className='size-50 grayscale-100'
             />
-            <CardDescription>
+            <CardDescription className='text-center'>
               Nenhuma receita por aqui ainda. Vamos registrar sua primeira
               entrada?
             </CardDescription>
             <ModalPostIncome>
-              <Button variant='border' className='w-full max-w-xl lg:w-fit'>
+              <Button className='w-full max-w-xl lg:w-fit'>
                 <BanknoteArrowUp />
                 Cadastre um novo ganho
               </Button>

@@ -6,7 +6,7 @@ import {
   CardTitle
 } from '@/components/ui/Card'
 import { signIn } from '../../../auth'
-import FormLogin from './components/FormLogin'
+import FormLogin from './_components/FormLogin'
 import Form from 'next/form'
 import { Divider } from '@/components/ui/Divider'
 import { Button } from '@/components/ui/Button'

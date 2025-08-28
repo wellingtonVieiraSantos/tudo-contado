@@ -22,7 +22,7 @@ export const ChartPie = ({
   }
 }) => {
   return (
-    <Card className='flex flex-col'>
+    <Card className='flex flex-col p-2 lg:col-start-2 lg:col-end-3 lg:row-start-2 lg:row-end-3'>
       <CardHeader>
         <CardTitle>Gastos por categoria</CardTitle>
         <CardDescription>Principais categorias do mês</CardDescription>
@@ -55,12 +55,12 @@ export const ChartPie = ({
               }
             }
           ]}
-          width={300}
-          height={300}
+          width={250}
+          height={250}
           sx={{
             '& .MuiChartsLegend-root': {
               color: 'oklch(0.99 0.0146 98.28)',
-              fontSize: '12px',
+              fontSize: '14px',
               fontWeight: 'bold'
             },
             '& .MuiChartsNoDataOverlay-root': {
@@ -69,7 +69,8 @@ export const ChartPie = ({
             },
             [`& .${pieArcLabelClasses.root}`]: {
               fontWeight: 'bold',
-              fontSize: '18px'
+              fontSize: '18px',
+              fill: 'oklch(0.99 0.0146 98.28)'
             }
           }}
           slotProps={{

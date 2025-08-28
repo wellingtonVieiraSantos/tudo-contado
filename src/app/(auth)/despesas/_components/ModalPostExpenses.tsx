@@ -30,7 +30,7 @@ import { Checkbox } from '@/components/ui/Checkbox'
 import { Label } from '@/components/ui/Label'
 import { expenseSchema, expenseType } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { usePostExpense } from '../hooks/use-post-expense'
+import { usePostExpense } from '../_hooks/use-post-expense'
 
 export const ModalPostExpense = ({
   children

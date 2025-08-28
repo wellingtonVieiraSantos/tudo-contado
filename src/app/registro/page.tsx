@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
-import FormRegister from './components/FormRegister'
+import FormRegister from './_components/FormRegister'
 import { Divider } from '@/components/ui/Divider'
 import { Button } from '@/components/ui/Button'
 import { Form } from '@/components/ui/Form'

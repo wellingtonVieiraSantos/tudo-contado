@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 /* import { Label } from '@/components/ui/Label'
 import { Checkbox } from '@/components/ui/Checkbox' */
-import { useRegisterUser } from '../hooks/use-register-user'
+import { useRegisterUser } from '../_hooks/use-register-user'
 
 export default function FormRegister() {
   const { isPending, onSubmit, handleSubmit, register, errors } =

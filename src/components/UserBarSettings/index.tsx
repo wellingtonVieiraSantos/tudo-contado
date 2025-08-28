@@ -44,7 +44,7 @@ export const UserBarSettings = ({ title }: { title: string }) => {
         </Dropdown>
       </div>
       {/* desktop */}
-      <div className='hidden lg:flex justify-between items-center text-sm lg:col-span-2 xl:col-span-3'>
+      <div className='hidden lg:flex justify-between items-center text-sm p-2 col-span-3'>
         <div className='text-xl text-left'>
           <h2 className=''>{title}</h2>
           <p className='text-sm text-foreground-secondary'>

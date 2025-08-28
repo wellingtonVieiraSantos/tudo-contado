@@ -14,6 +14,7 @@ import {
   markElementClasses
 } from '@mui/x-charts/LineChart'
 import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export const ChartLine = ({
   lineChartData
@@ -24,14 +25,15 @@ export const ChartLine = ({
   }[]
 }) => {
   return (
-    <Card className='min-h-[300px] flex flex-col w-full p-3'>
-      <CardHeader className='p-0'>
+    <Card className='flex flex-col p-2 lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-5'>
+      <CardHeader>
         <CardTitle>Controle mensal</CardTitle>
         <CardDescription>Dados dos ultimos 6 meses</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='h-full'>
+      <CardContent className='size-full pt-3 max-h-100'>
         <LineChart
+          className='min-w-85'
           localeText={{
             loading: 'Carregando dados...',
             noData: 'Nenhum dado encontrado.'
@@ -61,18 +63,13 @@ export const ChartLine = ({
                   new Date().getMonth() - (5 - i),
                   1
                 )
-                return format(date, 'MM/yy')
+                return format(date, 'MMMM', { locale: ptBR })
               }),
               scaleType: 'band',
-              tickSize: 5,
               disableTicks: true
             }
           ]}
-          yAxis={[
-            {
-              position: 'none'
-            }
-          ]}
+          yAxis={[{ disableTicks: true }]}
           sx={{
             [`& .${lineElementClasses.root}`]: {
               strokeWidth: 2

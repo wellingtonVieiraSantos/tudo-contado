@@ -28,7 +28,7 @@ import { Button } from '@/components/ui/Button'
 import { Send, Wallet } from 'lucide-react'
 import { incomeSchema, incomeType } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { usePostIncome } from '../hooks/use-post-income'
+import { usePostIncome } from '../_hooks/use-post-income'
 
 export const ModalPostIncome = ({
   children
