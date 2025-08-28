@@ -11,7 +11,8 @@ import {
   TrendingUp,
   AlertTriangle,
   Trophy,
-  Sigma
+  Sigma,
+  Plus
 } from 'lucide-react'
 
 import valueFormatter from '@/lib/valueFormatter'
@@ -23,6 +24,8 @@ import { ChartLine } from './_components/ChartLine'
 import { Divider } from '@/components/ui/Divider'
 import { useGetDashboard } from './_hooks/use-get-dashboard'
 import { ScrollArea, Scrollbar } from '@/components/ui/ScrollArea'
+import { Button } from '@/components/ui/Button'
+import Link from 'next/link'
 
 export default function Dashboard() {
   const {
@@ -47,8 +50,8 @@ export default function Dashboard() {
           </CardDescription>
           <Divider className='hidden lg:flex' />
         </CardHeader>
-        <CardContent className='relative flex flex-col md:items-center gap-3 justify-evenly lg:-mt-10 lg:h-full'>
-          <div className='absolute top-1 lg:top-auto lg:bottom-9 right-1'>
+        <CardContent className='relative flex flex-col md:items-center gap-6 justify-center lg:-mt-12 lg:h-full'>
+          <div className='absolute top-1 lg:top-auto lg:bottom-13 right-1'>
             {totalIncomeCurrent - totalExpenseCurrent > 0 ? (
               <Trophy strokeWidth={1.2} className='size-7' />
             ) : (
@@ -59,7 +62,7 @@ export default function Dashboard() {
             )}
           </div>
           <h2
-            className={`text-4xl tracking-wide ${
+            className={`text-3xl tracking-wide ${
               totalIncomeCurrent - totalExpenseCurrent > 0
                 ? 'lg:text-destructive'
                 : 'lg:text-success'
@@ -67,7 +70,7 @@ export default function Dashboard() {
           >
             {valueFormatter(totalIncomeCurrent - totalExpenseCurrent)}
           </h2>
-          <div className='flex md:justify-center gap-2 flex-wrap lg:gap-4'>
+          <div className='flex md:justify-center gap-2 flex-wrap lg:gap-2'>
             <div className='tracking-wide flex items-center gap-2'>
               <TrendingUp className='text-success size-6' />
               <p className='font-montserrat'>
@@ -82,6 +85,20 @@ export default function Dashboard() {
                 {valueFormatter(totalExpenseCurrent)}
               </p>
             </div>
+          </div>
+          <div className='w-full px-5 flex flex-col lg:flex-row items-center gap-2'>
+            <Link href={'/ganhos'} className='flex-1 w-full'>
+              <Button variant='border' className='w-full bg-card'>
+                <Plus />
+                Renda
+              </Button>
+            </Link>
+            <Link href={'/despesas'} className='flex-1 w-full'>
+              <Button variant='border' className='w-full bg-card'>
+                <Plus />
+                Gasto
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
