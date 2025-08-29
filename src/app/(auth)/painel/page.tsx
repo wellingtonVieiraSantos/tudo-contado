@@ -26,15 +26,19 @@ import { useGetDashboard } from './_hooks/use-get-dashboard'
 import { ScrollArea, Scrollbar } from '@/components/ui/ScrollArea'
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
+import Loading from './loading'
 
 export default function Dashboard() {
   const {
+    isLoading,
     lineChartData,
     pieChartData,
     totalExpenseCurrent,
     totalIncomeCurrent,
     recentTransactions
   } = useGetDashboard()
+
+  if (isLoading) return <Loading />
 
   return (
     <div className='w-full lg:h-screen grid grid-cols-1 lg:grid-rows-[auto_1fr_1fr_1fr] lg:grid-cols-3 gap-3 p-3 pb-24 lg:pb-0'>

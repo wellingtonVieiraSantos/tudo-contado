@@ -127,6 +127,17 @@
 
   --font-poppins: var(--font-poppins);
   --font-montserrat: var(--font-montserrat);
+
+  --animate-skeletonShimmer: SkeletonShimmer 1.5s linear infinite;
+
+  @keyframes SkeletonShimmer {
+    from {
+      transform: translateX(-110%);
+    }
+    to {
+      transform: translateX(110%);
+    }
+  }
 }
 
 @layer theme {
