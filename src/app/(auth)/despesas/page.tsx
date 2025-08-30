@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/Modal'
 import { Divider } from '@/components/ui/Divider'
 import { categoryFormatter } from '@/lib/categoryFormatter'
+import Loading from './loading'
 
 export default function Expense() {
   const {
@@ -54,6 +55,9 @@ export default function Expense() {
     openDeleteModal,
     selectedExpense
   } = useDelExpense()
+
+  if (isLoading) return <Loading />
+
   return (
     <div className='flex flex-col flex-wrap p-3 gap-3 pb-22'>
       <UserBarSettings title='Despesas' />
