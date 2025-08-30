@@ -37,6 +37,7 @@ import {
   ModalTitle
 } from '@/components/ui/Modal'
 import { Divider } from '@/components/ui/Divider'
+import Loading from './loading'
 
 export default function Income() {
   const { isLoading, filteredIncomes, months, totals, filters, updateFilters } =
@@ -50,10 +51,11 @@ export default function Income() {
     selectedIncome
   } = useDelIncome()
 
+  if (isLoading) return <Loading />
+
   return (
     <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 lg:pb-0'>
       <UserBarSettings title='Renda' />
-      {isLoading && <p>Carregando...</p>}
       {filteredIncomes?.length !== 0 && (
         <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
           <Card className='w-full p-2 lg:bg-none lg:bg-card bg-gradient-to-br from-button to-badge pb-8'>
