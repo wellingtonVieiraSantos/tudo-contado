@@ -129,6 +129,8 @@
   --font-montserrat: var(--font-montserrat);
 
   --animate-skeletonShimmer: SkeletonShimmer 1.5s linear infinite;
+  --animate-typing: typing 2.4s steps(13) 0.2s forwards,
+    blink 0.9s step-end infinite;
 
   @keyframes SkeletonShimmer {
     from {
@@ -136,6 +138,16 @@
     }
     to {
       transform: translateX(110%);
+    }
+  }
+  @keyframes typing {
+    to {
+      width: 13ch;
+    }
+  }
+  @keyframes blink {
+    50% {
+      border-color: transparent;
     }
   }
 }
