@@ -7,7 +7,7 @@ export default function Skeleton({
   return (
     <div
       className={twMerge(
-        `relative rounded-md border bg-border/70 overflow-hidden`,
+        `relative rounded-xl border bg-border/70 overflow-hidden`,
         className
       )}
       {...props}
