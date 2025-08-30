@@ -33,8 +33,13 @@ const SideBar = () => {
         </h1>
         <div className=' flex flex-col pt-30 gap-3'>
           {pages.map((page, i) => (
-            <Link href={page.url} className='w-full' key={i}>
-              <Button variant='ghost' className='w-full justify-normal xl:pl-8'>
+            <Link href={page.url} key={i}>
+              <Button
+                variant='ghost'
+                className={`w-full justify-normal xl:pl-8 transition duration-300 ${
+                  pathName === page.url && ' bg-button hover:bg-button'
+                } `}
+              >
                 <page.icon />
                 {page.name}
               </Button>
@@ -48,10 +53,10 @@ const SideBar = () => {
           <Link href={page.url} className='flex-1' key={i}>
             <div
               className={` flex flex-col items-center gap-1 transition duration-300 ${
-                pathName !== page.url && 'text-foreground-secondary  scale-85'
+                pathName !== page.url && 'text-foreground-secondary  scale-90'
               }`}
             >
-              <page.icon />
+              <page.icon strokeWidth={1.2} />
               <span className='text-[12px]'>{page.name}</span>
             </div>
           </Link>
