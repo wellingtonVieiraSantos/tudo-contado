@@ -130,7 +130,7 @@ export default function Income() {
       <Modal open={isOpen} onOpenChange={setIsOpen}>
         <ModalContent>
           <ModalHeader>
-            <ModalTitle>Deseja apagar entrada?</ModalTitle>
+            <ModalTitle>Deseja apagar o rendimento?</ModalTitle>
             <ModalDescription className='text-sm text-foreground-secondary'>
               Essa ação apagará permanentemente essa renda, deseja mesmo fazer
               isso?
@@ -154,7 +154,7 @@ export default function Income() {
                 if (selectedIncome) handleDeleteIncome(selectedIncome.id)
                 setIsOpen(false)
               }}
-              className='w-full lg:flex-1'
+              className='w-full lg:flex-1 bg-destructive hover:bg-destructive/50'
             >
               <Trash />
               Apagar rendimento
@@ -163,7 +163,7 @@ export default function Income() {
         </ModalContent>
       </Modal>
       {filteredIncomes?.length === 0 && (
-        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
+        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center lg:mt-10'>
           <CardContent className='items-center gap-8'>
             <Image
               src='/empty-wallet.webp'
@@ -173,8 +173,7 @@ export default function Income() {
               className='size-50 grayscale-100'
             />
             <CardDescription className='text-center'>
-              Nenhuma receita por aqui ainda. Vamos registrar sua primeira
-              entrada?
+              Nenhuma receita ainda. Vamos registrar sua primeira entrada?
             </CardDescription>
             <ModalPostIncome>
               <Button className='w-full max-w-xl lg:w-fit'>

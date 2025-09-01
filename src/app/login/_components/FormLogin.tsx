@@ -74,6 +74,7 @@ export default function FormLogin() {
             type='password'
             {...register('password')}
             placeholder='**************'
+            autoComplete='off'
           />
         </FormControl>
         {errors.password && (

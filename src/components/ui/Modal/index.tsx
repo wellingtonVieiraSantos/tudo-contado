@@ -47,7 +47,7 @@ const ModalContent = forwardRef<
         {children}
         <ModalClose
           className='text-foreground-secondary hover:text-foreground absolute top-2 right-2 cursor-pointer
-        transition duration-300 rounded'
+        transition duration-300'
         >
           <X className='size-5' />
         </ModalClose>

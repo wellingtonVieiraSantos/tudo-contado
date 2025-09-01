@@ -172,7 +172,7 @@ export default function Expense() {
                 if (selectedExpense) handleDeleteExpense(selectedExpense.id)
                 setIsOpen(false)
               }}
-              className='w-full lg:flex-1'
+              className='w-full lg:flex-1 bg-destructive hover:bg-destructive/50'
             >
               <Trash />
               Apagar despesa
@@ -181,7 +181,7 @@ export default function Expense() {
         </ModalContent>
       </Modal>
       {filteredExpenses?.length === 0 && (
-        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center mt-20 h-1/2'>
+        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center lg:mt-10 '>
           <CardContent className='items-center gap-8'>
             <Image
               src='/empty-wallet.webp'

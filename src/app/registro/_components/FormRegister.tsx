@@ -55,6 +55,7 @@ export default function FormRegister() {
             {...register('password')}
             type='password'
             placeholder='**********'
+            autoComplete='off'
           />
         </FormControl>
         {errors.password && (
@@ -70,6 +71,7 @@ export default function FormRegister() {
             {...register('confirmPassword')}
             type='password'
             placeholder='**********'
+            autoComplete='off'
           />
         </FormControl>
         {errors.confirmPassword && (
