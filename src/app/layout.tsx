@@ -3,6 +3,7 @@ import { Poppins, Montserrat } from 'next/font/google'
 import './globals.css'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import { SessionProvider } from 'next-auth/react'
+import Head from 'next/head'
 
 const poppins = Poppins({
   variable: '--font-poppins',
@@ -36,6 +37,9 @@ export default async function RootLayout({
       suppressHydrationWarning
       className='scroll-smooth scrollbar-custom'
     >
+      <Head>
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
       <body
         className={`w-full min-h-dvh ${montserrat.variable} ${poppins.variable} tracking-wide`}
       >

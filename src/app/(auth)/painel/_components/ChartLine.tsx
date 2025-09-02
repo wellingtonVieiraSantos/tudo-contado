@@ -63,7 +63,7 @@ export const ChartLine = ({
                   new Date().getMonth() - (5 - i),
                   1
                 )
-                return format(date, 'MMMM', { locale: ptBR })
+                return format(date, 'MMM', { locale: ptBR })
               }),
               scaleType: 'band',
               disableTicks: true
