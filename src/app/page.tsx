@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div className=' h-screen w-full overflow-hidden bg-radial to-background from-border'>
-      <div className='w-full flex justify-between items-center p-2 md:p-4'>
+      <div className='w-full flex justify-between items-center p-3 md:p-4'>
         <Image
           src={'/logo.png'}
           alt='logo image'
@@ -52,16 +52,21 @@ export default function Home() {
               de suas finanças
             </CardTitle>
             <CardDescription className='text-base md:text-2xl'>
-              Monitore seus gastos, controle seus rendimentos e gerencie de
-              forma simple e intuitiva o seu dinheiro com esse aplicativo web
-              totalmente gratuito.
+              Monitore seus gastos, controle seus rendimentos e gerencie{' '}
+              <span className='hidden lg:inline'>
+                de forma simple e intuitiva
+              </span>{' '}
+              o seu dinheiro{' '}
+              <span className='hidden lg:inline'>
+                com esse aplicativo web totalmente gratuito.
+              </span>
             </CardDescription>
           </CardHeader>
           <CardContent className='w-full flex'>
             <Link href={'/registro'}>
               <Button
                 size='lg'
-                className='h-10 lg:h-13 lg:px-30 lg:rounded-full md:text-xl w-full lg:w-auto'
+                className='h-9 lg:h-13 lg:px-30 lg:rounded-full md:text-xl w-full lg:w-auto'
               >
                 Começar
                 <ArrowUpRight />
