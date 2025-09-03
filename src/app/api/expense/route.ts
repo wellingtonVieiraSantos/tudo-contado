@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { deleteExpenseById, getExpenses, postExpense } from '@/lib/dal/expenses'
+import {
+  deleteExpenseById,
+  getExpenses,
+  postExpense,
+  updateExpenseById
+} from '@/lib/dal/expenses'
 import { expenseSchema } from '@/validators/formExpense'
 
 export async function GET() {
@@ -55,7 +60,24 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     console.log(e)
     return NextResponse.json(
-      { error: 'Erro ao cadastrar nova Despesa.' },
+      { error: 'Erro ao cadastrar nova despesa.' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const { id, data } = await req.json()
+    const updatedExpense = await updateExpenseById(id, data)
+    return NextResponse.json(
+      { success: true, data: updatedExpense },
+      { status: 201 }
+    )
+  } catch (e) {
+    console.log(e)
+    return NextResponse.json(
+      { error: 'Erro ao atualizar a despesa.' },
       { status: 500 }
     )
   }

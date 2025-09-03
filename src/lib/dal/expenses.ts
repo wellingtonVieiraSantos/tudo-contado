@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { requireUser } from './user/require-user'
-import { CateroryType } from '@prisma/client'
+import { CateroryType, Prisma } from '@prisma/client'
 
 export const getExpenses = async () => {
   const user = await requireUser()
@@ -46,6 +46,17 @@ export const postExpense = async (
         connect: { id: user.id }
       }
     }
+  })
+}
+
+export const updateExpenseById = async (
+  id: string,
+  data: Prisma.IncomeUpdateInput
+) => {
+  await requireUser()
+  return await prisma.expense.update({
+    where: { id },
+    data
   })
 }
 

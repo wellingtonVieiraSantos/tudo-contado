@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { deleteIncomeById, getIncomes, postIncome } from '@/lib/dal/incomes'
+import {
+  deleteIncomeById,
+  getIncomes,
+  postIncome,
+  updateIncomeById
+} from '@/lib/dal/incomes'
 import { incomeSchema } from '@/validators/formIncome'
 
 export async function GET() {
@@ -42,6 +47,23 @@ export async function POST(req: NextRequest) {
     console.log(e)
     return NextResponse.json(
       { error: 'Erro ao cadastrar nova renda.' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const { id, data } = await req.json()
+    const updatedIncome = await updateIncomeById(id, data)
+    return NextResponse.json(
+      { success: true, data: updatedIncome },
+      { status: 201 }
+    )
+  } catch (e) {
+    console.log(e)
+    return NextResponse.json(
+      { error: 'Erro ao atualizar a renda.' },
       { status: 500 }
     )
   }

@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { requireUser } from './user/require-user'
+import { Prisma } from '@prisma/client'
 
 export const getIncomes = async () => {
   const user = await requireUser()
@@ -41,6 +42,18 @@ export const postIncome = async (
     }
   })
 }
+
+export const updateIncomeById = async (
+  id: string,
+  data: Prisma.IncomeUpdateInput
+) => {
+  await requireUser()
+  return await prisma.income.update({
+    where: { id },
+    data
+  })
+}
+
 export const deleteIncomeById = async (id: string) => {
   await requireUser()
   return await prisma.income.delete({ where: { id } })
