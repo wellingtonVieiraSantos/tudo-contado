@@ -1,5 +1,5 @@
 import { queryClient } from '@/lib/query-client'
-import { expenseType } from '@/validators/formExpense'
+import { expenseType } from '@/types/expense-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
