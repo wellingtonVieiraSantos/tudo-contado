@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
@@ -12,20 +13,19 @@ import { Badge } from '@/components/ui/Badge'
 
 import formatedCurrency from '@/lib/valueFormatter'
 import { UserBarSettings } from '@/components/UserBarSettings'
-import { useGetExpenses } from './_hooks/use-get-expenses'
-import { ModalPostExpense } from './_components/ModalPostExpenses'
+import { ModalExpense } from './_components/ModalExpenses'
 import { Button } from '@/components/ui/Button'
 import {
   BanknoteArrowUp,
-  BanknoteX,
   Plus,
+  RefreshCw,
   Trash,
   TrendingDown,
-  TriangleAlert
+  TriangleAlert,
+  X
 } from 'lucide-react'
 import { FilterExpenses } from './_components/FilterExpenses'
 import Image from 'next/image'
-import { useDelExpense } from './_hooks/use-del-expense'
 import {
   Modal,
   ModalActions,
@@ -37,6 +37,10 @@ import {
 import { Divider } from '@/components/ui/Divider'
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import Loading from './loading'
+import { useGetExpenses } from './_hooks/use-get-expenses'
+import { useDelExpense } from './_hooks/use-del-expense'
+import { usePostExpense } from './_hooks/use-post-expense'
+import { usePutExpense } from './_hooks/use-put-expense'
 
 export default function Expense() {
   const {
@@ -49,12 +53,28 @@ export default function Expense() {
   } = useGetExpenses()
 
   const {
+    isOpen: isOpenPost,
+    setIsOpen: setIsOpenPost,
+    onSubmit,
+    isPending
+  } = usePostExpense()
+
+  const {
     handleDeleteExpense,
     isOpen,
     setIsOpen,
     openDeleteModal,
     selectedExpense
   } = useDelExpense()
+
+  const {
+    isOpen: isOpenPut,
+    setIsOpen: setIsOpenPut,
+    isPending: isPendingPut,
+    openUpdateModal,
+    handleUpdateExpense,
+    selectedExpense: selectedExpenseUpdate
+  } = usePutExpense()
 
   if (isLoading) return <Loading />
 
@@ -83,14 +103,19 @@ export default function Expense() {
                 </span>{' '}
                 {formatedCurrency(totals.notPaid)}
               </p>
-              <ModalPostExpense>
+              <ModalExpense
+                isOpen={isOpenPost}
+                setIsOpen={setIsOpenPost}
+                isPending={isPending}
+                onSubmit={onSubmit}
+              >
                 <Button
                   size='icon'
                   className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
                 >
                   <Plus />
                 </Button>
-              </ModalPostExpense>
+              </ModalExpense>
             </CardContent>
           </Card>
         </div>
@@ -132,18 +157,36 @@ export default function Expense() {
                 >
                   {expense.paid ? 'Pago' : 'À pagar'}
                 </Badge>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant='border'
+                  onClick={() => openUpdateModal(expense)}
+                  disabled={isOpenPut}
+                  className='self-end bg-info/40 px-4'
+                >
+                  <RefreshCw />
+                  <span className='hidden md:inline-block'>Atualizar</span>
+                </Button>
                 <Button
                   variant='border'
                   onClick={() => openDeleteModal(expense)}
-                  className='self-end bg-destructive/20'
+                  className='self-end bg-destructive/40 px-4'
                 >
-                  <BanknoteX />
-                  Deletar entrada
+                  <X />
+                  <span className='hidden md:inline-block'>Deletar</span>
                 </Button>
-              </CardContent>
+              </CardFooter>
             </Card>
           ))}
       </div>
+      <ModalExpense
+        isOpen={isOpenPut}
+        setIsOpen={setIsOpenPut}
+        isPending={isPendingPut}
+        onSubmit={handleUpdateExpense}
+        selectedExpenseUpdate={selectedExpenseUpdate!}
+      />
       <Modal open={isOpen} onOpenChange={setIsOpen}>
         <ModalContent>
           <ModalHeader>
@@ -193,12 +236,17 @@ export default function Expense() {
             <CardDescription className='text-center'>
               Nenhuma despesa registrada. Que tal adicionar a primeira?
             </CardDescription>
-            <ModalPostExpense>
+            <ModalExpense
+              isOpen={isOpenPost}
+              setIsOpen={setIsOpenPost}
+              isPending={isPending}
+              onSubmit={onSubmit}
+            >
               <Button className='w-full max-w-xl lg:w-fit'>
                 <BanknoteArrowUp />
                 Cadastre uma nova despesa
               </Button>
-            </ModalPostExpense>
+            </ModalExpense>
           </CardContent>
         </Card>
       )}

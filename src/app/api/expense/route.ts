@@ -6,6 +6,8 @@ import {
   updateExpenseById
 } from '@/lib/dal/expenses'
 import { expenseSchema } from '@/validators/formExpense'
+import { format } from 'date-fns'
+import { dataExpenseUpdateProps } from '@/types/expense-data-props'
 
 export async function GET() {
   try {
@@ -14,8 +16,8 @@ export async function GET() {
     //normalize value and type to show in component, get in centavos, return in reais
     const expenses = rawExpense.map(expense => ({
       ...expense,
-      type: expense.type === 'FIXED' ? 'Fixo' : 'Variável',
-      value: expense.value / 100
+      value: expense.value / 100,
+      dateString: format(expense.date, 'yyyy-MM-dd')
     }))
 
     return NextResponse.json({ data: expenses, success: true }, { status: 200 })
@@ -38,12 +40,13 @@ export async function POST(req: NextRequest) {
     const {
       type,
       value: rawValue,
-      date,
+      dateString,
       description,
       category,
       paid
     } = result.data
     const value = rawValue * 100
+    const date = new Date(dateString)
 
     const postedExpense = await postExpense(
       type,
@@ -68,7 +71,20 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const { id, data } = await req.json()
+    const {
+      id,
+      value: rawValue,
+      dateString,
+      description,
+      type,
+      category,
+      paid
+    }: dataExpenseUpdateProps = await req.json()
+
+    const value = rawValue * 100
+    const date = new Date(dateString + 'T00:00:00')
+    const data = { type, value, description, date, category, paid }
+
     const updatedExpense = await updateExpenseById(id, data)
     return NextResponse.json(
       { success: true, data: updatedExpense },

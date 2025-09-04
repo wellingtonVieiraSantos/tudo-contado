@@ -51,7 +51,7 @@ export const postExpense = async (
 
 export const updateExpenseById = async (
   id: string,
-  data: Prisma.IncomeUpdateInput
+  data: Prisma.ExpenseUpdateInput
 ) => {
   await requireUser()
   return await prisma.expense.update({

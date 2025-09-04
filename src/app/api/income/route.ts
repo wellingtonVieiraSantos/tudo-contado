@@ -7,7 +7,7 @@ import {
 } from '@/lib/dal/incomes'
 import { incomeSchema } from '@/validators/formIncome'
 import { format } from 'date-fns'
-import { dataUpdateProps } from '@/types/income-data-props'
+import { dataIncomeUpdateProps } from '@/types/income-data-props'
 
 export async function GET() {
   try {
@@ -68,11 +68,11 @@ export async function PUT(req: NextRequest) {
       dateString,
       value: rawValue,
       description
-    }: dataUpdateProps = await req.json()
+    }: dataIncomeUpdateProps = await req.json()
 
     const value = rawValue * 100
     const date = new Date(dateString + 'T00:00:00')
-    const data = { id, type, value, description, date }
+    const data = { type, value, description, date }
 
     const updatedIncome = await updateIncomeById(id, data)
     return NextResponse.json(

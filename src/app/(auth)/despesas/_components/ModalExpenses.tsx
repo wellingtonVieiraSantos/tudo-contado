@@ -1,3 +1,4 @@
+'use client'
 import {
   Modal,
   ModalContent,
@@ -28,25 +29,50 @@ import { Textarea } from '@/components/ui/Textarea'
 import { Controller, useForm } from 'react-hook-form'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Label } from '@/components/ui/Label'
-import { expenseSchema, expenseType } from '@/validators/formExpense'
+import { expenseSchema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { usePostExpense } from '../_hooks/use-post-expense'
+import { dataExpenseUpdateProps, expenseType } from '@/types/expense-data-props'
+import { useEffect } from 'react'
 
-export const ModalPostExpense = ({
+type ModalExpenseProps = {
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onSubmit: (data: expenseType) => Promise<void>
+  isPending: boolean
+  children?: React.ReactNode
+  selectedExpenseUpdate?: dataExpenseUpdateProps
+}
+
+export const ModalExpense = ({
+  isOpen,
+  setIsOpen,
+  onSubmit,
+  isPending,
+  selectedExpenseUpdate,
   children
-}: {
-  children: React.ReactNode
-}) => {
+}: ModalExpenseProps) => {
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors }
   } = useForm<expenseType>({
     resolver: zodResolver(expenseSchema)
   })
 
-  const { isOpen, setIsOpen, onSubmit, isPending } = usePostExpense()
+  useEffect(() => {
+    if (selectedExpenseUpdate) {
+      reset({
+        value: selectedExpenseUpdate.value,
+        description: selectedExpenseUpdate.description,
+        type: selectedExpenseUpdate.type,
+        category: selectedExpenseUpdate.category,
+        paid: selectedExpenseUpdate.paid,
+        dateString: selectedExpenseUpdate.dateString
+      })
+    }
+  }, [selectedExpenseUpdate, reset])
 
   return (
     <Modal open={isOpen} onOpenChange={setIsOpen}>
@@ -55,7 +81,7 @@ export const ModalPostExpense = ({
         <ModalHeader>
           <ModalTitle>Cadastro de Gastos</ModalTitle>
           <ModalDescription className='text-sm text-foreground-secondary'>
-            Formulario para cadastro de gastos
+            Formulario para cadastro/atualizações de gastos
           </ModalDescription>
         </ModalHeader>
         <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-3'>
@@ -98,7 +124,7 @@ export const ModalPostExpense = ({
             <Controller
               name='type'
               control={control}
-              defaultValue={'FIXED'}
+              defaultValue='VARIABLE'
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
@@ -117,14 +143,14 @@ export const ModalPostExpense = ({
             <FormControl asChild>
               <input
                 type='date'
-                id='date'
-                {...register('date')}
+                id='dateString'
+                {...register('dateString')}
                 className='text-foreground-secondary border p-1 px-2'
               />
             </FormControl>
-            {errors.date && (
+            {errors.dateString && (
               <FormMessage className='text-destructive'>
-                {errors.date?.message}
+                {errors.dateString?.message}
               </FormMessage>
             )}
           </FormField>
@@ -186,8 +212,11 @@ export const ModalPostExpense = ({
             asChild
             className='w-full lg:w-fit mt-2 lg:justify-self-end'
           >
-            <Button disabled={isPending}>
-              {isPending ? 'Cadastrando...' : 'Cadastrar nova despesa'}
+            <Button
+              disabled={isPending}
+              variant={isPending ? 'loading' : 'default'}
+            >
+              {isPending ? 'Cadastrando...' : 'Cadastrar'}
               <Send />
             </Button>
           </FormSubmit>

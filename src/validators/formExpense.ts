@@ -12,11 +12,7 @@ export const expenseSchema = z.object({
   type: z.enum(['FIXED', 'VARIABLE']),
   category: z.nativeEnum(CateroryType),
   paid: z.boolean(),
-  date: z.coerce.date({
-    errorMap: (issue, { defaultError }) => ({
-      message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-    })
-  })
+  dateString: z
+    .string()
+    .refine(val => !isNaN(Date.parse(val)), { message: 'Data inválida' })
 })
-
-export type expenseType = z.infer<typeof expenseSchema>

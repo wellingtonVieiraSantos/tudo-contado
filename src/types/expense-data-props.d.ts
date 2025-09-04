@@ -1,11 +1,11 @@
-import { CateroryType } from '@prisma/client'
+import { expenseSchema } from '@/validators/formExpense'
+import { z } from 'zod'
 
-export type ExpenseDataProps = {
-  type: string
-  value: number
-  paid: boolean
-  id: string
-  date: Date
-  description: string
-  category: CateroryType
-}
+/* post */
+export type expenseType = z.infer<typeof expenseSchema>
+
+/* get */
+export type ExpenseDataProps = expenseType & { id: string; date: Date }
+
+/* put */
+export type dataExpenseUpdateProps = Omit<ExpenseDataProps, 'date'>

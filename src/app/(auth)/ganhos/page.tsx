@@ -163,16 +163,6 @@ export default function Income() {
             </Card>
           ))}
       </div>
-      {/*  <Modal open={isOpenUpdate} onOpenChange={setIsOpenUpdate}>
-        <ModalContent>
-          <ModalHeader>
-            <ModalTitle>Atualização de rendimento</ModalTitle>
-            <ModalDescription className='text-sm text-foreground-secondary'>
-              Atualize uma ou mais informações abaixo.
-            </ModalDescription>
-          </ModalHeader>
-        </ModalContent>
-      </Modal> */}
       <ModalIncome
         isOpen={isOpenPut}
         setIsOpen={setIsOpenPut}

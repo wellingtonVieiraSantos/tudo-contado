@@ -1,3 +1,4 @@
+'use client'
 import { Textarea } from '@/components/ui/Textarea'
 import { Controller, useForm } from 'react-hook-form'
 import {
@@ -28,7 +29,7 @@ import { Button } from '@/components/ui/Button'
 import { Send, Wallet } from 'lucide-react'
 import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { dataUpdateProps, incomeType } from '@/types/income-data-props'
+import { dataIncomeUpdateProps, incomeType } from '@/types/income-data-props'
 import { useEffect } from 'react'
 
 type ModalIncomeProps = {
@@ -37,7 +38,7 @@ type ModalIncomeProps = {
   onSubmit: (data: incomeType) => Promise<void>
   isPending: boolean
   children?: React.ReactNode
-  selectedIncomeUpdate?: dataUpdateProps
+  selectedIncomeUpdate?: dataIncomeUpdateProps
 }
 
 export const ModalIncome = ({
@@ -76,7 +77,7 @@ export const ModalIncome = ({
         <ModalHeader>
           <ModalTitle>Cadastro de Ganhos</ModalTitle>
           <ModalDescription className='text-sm text-foreground-secondary'>
-            Formulario para cadastro de ganhos
+            Formulario para cadastro/atualizações de ganhos
           </ModalDescription>
         </ModalHeader>
         <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-3'>
