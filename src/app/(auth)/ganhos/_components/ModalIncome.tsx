@@ -26,25 +26,48 @@ import {
 } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { Send, Wallet } from 'lucide-react'
-import { incomeSchema, incomeType } from '@/validators/formIncome'
+import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { usePostIncome } from '../_hooks/use-post-income'
+import { dataUpdateProps, incomeType } from '@/types/income-data-props'
+import { useEffect } from 'react'
 
-export const ModalPostIncome = ({
+type ModalIncomeProps = {
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onSubmit: (data: incomeType) => Promise<void>
+  isPending: boolean
+  children?: React.ReactNode
+  selectedIncomeUpdate?: dataUpdateProps
+}
+
+export const ModalIncome = ({
+  isOpen,
+  setIsOpen,
+  onSubmit,
+  isPending,
+  selectedIncomeUpdate,
   children
-}: {
-  children: React.ReactNode
-}) => {
+}: ModalIncomeProps) => {
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors }
   } = useForm<incomeType>({
     resolver: zodResolver(incomeSchema)
   })
 
-  const { isOpen, setIsOpen, onSubmit, isPending } = usePostIncome()
+  useEffect(() => {
+    if (selectedIncomeUpdate) {
+      reset({
+        value: selectedIncomeUpdate.value,
+        description: selectedIncomeUpdate.description,
+        type: selectedIncomeUpdate.type,
+        dateString: selectedIncomeUpdate.dateString
+      })
+    }
+  }, [selectedIncomeUpdate, reset])
 
   return (
     <Modal open={isOpen} onOpenChange={setIsOpen}>
@@ -95,7 +118,7 @@ export const ModalPostIncome = ({
             <Controller
               name='type'
               control={control}
-              defaultValue={'FIXED'}
+              defaultValue='VARIABLE'
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
@@ -114,14 +137,14 @@ export const ModalPostIncome = ({
             <FormControl asChild>
               <input
                 type='date'
-                id='date'
-                {...register('date')}
+                id='dateString'
+                {...register('dateString')}
                 className='text-foreground-secondary border p-1 px-2'
               />
             </FormControl>
-            {errors.date && (
+            {errors.dateString && (
               <FormMessage className='text-destructive'>
-                {errors.date?.message}
+                {errors.dateString?.message}
               </FormMessage>
             )}
           </FormField>
@@ -129,8 +152,11 @@ export const ModalPostIncome = ({
             asChild
             className='w-full lg:w-fit mt-5 lg:justify-self-end'
           >
-            <Button disabled={isPending}>
-              {isPending ? 'Cadastrando...' : 'Cadastrar nova renda'}
+            <Button
+              disabled={isPending}
+              variant={isPending ? 'loading' : 'default'}
+            >
+              {isPending ? 'Cadastrando...' : 'Cadastrar'}
               <Send />
             </Button>
           </FormSubmit>

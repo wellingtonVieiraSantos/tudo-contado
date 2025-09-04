@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
@@ -14,20 +15,21 @@ import { Button } from '@/components/ui/Button'
 
 import {
   BanknoteArrowUp,
-  BanknoteX,
   Plus,
+  RefreshCw,
   Trash,
   TrendingUp,
-  TriangleAlert
+  TriangleAlert,
+  X
 } from 'lucide-react'
 
 import formatedCurrency from '@/lib/valueFormatter'
 import { UserBarSettings } from '@/components/UserBarSettings'
 import { useGetIncomes } from './_hooks/use-get-incomes'
-import { ModalPostIncome } from './_components/ModalPostIncome'
+import { ModalIncome } from './_components/ModalIncome'
 import { FilterIncomes } from './_components/FilterIncomes'
 import Image from 'next/image'
-import { useDelIncome } from './_hooks/use-del-incomes'
+import { useDelIncome } from './_hooks/use-del-income'
 import {
   Modal,
   ModalActions,
@@ -38,6 +40,8 @@ import {
 } from '@/components/ui/Modal'
 import { Divider } from '@/components/ui/Divider'
 import Loading from './loading'
+import { usePutIncome } from './_hooks/use-put-income'
+import { usePostIncome } from './_hooks/use-post-income'
 
 export default function Income() {
   const { isLoading, filteredIncomes, months, totals, filters, updateFilters } =
@@ -50,6 +54,22 @@ export default function Income() {
     openDeleteModal,
     selectedIncome
   } = useDelIncome()
+
+  const {
+    isOpen: isOpenPost,
+    setIsOpen: setIsOpenPost,
+    onSubmit,
+    isPending
+  } = usePostIncome()
+
+  const {
+    isOpen: isOpenPut,
+    setIsOpen: setIsOpenPut,
+    isPending: isPendingPut,
+    openUpdateModal,
+    handleUpdateIncome,
+    selectedIncome: selectedIncomeUpdate
+  } = usePutIncome()
 
   if (isLoading) return <Loading />
 
@@ -71,14 +91,19 @@ export default function Income() {
             </CardHeader>
             <CardContent className='py-3 text-center text-4xl font-montserrat'>
               {formatedCurrency(totals)}
-              <ModalPostIncome>
+              <ModalIncome
+                isOpen={isOpenPost}
+                setIsOpen={setIsOpenPost}
+                isPending={isPending}
+                onSubmit={onSubmit}
+              >
                 <Button
                   size='icon'
                   className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
                 >
                   <Plus />
                 </Button>
-              </ModalPostIncome>
+              </ModalIncome>
             </CardContent>
           </Card>
         </div>
@@ -113,20 +138,48 @@ export default function Income() {
                   </p>
                 </div>
                 <Badge variant='info' className='absolute top-3 right-3 px-4'>
-                  {income.type}
+                  {income.type === 'FIXED' ? 'Fixo' : 'Variável'}
                 </Badge>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant='border'
+                  onClick={() => openUpdateModal(income)}
+                  disabled={isOpenPut}
+                  className='self-end bg-info/40 px-4'
+                >
+                  <RefreshCw />
+                  <span className='hidden md:inline-block'>Atualizar</span>
+                </Button>
                 <Button
                   variant='border'
                   onClick={() => openDeleteModal(income)}
-                  className='self-end bg-destructive/20'
+                  className='self-end bg-destructive/40 px-4'
                 >
-                  <BanknoteX />
-                  Deletar entrada
+                  <X />
+                  <span className='hidden md:inline-block'>Deletar</span>
                 </Button>
-              </CardContent>
+              </CardFooter>
             </Card>
           ))}
       </div>
+      {/*  <Modal open={isOpenUpdate} onOpenChange={setIsOpenUpdate}>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Atualização de rendimento</ModalTitle>
+            <ModalDescription className='text-sm text-foreground-secondary'>
+              Atualize uma ou mais informações abaixo.
+            </ModalDescription>
+          </ModalHeader>
+        </ModalContent>
+      </Modal> */}
+      <ModalIncome
+        isOpen={isOpenPut}
+        setIsOpen={setIsOpenPut}
+        isPending={isPendingPut}
+        onSubmit={handleUpdateIncome}
+        selectedIncomeUpdate={selectedIncomeUpdate!}
+      />
       <Modal open={isOpen} onOpenChange={setIsOpen}>
         <ModalContent>
           <ModalHeader>
@@ -175,12 +228,17 @@ export default function Income() {
             <CardDescription className='text-center'>
               Nenhuma receita ainda. Vamos registrar sua primeira entrada?
             </CardDescription>
-            <ModalPostIncome>
+            <ModalIncome
+              isOpen={isOpenPost}
+              setIsOpen={setIsOpenPost}
+              isPending={isPending}
+              onSubmit={onSubmit}
+            >
               <Button className='w-full max-w-xl lg:w-fit'>
                 <BanknoteArrowUp />
                 Cadastre um novo ganho
               </Button>
-            </ModalPostIncome>
+            </ModalIncome>
           </CardContent>
         </Card>
       )}

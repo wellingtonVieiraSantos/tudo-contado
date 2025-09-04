@@ -6,6 +6,8 @@ import {
   updateIncomeById
 } from '@/lib/dal/incomes'
 import { incomeSchema } from '@/validators/formIncome'
+import { format } from 'date-fns'
+import { dataUpdateProps } from '@/types/income-data-props'
 
 export async function GET() {
   try {
@@ -14,8 +16,8 @@ export async function GET() {
     //normalize value and type to show in component, get in centavos, return in reais
     const incomes = rawIncomes.map(income => ({
       ...income,
-      type: income.type === 'FIXED' ? 'Fixo' : 'Variável',
-      value: income.value / 100
+      value: income.value / 100,
+      dateString: format(income.date, 'yyyy-MM-dd')
     }))
 
     return NextResponse.json({ data: incomes, success: true }, { status: 200 })
@@ -35,8 +37,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
     }
 
-    const { type, value: rawValue, date, description } = result.data
+    const {
+      type,
+      value: rawValue,
+      dateString: rawDate,
+      description
+    } = result.data
     const value = rawValue * 100
+    const date = new Date(rawDate)
 
     const postedIncome = await postIncome(type, value, date, description)
     return NextResponse.json(
@@ -54,7 +62,18 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const { id, data } = await req.json()
+    const {
+      id,
+      type,
+      dateString,
+      value: rawValue,
+      description
+    }: dataUpdateProps = await req.json()
+
+    const value = rawValue * 100
+    const date = new Date(dateString + 'T00:00:00')
+    const data = { id, type, value, description, date }
+
     const updatedIncome = await updateIncomeById(id, data)
     return NextResponse.json(
       { success: true, data: updatedIncome },

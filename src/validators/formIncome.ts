@@ -9,11 +9,7 @@ export const incomeSchema = z.object({
     }),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
   type: z.enum(['FIXED', 'VARIABLE']),
-  date: z.coerce.date({
-    errorMap: (issue, { defaultError }) => ({
-      message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-    })
-  })
+  dateString: z
+    .string()
+    .refine(val => !isNaN(Date.parse(val)), { message: 'Data inválida' })
 })
-
-export type incomeType = z.infer<typeof incomeSchema>

@@ -1,5 +1,5 @@
 import { queryClient } from '@/lib/query-client'
-import { incomeType } from '@/validators/formIncome'
+import { incomeType } from '@/types/income-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
