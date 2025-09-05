@@ -117,7 +117,8 @@ export default function Dashboard() {
           </CardDescription>
           <Divider />
         </CardHeader>
-        <CardContent className=' items-center justify-center gap-2'>
+        <CardContent className='items-center justify-center'>
+          {/* <p>Nenhum cartao de credito cadastrado...</p> */}
           <div className='relative w-75 lg:w-60 xl:w-75 h-45 rounded-xl bg-radial from-violet-800 to-violet-500 border border-foreground'>
             <Image
               src={'/chip.png'}
@@ -127,11 +128,11 @@ export default function Dashboard() {
               className='w-10 absolute top-3 left-5'
             />
             <Image
-              src={'/visa.png'}
+              src={'/money.png'}
               alt='chip credit card'
               width={512}
               height={512}
-              className='w-10 absolute top-3 right-5'
+              className='w-15 absolute top-0 right-3'
             />
             <div className='text-xl lg:text-base xl:text-xl absolute bottom-18 left-9 font-mono tracking-wider'>
               **** **** **** 4528

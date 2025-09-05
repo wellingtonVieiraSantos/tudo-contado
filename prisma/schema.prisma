@@ -79,13 +79,14 @@ model Authenticator {
 }
 
 model CreditCard {
-  id         String    @id @default(cuid())
-  lastNumber Int
-  validity   DateTime
-  holder     String
-  brand      Brand[]
-  income     Income[]
-  expense    Expense[]
+  id          String    @id @default(cuid())
+  lastNumber  Int
+  creditLimit Int
+  validity    DateTime
+  holder      String
+  brand       Brand[]
+  income      Income[]
+  expense     Expense[]
 }
 
 model Income {
