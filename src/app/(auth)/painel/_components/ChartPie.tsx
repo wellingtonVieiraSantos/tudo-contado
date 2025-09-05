@@ -55,8 +55,8 @@ export const ChartPie = ({
               }
             }
           ]}
-          width={250}
-          height={250}
+          width={200}
+          height={200}
           sx={{
             '& .MuiChartsLegend-root': {
               color: 'oklch(0.99 0.0146 98.28)',

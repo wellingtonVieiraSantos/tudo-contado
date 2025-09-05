@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL") 
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -78,30 +78,45 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+model CreditCard {
+  id         String    @id @default(cuid())
+  lastNumber Int
+  validity   DateTime
+  holder     String
+  brand      Brand[]
+  income     Income[]
+  expense    Expense[]
+}
+
 model Income {
-  id          String     @id @default(cuid())
-  userId      String
-  type        IncomeType
-  value       Int
-  date        DateTime
-  description String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  user        User       @relation(fields: [userId], references: [id])
+  id           String      @id @default(cuid())
+  userId       String
+  creditCardId String?
+  type         IncomeType  @default(VARIABLE)
+  value        Int
+  date         DateTime
+  description  String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  user         User        @relation(fields: [userId], references: [id])
+  creditCard   CreditCard? @relation(fields: [creditCardId], references: [id])
 }
 
 model Expense {
-  id          String       @id @default(cuid())
-  userId      String
-  type        ExpenseType
-  value       Int
-  date        DateTime
-  description String
-  category    CateroryType
-  paid        Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  user        User         @relation(fields: [userId], references: [id])
+  id            String            @id @default(cuid())
+  userId        String
+  creditCardId  String?
+  type          ExpenseType       @default(VARIABLE)
+  paymentMethod PaymentMethodType @default(PIX)
+  value         Int
+  date          DateTime
+  description   String
+  category      CategoryType      @default(OTHER)
+  paid          Boolean           @default(false)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  user          User              @relation(fields: [userId], references: [id])
+  creditCard    CreditCard?       @relation(fields: [creditCardId], references: [id])
 }
 
 model Product {
@@ -115,10 +130,12 @@ model Product {
 
 model Brand {
   id              String           @id @default(cuid())
+  creditCardId    String?
   name            String
   createdAt       DateTime         @default(now())
   normalized_name String           @unique
   variants        ProductVariant[]
+  creditCard      CreditCard?      @relation(fields: [creditCardId], references: [id])
 }
 
 model ProductVariant {
@@ -201,6 +218,13 @@ enum ExpenseType {
   VARIABLE
 }
 
+enum PaymentMethodType {
+  PIX
+  MONEY
+  CREDIT_CARD
+  DEBIT_CARD
+}
+
 enum RatingType {
   ONE_STAR
   TWO_STAR
@@ -216,7 +240,7 @@ enum UnitType {
   M
 }
 
-enum CateroryType {
+enum CategoryType {
   HOUSE
   FOOD
   TRANSPORT
