@@ -117,7 +117,7 @@ export default function Dashboard() {
           </CardDescription>
           <Divider />
         </CardHeader>
-        <CardContent className='items-center justify-center'>
+        <CardContent className='items-center justify-center gap-4'>
           {/* <p>Nenhum cartao de credito cadastrado...</p> */}
           <div className='relative w-75 lg:w-60 xl:w-75 h-45 rounded-xl bg-radial from-violet-800 to-violet-500 border border-foreground'>
             <Image

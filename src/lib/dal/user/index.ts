@@ -14,8 +14,8 @@ export const getDataFromUserId = async () => {
           id: true,
           value: true,
           category: true,
+          paymentMethod: true,
           date: true,
-          paid: true,
           description: true
         },
         orderBy: {
@@ -31,24 +31,6 @@ export const getDataFromUserId = async () => {
         },
         orderBy: {
           date: 'desc'
-        }
-      },
-      productLifetime: {
-        select: {
-          id: true,
-          purchaseDate: true,
-          endDate: true,
-          productVariant: {
-            select: {
-              id: true,
-              product: {
-                select: {
-                  id: true,
-                  name: true
-                }
-              }
-            }
-          }
         }
       }
     }
