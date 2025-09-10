@@ -1,5 +1,7 @@
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import { getDataFromUserId } from '@/lib/dal/user'
+import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
+import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -9,7 +11,9 @@ export async function GET() {
     const dashboardInfoExpense = rawDashboardInfo?.expense.map(e => ({
       ...e,
       value: e.value / 100,
-      category: categoryFormatter(e.category)
+      category: categoryFormatter(e.category),
+      paymentMethod: paymentMethodFormatter(e.paymentMethod),
+      status: paymentStatusFormatter(e.status)
     }))
     const dashboardInfoIncome = rawDashboardInfo?.income.map(i => ({
       ...i,

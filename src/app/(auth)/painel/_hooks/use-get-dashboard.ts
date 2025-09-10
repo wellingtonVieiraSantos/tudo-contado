@@ -33,7 +33,7 @@ export const useGetDashboard = () => {
           value: i.value,
           description: i.description,
           date: i.date,
-          type: 'income'
+          type: 'income' as const
         }
       }) || []
     const expenseArray =
@@ -43,7 +43,9 @@ export const useGetDashboard = () => {
           value: e.value,
           description: e.description,
           date: e.date,
-          type: 'expense'
+          paymentMethod: e.paymentMethod,
+          status: e.status,
+          type: 'expense' as const
         }
       }) || []
     return [...incomeArray, ...expenseArray]

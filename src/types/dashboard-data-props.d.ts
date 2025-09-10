@@ -1,37 +1,35 @@
-import { CateroryType } from '@prisma/client'
+import { CategoryType, PaymentMethodType, StatusType } from '@prisma/client'
 
 export type dashboardDataProps = {
   name: string | null
   image: string | null
-  income: {
-    id: string
-    value: number
-    date: Date
-    description: string
-  }[]
-  expense: {
-    id: string
-    value: number
-    category: CateroryType
-    date: Date
-    paid: boolean
-    description: string
-  }[]
-  productLifetime: {
-    id: string
-    purschaseDate: Date
-    endDate: Date | null
-    productVariantId: {
-      id: string
-      purshaseDate: Date
-      endDate: Date
-      productVariant: {
+  income:
+    | {
         id: string
-        product: {
-          id: string
-          name: string
-        }
-      }
-    }
-  }[]
+        value: number
+        date: Date
+        description: string
+      }[]
+
+  expense:
+    | {
+        id: string
+        value: number
+        category: CategoryType
+        date: Date
+        dueDate: Date
+        description: string
+        paymentMethod: PaymentMethodType
+        installments: number
+        status: StatusType
+      }[]
+
+  creditCard:
+    | {
+        lastNumber: number
+        creditLimit: number
+        validity: Date
+        holder: string
+        brand: string
+      }[]
 } | null

@@ -1,4 +1,4 @@
-import { CateroryType } from '@prisma/client'
+import { CategoryType } from '@prisma/client'
 
 export const CateroryTypeRenamed = {
   HOUSE: 'Moradia',
@@ -15,6 +15,6 @@ export const CateroryTypeRenamed = {
   OTHER: 'Outros'
 }
 
-export const categoryFormatter = (category: keyof typeof CateroryType) => {
+export const categoryFormatter = (category: keyof typeof CategoryType) => {
   return CateroryTypeRenamed[category] ?? category
 }

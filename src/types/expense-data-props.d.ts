@@ -5,7 +5,14 @@ import { z } from 'zod'
 export type expenseType = z.infer<typeof expenseSchema>
 
 /* get */
-export type ExpenseDataProps = expenseType & { id: string; date: Date }
+export type ExpenseDataProps = Omit<
+  expenseType & {
+    id: string
+    date: Date
+    dueDate: Date
+  },
+  'dateString' | 'dueDateString'
+>
 
 /* put */
-export type dataExpenseUpdateProps = Omit<ExpenseDataProps, 'date'>
+export type ExpenseUpdateProps = expenseType & { id: string }

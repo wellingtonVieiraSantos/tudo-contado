@@ -41,6 +41,7 @@ import { useGetExpenses } from './_hooks/use-get-expenses'
 import { useDelExpense } from './_hooks/use-del-expense'
 import { usePostExpense } from './_hooks/use-post-expense'
 import { usePutExpense } from './_hooks/use-put-expense'
+import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 
 export default function Expense() {
   const {
@@ -101,7 +102,7 @@ export default function Expense() {
                 <span className='text-sm font-poppins'>
                   Total ainda à pagar:
                 </span>{' '}
-                {formatedCurrency(totals.notPaid)}
+                {formatedCurrency(totals.pending)}
               </p>
               <ModalExpense
                 isOpen={isOpenPost}
@@ -152,10 +153,16 @@ export default function Expense() {
                   </p>
                 </div>
                 <Badge
-                  variant={expense.paid ? 'success' : 'error'}
+                  variant={
+                    paymentStatusFormatter(expense.status) === 'Pago'
+                      ? 'success'
+                      : 'error'
+                  }
                   className='absolute top-3 right-3 px-4'
                 >
-                  {expense.paid ? 'Pago' : 'À pagar'}
+                  {paymentStatusFormatter(expense.status) === 'Pago'
+                    ? 'Pago'
+                    : 'À pagar'}
                 </Badge>
               </CardContent>
               <CardFooter>

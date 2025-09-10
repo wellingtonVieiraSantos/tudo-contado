@@ -24,15 +24,14 @@ import {
   SelectValue
 } from '@/components/ui/Select'
 import { Input } from '@/components/ui/Input'
-import { Send, Wallet } from 'lucide-react'
+import { CreditCard, Send, Wallet } from 'lucide-react'
 import { Textarea } from '@/components/ui/Textarea'
 import { Controller, useForm } from 'react-hook-form'
-import { Checkbox } from '@/components/ui/Checkbox'
-import { Label } from '@/components/ui/Label'
 import { expenseSchema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { dataExpenseUpdateProps, expenseType } from '@/types/expense-data-props'
+import { expenseType } from '@/types/expense-data-props'
 import { useEffect } from 'react'
+import { format } from 'date-fns'
 
 type ModalExpenseProps = {
   isOpen: boolean
@@ -40,7 +39,7 @@ type ModalExpenseProps = {
   onSubmit: (data: expenseType) => Promise<void>
   isPending: boolean
   children?: React.ReactNode
-  selectedExpenseUpdate?: dataExpenseUpdateProps
+  selectedExpenseUpdate?: expenseType
 }
 
 export const ModalExpense = ({
@@ -56,7 +55,8 @@ export const ModalExpense = ({
     handleSubmit,
     control,
     reset,
-    formState: { errors }
+    formState: { errors },
+    watch
   } = useForm<expenseType>({
     resolver: zodResolver(expenseSchema)
   })
@@ -68,9 +68,23 @@ export const ModalExpense = ({
         description: selectedExpenseUpdate.description,
         type: selectedExpenseUpdate.type,
         category: selectedExpenseUpdate.category,
-        paid: selectedExpenseUpdate.paid,
-        dateString: selectedExpenseUpdate.dateString
+        paymentMethod: selectedExpenseUpdate.paymentMethod,
+        installments: selectedExpenseUpdate.installments,
+        creditCardId: selectedExpenseUpdate.creditCardId,
+        status: selectedExpenseUpdate.status,
+        date: format(
+          selectedExpenseUpdate.date,
+          'yyyy-MM-dd'
+        ) as unknown as Date
       })
+      if (selectedExpenseUpdate.dueDate) {
+        reset({
+          dueDate: format(
+            selectedExpenseUpdate.dueDate,
+            'yyyy-MM-dd'
+          ) as unknown as Date
+        })
+      }
     }
   }, [selectedExpenseUpdate, reset])
 
@@ -79,9 +93,9 @@ export const ModalExpense = ({
       <ModalTrigger asChild>{children}</ModalTrigger>
       <ModalContent>
         <ModalHeader>
-          <ModalTitle>Cadastro de Gastos</ModalTitle>
+          <ModalTitle>Despesas</ModalTitle>
           <ModalDescription className='text-sm text-foreground-secondary'>
-            Formulario para cadastro/atualizações de gastos
+            Cadastre ou atualize seus gastos da forma que desejar.
           </ModalDescription>
         </ModalHeader>
         <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-3'>
@@ -120,7 +134,7 @@ export const ModalExpense = ({
           </FormField>
 
           <FormField name='type'>
-            <FormLabel>Tipo de gasto</FormLabel>
+            <FormLabel>Tipo</FormLabel>
             <Controller
               name='type'
               control={control}
@@ -138,24 +152,8 @@ export const ModalExpense = ({
               )}
             />
           </FormField>
-          <FormField name='date'>
-            <FormLabel>Data da compra</FormLabel>
-            <FormControl asChild>
-              <input
-                type='date'
-                id='dateString'
-                {...register('dateString')}
-                className='text-foreground-secondary border p-1 px-2'
-              />
-            </FormControl>
-            {errors.dateString && (
-              <FormMessage className='text-destructive'>
-                {errors.dateString?.message}
-              </FormMessage>
-            )}
-          </FormField>
           <FormField name='category'>
-            <FormLabel>Categoria do gasto</FormLabel>
+            <FormLabel>Categoria</FormLabel>
             <Controller
               name='category'
               control={control}
@@ -189,25 +187,136 @@ export const ModalExpense = ({
               )}
             />
           </FormField>
-          <FormField name='paid' className='w-fit'>
-            <FormLabel>Status do gasto</FormLabel>
+
+          <FormField name='paymentMethod' className='w-fit'>
+            <FormLabel>Forma de pagamento</FormLabel>
             <FormControl asChild>
               <Controller
-                name='paid'
+                name='paymentMethod'
                 control={control}
-                defaultValue={false}
+                defaultValue={'PIX'}
                 render={({ field }) => (
-                  <Label className='flex flex-row items-center gap-4 text-foreground-secondary'>
-                    <span>A despesa ja foi paga?</span>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </Label>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='PIX'>Pix</SelectItem>
+                      <SelectItem value='MONEY'>Dinheiro</SelectItem>
+                      <SelectItem value='CREDIT_CARD'>Crédito</SelectItem>
+                      <SelectItem value='DEBIT_CARD'>Débito</SelectItem>
+                    </SelectContent>
+                  </Select>
                 )}
               />
             </FormControl>
           </FormField>
+          {watch('paymentMethod') === 'CREDIT_CARD' && (
+            <>
+              <FormField name='creditCardId' className='w-fit'>
+                <FormLabel>Cartão de crédito</FormLabel>
+                <FormControl asChild>
+                  <Controller
+                    name='creditCardId'
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder='Vincule a um cartão cadastrado' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value='PIX'>Pix</SelectItem>
+                          <SelectItem value='MONEY'>Dinheiro</SelectItem>
+                          <SelectItem value='CREDIT_CARD'>Crédito</SelectItem>
+                          <SelectItem value='DEBIT_CARD'>Débito</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </FormField>
+
+              <FormField name='installments'>
+                <FormLabel>Numero de parcelas</FormLabel>
+                <FormControl asChild>
+                  <Input
+                    icon={CreditCard}
+                    id='installments'
+                    {...register('installments')}
+                    type='number'
+                    min={1}
+                    step={1}
+                    placeholder='Para compra à vista, digite 1'
+                  />
+                </FormControl>
+                {errors.value && (
+                  <FormMessage className='text-destructive'>
+                    {errors.value?.message}
+                  </FormMessage>
+                )}
+              </FormField>
+            </>
+          )}
+
+          <FormField name='date'>
+            <FormLabel>Data de compra</FormLabel>
+            <FormControl asChild>
+              <input
+                type='date'
+                id='date'
+                {...register('date')}
+                className='text-foreground-secondary border p-1 px-2'
+              />
+            </FormControl>
+            {errors.date && (
+              <FormMessage className='text-destructive'>
+                {errors.date?.message}
+              </FormMessage>
+            )}
+          </FormField>
+          <FormField name='dueDate'>
+            <FormLabel>Data de vencimento</FormLabel>
+            <FormControl asChild>
+              <input
+                type='date'
+                id='dueDate'
+                {...register('dueDate')}
+                className='text-foreground-secondary border p-1 px-2'
+              />
+            </FormControl>
+            {errors.dueDate && (
+              <FormMessage className='text-destructive'>
+                {errors.dueDate?.message}
+              </FormMessage>
+            )}
+          </FormField>
+
+          <FormField name='status' className='w-fit'>
+            <FormLabel>Situação</FormLabel>
+            <FormControl asChild>
+              <Controller
+                name='status'
+                control={control}
+                defaultValue={'PENDING'}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='PAID'>Pago</SelectItem>
+                      <SelectItem value='PENDING'>Pendente</SelectItem>
+                      <SelectItem value='OVERDUE'>Atrasado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </FormControl>
+          </FormField>
+
           <FormSubmit
             asChild
             className='w-full lg:w-fit mt-2 lg:justify-self-end'

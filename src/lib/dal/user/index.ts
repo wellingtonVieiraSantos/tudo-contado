@@ -9,6 +9,23 @@ export const getDataFromUserId = async () => {
     select: {
       name: true,
       image: true,
+      creditCard: {
+        select: {
+          id: true,
+          brand: true,
+          lastNumber: true,
+          holder: true,
+          validity: true,
+          creditLimit: true,
+          expense: {
+            select: {
+              value: true,
+              status: true,
+              dueDate: true
+            }
+          }
+        }
+      },
       expense: {
         select: {
           id: true,
@@ -16,7 +33,10 @@ export const getDataFromUserId = async () => {
           category: true,
           paymentMethod: true,
           date: true,
-          description: true
+          description: true,
+          dueDate: true,
+          installments: true,
+          status: true
         },
         orderBy: {
           date: 'desc'

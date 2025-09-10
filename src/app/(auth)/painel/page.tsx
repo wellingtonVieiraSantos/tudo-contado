@@ -191,6 +191,8 @@ export default function Dashboard() {
                     {trans.description}
                   </h3>
                   <p>{valueFormatter(trans.value)}</p>
+                  {trans.type === 'expense' && <p>{trans.paymentMethod}</p>}
+                  {trans.type === 'expense' && <p>{trans.status}</p>}
                 </div>
               </div>
             ))}

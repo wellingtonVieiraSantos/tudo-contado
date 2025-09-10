@@ -6,8 +6,6 @@ import {
   updateExpenseById
 } from '@/lib/dal/expenses'
 import { expenseSchema } from '@/validators/formExpense'
-import { format } from 'date-fns'
-import { dataExpenseUpdateProps } from '@/types/expense-data-props'
 
 export async function GET() {
   try {
@@ -16,8 +14,7 @@ export async function GET() {
     //normalize value and type to show in component, get in centavos, return in reais
     const expenses = rawExpense.map(expense => ({
       ...expense,
-      value: expense.value / 100,
-      dateString: format(expense.date, 'yyyy-MM-dd')
+      value: expense.value / 100
     }))
 
     return NextResponse.json({ data: expenses, success: true }, { status: 200 })
@@ -37,25 +34,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
     }
 
-    const {
-      type,
-      value: rawValue,
-      dateString,
-      description,
-      category,
-      paid
-    } = result.data
+    const { value: rawValue, dateString, dueDateString } = result.data
+
     const value = rawValue * 100
     const date = new Date(dateString)
+    const dueDate = new Date(dueDateString)
 
-    const postedExpense = await postExpense(
-      type,
+    const data = {
+      ...result.data,
       value,
       date,
-      category,
-      description,
-      paid
-    )
+      dueDate
+    }
+
+    const postedExpense = await postExpense(data)
     return NextResponse.json(
       { success: true, data: postedExpense },
       { status: 201 }
@@ -71,19 +63,18 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const {
-      id,
-      value: rawValue,
-      dateString,
-      description,
-      type,
-      category,
-      paid
-    }: dataExpenseUpdateProps = await req.json()
+    const result = expenseSchema.safeParse(await req.json())
+    if (!result.success) {
+      return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
+    }
+
+    const { value: rawValue, dateString, dueDateString } = result.data
 
     const value = rawValue * 100
     const date = new Date(dateString + 'T00:00:00')
-    const data = { type, value, description, date, category, paid }
+    const dueDate = new Date(dueDateString + 'T00:00:00')
+    const id = result.data.id!
+    const data = { ...result.data, value, date, dueDate }
 
     const updatedExpense = await updateExpenseById(id, data)
     return NextResponse.json(
