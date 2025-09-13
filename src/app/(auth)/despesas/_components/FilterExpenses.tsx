@@ -5,22 +5,22 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/Select'
-import { ExpenseDataProps } from '@/types/expense-data-props'
+import { expenseType } from '@/types/expense-data-props'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 type FilterExpensesProps = {
   months: string[]
-  filteredExpenses: ExpenseDataProps[]
+  filteredExpenses: expenseType[]
   filters: {
     month: string
-    paid: string | boolean
+    status: 'all' | 'Pago' | 'Pendente' | 'Atrasado'
   }
 
   updateFilters: (
     newFilters: Partial<{
       month: string
-      paid: string | boolean
+      status: 'all' | 'Pago' | 'Pendente' | 'Atrasado'
     }>
   ) => void
 }
@@ -36,10 +36,10 @@ export const FilterExpenses = ({
     updateFilters(newFilter)
   }
 
-  const handleStatusFilter = (value: string) => {
-    const option =
-      value === 'paid' ? true : value === 'notPaid' ? false : 'default'
-    const newFilter = { ...filters, paid: option }
+  const handleStatusFilter = (
+    value: 'all' | 'Pago' | 'Pendente' | 'Atrasado'
+  ) => {
+    const newFilter = { ...filters, status: value }
     updateFilters(newFilter)
   }
   return (
@@ -61,7 +61,7 @@ export const FilterExpenses = ({
           </SelectTrigger>
           {months && (
             <SelectContent>
-              <SelectItem value='default'>Todos os Gastos</SelectItem>
+              <SelectItem value='default'>Sem filtro</SelectItem>
               {months.map(month => (
                 <SelectItem key={month} value={month}>
                   {month}
@@ -75,9 +75,10 @@ export const FilterExpenses = ({
             <SelectValue placeholder='status' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='default'>Sem filtro</SelectItem>
-            <SelectItem value='paid'>Pago</SelectItem>
-            <SelectItem value='notPaid'>Não pago</SelectItem>
+            <SelectItem value='all'>Sem filtro</SelectItem>
+            <SelectItem value='Pago'>Pago</SelectItem>
+            <SelectItem value='Pendente'>Pendente</SelectItem>
+            <SelectItem value='Atrasado'>Atrasado</SelectItem>
           </SelectContent>
         </Select>
       </div>

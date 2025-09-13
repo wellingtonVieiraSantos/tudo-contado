@@ -168,7 +168,9 @@ export default function Expense() {
               <CardFooter>
                 <Button
                   variant='border'
-                  onClick={() => openUpdateModal(expense)}
+                  onClick={() => {
+                    openUpdateModal(expense)
+                  }}
                   disabled={isOpenPut}
                   className='self-end bg-info/40 px-4'
                 >

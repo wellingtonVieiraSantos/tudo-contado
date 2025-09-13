@@ -24,6 +24,8 @@ export const usePostExpense = () => {
   })
 
   const onSubmit = async (data: expenseType) => {
+    console.log(data)
+
     mutate(data)
     setIsOpen(false)
   }

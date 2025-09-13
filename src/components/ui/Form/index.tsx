@@ -14,7 +14,7 @@ const FormField = forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <FormRadix.Field
-      className={twMerge(`flex flex-col gap-3 group`, className)}
+      className={twMerge(`flex flex-col gap-3 group mt-3`, className)}
       ref={ref}
       {...props}
     />

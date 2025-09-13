@@ -34,17 +34,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
     }
 
-    const { value: rawValue, dateString, dueDateString } = result.data
+    const { value: rawValue } = result.data
 
     const value = rawValue * 100
-    const date = new Date(dateString)
-    const dueDate = new Date(dueDateString)
 
     const data = {
       ...result.data,
-      value,
-      date,
-      dueDate
+      value
     }
 
     const postedExpense = await postExpense(data)
@@ -68,13 +64,12 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
     }
 
-    const { value: rawValue, dateString, dueDateString } = result.data
+    const { value: rawValue } = result.data
 
     const value = rawValue * 100
-    const date = new Date(dateString + 'T00:00:00')
-    const dueDate = new Date(dueDateString + 'T00:00:00')
+
     const id = result.data.id!
-    const data = { ...result.data, value, date, dueDate }
+    const data = { ...result.data, value }
 
     const updatedExpense = await updateExpenseById(id, data)
     return NextResponse.json(

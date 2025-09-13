@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { ExpenseDataProps } from '@/types/expense-data-props'
+import { expenseType } from '@/types/expense-data-props'
 import { ApiResponse } from '@/types/api-response'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 
@@ -12,7 +12,7 @@ const fetchExpenses = async () => {
   if (!response.ok) {
     throw new Error('Falha ao buscar despesas')
   }
-  return response.json() as Promise<ApiResponse<ExpenseDataProps[]>>
+  return response.json() as Promise<ApiResponse<expenseType[]>>
 }
 
 export const useGetExpenses = () => {

@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { requireUser } from './user/require-user'
 import { Prisma } from '@prisma/client'
-import { ExpenseDataProps } from '@/types/expense-data-props'
+import { expenseType } from '@/types/expense-data-props'
 
 export const getExpenses = async () => {
   const user = await requireUser()
@@ -15,10 +15,12 @@ export const getExpenses = async () => {
       value: true,
       description: true,
       category: true,
+      type: true,
       date: true,
       dueDate: true,
       installments: true,
       paymentMethod: true,
+      creditCardId: true,
       status: true,
       creditCard: {
         select: {
@@ -32,7 +34,7 @@ export const getExpenses = async () => {
   })
 }
 
-export const postExpense = async (data: Omit<ExpenseDataProps, 'id'>) => {
+export const postExpense = async (data: expenseType) => {
   const user = await requireUser()
 
   return await prisma.expense.create({
@@ -41,13 +43,20 @@ export const postExpense = async (data: Omit<ExpenseDataProps, 'id'>) => {
       value: data.value,
       date: data.date,
       dueDate: data.dueDate,
-      installments: data.installments,
       description: data.description,
       category: data.category,
       status: data.status,
       user: {
         connect: { id: user.id }
-      }
+      },
+      ...(data.creditCardId && {
+        creditCard: {
+          connect: { id: data.creditCardId }
+        }
+      }),
+      ...(data.paymentMethod === 'CREDIT_CARD' && {
+        installments: data.installments ?? 1
+      })
     }
   })
 }
