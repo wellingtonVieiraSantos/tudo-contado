@@ -2,6 +2,7 @@ import { CardBrand } from '@prisma/client'
 import z from 'zod'
 
 export const creditCardSchema = z.object({
+  id: z.string().uuid().optional(),
   lastNumber: z
     .string({ message: 'Campo obrigatório' })
     .regex(/^\d{4}$/, { message: 'Deve ter 4 números' }),

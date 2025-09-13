@@ -1,14 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/Button'
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
-} from '@/components/ui/Drawer'
-import {
   Form,
   FormControl,
   FormField,
@@ -17,21 +9,7 @@ import {
   FormSubmit
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
-import {
-  Modal,
-  ModalContent,
-  ModalDescription,
-  ModalHeader,
-  ModalTitle,
-  ModalTrigger
-} from '@/components/ui/Modal'
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverArrow,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/Popover'
+
 import {
   Select,
   SelectContent,
@@ -44,14 +22,7 @@ import { expenseFormStepTwo, expenseType } from '@/types/expense-data-props'
 import { step2Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PaymentMethodType } from '@prisma/client'
-import {
-  ArrowLeft,
-  ArrowRight,
-  CreditCard,
-  Plus,
-  Send,
-  User
-} from 'lucide-react'
+import { ArrowLeft, ArrowRight, CreditCard, Plus } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
