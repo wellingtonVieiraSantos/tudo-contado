@@ -1,29 +1,29 @@
 import { queryClient } from '@/lib/query-client'
-import { expenseType } from '@/types/expense-data-props'
+import { creditCardType } from '@/types/creditcard-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
-const fetchExpense = async (data: expenseType) => {
-  const res = await fetch('api/expense', {
+const fetchCreditCard = async (data: creditCardType) => {
+  const res = await fetch('api/credit-card', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }
   })
-  if (!res.ok) throw new Error('Falha ao cadastrar despesa')
+  if (!res.ok) throw new Error('Falha ao cadastrar cartão')
   return res.json()
 }
 
-export const usePostExpense = () => {
+export const usePostCreditCard = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    mutationFn: fetchExpense,
+    mutationFn: fetchCreditCard,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
+      queryClient.invalidateQueries({ queryKey: ['creditCard'] })
     }
   })
 
-  const onSubmit = async (data: expenseType) => {
+  const onSubmit = async (data: creditCardType) => {
     mutate(data)
     setIsOpen(false)
   }

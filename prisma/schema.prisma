@@ -84,11 +84,14 @@ model CreditCard {
   userId      String
   lastNumber  String
   creditLimit Int
-  validity    DateTime
+  expMonth    String
+  expYear     String
   holder      String
   cardBrand   CardBrand  @default(OTHER)
   expense     Expense[]
   user        User        @relation(fields: [userId], references: [id])
+
+  @@unique([userId, lastNumber, expMonth, expYear, cardBrand])
 }
 
 model Income {

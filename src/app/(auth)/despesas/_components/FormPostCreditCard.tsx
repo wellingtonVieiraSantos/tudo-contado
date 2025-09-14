@@ -4,7 +4,8 @@ import {
   FormField,
   FormLabel,
   FormMessage,
-  FormSubmit
+  FormSubmit,
+  FormSubmitError
 } from '@/components/ui/Form'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -22,6 +23,7 @@ import { creditCardSchema } from '@/validators/formCreditCard'
 import { creditCardType } from '@/types/creditcard-data-props'
 import { CardBrand } from '@prisma/client'
 import { cardBrandFormatter } from '@/lib/cardBrandFormatter'
+import { usePostCreditCard } from '../_hooks/use-post-creditcard'
 
 export const FormPostCreditCard = ({
   setStep
@@ -35,9 +37,7 @@ export const FormPostCreditCard = ({
     formState: { errors }
   } = useForm<creditCardType>({ resolver: zodResolver(creditCardSchema) })
 
-  const onSubmit = (data: creditCardType) => {
-    console.log(data)
-  }
+  const { isPending, onSubmit } = usePostCreditCard()
 
   const cardBrands = Object.keys(CardBrand) as CardBrand[]
 
@@ -93,22 +93,50 @@ export const FormPostCreditCard = ({
           </FormMessage>
         )}
       </FormField>
-      <FormField name='validity'>
-        <FormLabel>Validade</FormLabel>
-        <FormControl asChild>
-          <input
-            type='date'
-            id='date'
-            {...register('validity')}
-            className='text-foreground-secondary border p-1 px-2'
-          />
-        </FormControl>
-        {errors.validity && (
-          <FormMessage className='text-destructive'>
-            {errors.validity?.message}
-          </FormMessage>
+      <h2 className='font-poppins mt-3'>Vencimento</h2>
+      <div className='flex relative gap-6 w-fit'>
+        <FormField name='expMonth'>
+          <FormLabel className='text-sm text-foreground-secondary'>
+            Mês
+          </FormLabel>
+          <FormControl asChild className='w-13'>
+            <Input
+              id='expMonth'
+              {...register('expMonth')}
+              className='pr-2 pl-4'
+              placeholder='10'
+            />
+          </FormControl>
+        </FormField>
+        <span className='absolute bottom-1 right-1/2 translate-x-1/2 text-base text-foreground-secondary'>
+          /
+        </span>
+        <FormField name='expYear'>
+          <FormLabel className='text-sm text-foreground-secondary'>
+            Ano
+          </FormLabel>
+          <FormControl asChild className='w-13'>
+            <Input
+              id='expYear'
+              {...register('expYear')}
+              className='pr-2 pl-4'
+              placeholder='25'
+            />
+          </FormControl>
+        </FormField>
+      </div>
+      <div className='flex flex-col items-start'>
+        {errors.expMonth && (
+          <FormSubmitError className='text-destructive'>
+            {errors.expMonth?.message}
+          </FormSubmitError>
         )}
-      </FormField>
+        {errors.expYear && (
+          <FormSubmitError className='text-destructive'>
+            {errors.expYear?.message}
+          </FormSubmitError>
+        )}
+      </div>
       <FormField name='cardBrand' className='w-fit'>
         <FormLabel>Bandeira</FormLabel>
         <FormControl asChild>
@@ -144,9 +172,12 @@ export const FormPostCreditCard = ({
           Cancelar
         </Button>
         <FormSubmit asChild>
-          <Button>
-            Cadastrar cartão
-            <Send />
+          <Button
+            disabled={isPending}
+            variant={`${isPending ? 'loading' : 'default'}`}
+          >
+            {isPending ? 'Cadastrando...' : 'Cadastrar cartão'}
+            <Send className={`${isPending && 'hidden'}`} />
           </Button>
         </FormSubmit>
       </div>

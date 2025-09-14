@@ -13,18 +13,11 @@ export const creditCardSchema = z.object({
       message: 'Máximo 2 casas decimais'
     }),
   holder: z.string().trim().min(1, { message: 'Campo obrigatório' }),
-  validity: z.coerce
-    .date({
-      errorMap: (issue, { defaultError }) => ({
-        message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-      })
-    })
-    .refine(
-      val => {
-        if (new Date(val) < new Date()) return false
-        return true
-      },
-      { message: 'Data não pode ser anterior a hoje.' }
-    ),
+  expMonth: z
+    .string({ message: 'Campo obrigatório' })
+    .regex(/^(0[1-9]|1[0-2])$/, { message: 'Mês deve ser de 01 à 12' }),
+  expYear: z
+    .string({ message: 'Campo obrigatório' })
+    .regex(/^\d{2}$/, { message: 'Ano deve ter 2 números' }),
   cardBrand: z.nativeEnum(CardBrand)
 })
