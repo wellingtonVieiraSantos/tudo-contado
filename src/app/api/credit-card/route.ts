@@ -7,6 +7,7 @@ import {
   updateCreditCardById
 } from '@/lib/dal/creditCard'
 import { creditCardSchema } from '@/validators/formCreditCard'
+import { Prisma } from '@prisma/client'
 
 export async function GET() {
   try {
@@ -53,7 +54,15 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     )
   } catch (e) {
-    console.log(e)
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === 'P2002'
+    ) {
+      return NextResponse.json(
+        { message: 'Cartão já cadastrado.' },
+        { status: 409 }
+      )
+    }
     return NextResponse.json(
       { error: 'Erro ao cadastrar novo cartão.' },
       { status: 500 }

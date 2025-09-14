@@ -15,11 +15,12 @@ export const getCreditCard = async () => {
       lastNumber: true,
       creditLimit: true,
       holder: true,
-      validity: true,
+      expMonth: true,
+      expYear: true,
       cardBrand: true
     },
     orderBy: {
-      validity: 'desc'
+      expYear: 'desc'
     }
   })
 }
@@ -32,7 +33,8 @@ export const postCreditCard = async (data: creditCardType) => {
       lastNumber: data.lastNumber,
       creditLimit: data.creditLimit,
       holder: data.holder,
-      validity: data.validity,
+      expMonth: data.expMonth,
+      expYear: data.expYear,
       cardBrand: data.cardBrand,
       user: { connect: { id: user.id } }
     }

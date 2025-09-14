@@ -4,6 +4,7 @@ import './globals.css'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import { SessionProvider } from 'next-auth/react'
 import Head from 'next/head'
+import { Toaster } from 'sonner'
 
 const poppins = Poppins({
   variable: '--font-poppins',
@@ -43,6 +44,17 @@ export default async function RootLayout({
       <body
         className={`w-full min-h-dvh ${montserrat.variable} ${poppins.variable} tracking-wide`}
       >
+        <Toaster
+          invert
+          offset={{ bottom: '11vh' }}
+          toastOptions={{
+            classNames: {
+              error: '!bg-destructive/50',
+              success: '!bg-success/50',
+              toast: '!bg-card !text-foreground !border-border'
+            }
+          }}
+        />
         <SessionProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
         </SessionProvider>
