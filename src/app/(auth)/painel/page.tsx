@@ -37,6 +37,14 @@ import {
   CarouselItem
 } from '@/components/ui/Carousel'
 
+const cardBrand = [
+  { title: 'VISA', url: '/visa.png' },
+  { title: 'MASTERCARD', url: '/mastercard.png' },
+  { title: 'ELO', url: '/elo.png' },
+  { title: 'HIPERCARD', url: '/hipercard.png' },
+  { title: 'AMEX', url: '/amex.png' }
+]
+
 export default function Dashboard() {
   const {
     isLoading,
@@ -126,7 +134,7 @@ export default function Dashboard() {
           <Divider />
         </CardHeader>
         <CardContent className='items-center justify-center'>
-          {!CreditCardData.creditCard ? (
+          {CreditCardData.creditCard?.length === 0 ? (
             <p>Nenhum cartao de credito cadastrado...</p>
           ) : (
             <Carousel>
@@ -136,20 +144,26 @@ export default function Dashboard() {
                     key={card.id}
                     className='flex flex-col items-center pb-1 gap-3'
                   >
-                    <div className='relative w-full max-w-75 h-45 rounded-xl bg-radial from-violet-800 to-violet-500 border border-foreground'>
+                    <div
+                      className={`relative w-full max-w-75 h-45 rounded-xl bg-radial
+                        from-sky-800 border border-foreground-secondary`}
+                    >
                       <Image
                         src={'/chip.png'}
-                        alt='chip credit card'
+                        alt='chip cartão de crédito'
                         width={512}
                         height={512}
                         className='w-10 absolute top-3 left-5'
                       />
                       <Image
-                        src={'/money.png'}
-                        alt='chip credit card'
+                        src={
+                          cardBrand.find(b => b.title === card.cardBrand)
+                            ?.url ?? ''
+                        }
+                        alt='bandeira do cartão de crédito'
                         width={512}
                         height={512}
-                        className='w-15 absolute top-0 right-3'
+                        className='w-16 absolute top-0 right-5'
                       />
                       <div className='text-xl lg:text-base xl:text-xl absolute bottom-18 left-9 font-mono tracking-wider'>
                         **** **** **** {card.lastNumber}
