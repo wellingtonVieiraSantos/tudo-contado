@@ -16,7 +16,6 @@ import { FormStepOne } from './FormStepOne'
 import { FormStepTwo } from './FormStepTwo'
 import { FormStepThree } from './FormStepThree'
 import { FormStepFour } from './FormStepFour'
-import { format } from 'date-fns'
 import { FormPostCreditCard } from './FormPostCreditCard'
 
 type ModalExpenseProps = {

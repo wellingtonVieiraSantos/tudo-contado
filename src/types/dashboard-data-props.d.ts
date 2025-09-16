@@ -24,7 +24,7 @@ export type dashboardDataProps = {
         dueDate: Date
         description: string
         paymentMethod: PaymentMethodType
-        creditCardId: String | undefined
+        creditCardId: string | undefined
         installments: number | undefined
         status: StatusType
       }[]

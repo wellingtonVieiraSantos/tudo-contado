@@ -33,7 +33,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselControlLeft,
-  CarouselControlMiniature,
   CarouselControlRight,
   CarouselItem
 } from '@/components/ui/Carousel'
@@ -133,7 +132,10 @@ export default function Dashboard() {
             <Carousel>
               <CarouselContent>
                 {CreditCardData.creditCard?.map((card, i) => (
-                  <CarouselItem className='flex flex-col items-center pb-1 gap-3'>
+                  <CarouselItem
+                    key={card.id}
+                    className='flex flex-col items-center pb-1 gap-3'
+                  >
                     <div className='relative w-full max-w-75 h-45 rounded-xl bg-radial from-violet-800 to-violet-500 border border-foreground'>
                       <Image
                         src={'/chip.png'}
