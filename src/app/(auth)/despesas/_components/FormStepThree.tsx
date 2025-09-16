@@ -2,7 +2,6 @@
 import { Button } from '@/components/ui/Button'
 import {
   Form,
-  FormControl,
   FormField,
   FormLabel,
   FormMessage,
@@ -13,7 +12,7 @@ import { step3Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 type FormStepThreeProps = {
   formData: Partial<expenseType>
@@ -27,36 +26,30 @@ export const FormStepThree = ({
   setStep
 }: FormStepThreeProps) => {
   const {
-    register,
     handleSubmit,
+    control,
     formState: { errors }
   } = useForm<expenseFormStepThree>({
     resolver: zodResolver(step3Schema),
-    defaultValues: {
-      ...formData,
-      date: format(
-        formData.date || new Date(),
-        'yyyy-MM-dd'
-      ) as unknown as Date,
-      dueDate: format(
-        formData.dueDate || new Date(),
-        'yyyy-MM-dd'
-      ) as unknown as Date
-    }
+    defaultValues: formData
   })
 
   return (
     <Form onSubmit={handleSubmit(onNext)}>
       <FormField name='date'>
         <FormLabel>Data de compra</FormLabel>
-        <FormControl asChild>
-          <input
-            type='date'
-            id='date'
-            {...register('date')}
-            className='text-foreground-secondary border p-1 px-2'
-          />
-        </FormControl>
+        <Controller
+          name='date'
+          control={control}
+          render={({ field }) => (
+            <input
+              type='date'
+              className='text-foreground-secondary border p-1 px-2'
+              {...field}
+              value={format(field.value, 'yyyy-MM-dd')}
+            />
+          )}
+        />
         {errors.date && (
           <FormMessage className='text-destructive'>
             {errors.date?.message}
@@ -65,14 +58,18 @@ export const FormStepThree = ({
       </FormField>
       <FormField name='dueDate'>
         <FormLabel>Data de vencimento</FormLabel>
-        <FormControl asChild>
-          <input
-            type='date'
-            id='dueDate'
-            {...register('dueDate')}
-            className='text-foreground-secondary border p-1 px-2'
-          />
-        </FormControl>
+        <Controller
+          name='dueDate'
+          control={control}
+          render={({ field }) => (
+            <input
+              type='date'
+              className='text-foreground-secondary border p-1 px-2'
+              {...field}
+              value={format(field.value!, 'yyyy-MM-dd')}
+            />
+          )}
+        />
         {errors.dueDate && (
           <FormMessage className='text-destructive'>
             {errors.dueDate?.message}

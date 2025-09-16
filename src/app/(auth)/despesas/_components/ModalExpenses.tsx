@@ -55,14 +55,9 @@ export const ModalExpense = ({
       const cleaned = {
         ...selectedExpenseUpdate,
         installments: selectedExpenseUpdate.installments ?? undefined,
-        date: format(
-          selectedExpenseUpdate.date,
-          'yyyy-MM-dd'
-        ) as unknown as Date,
-        dueDate: format(
-          selectedExpenseUpdate.dueDate || new Date(),
-          'yyyy-MM-dd'
-        ) as unknown as Date
+        date: selectedExpenseUpdate.date,
+
+        dueDate: selectedExpenseUpdate.dueDate || new Date()
       }
       setFormData(cleaned)
     }
