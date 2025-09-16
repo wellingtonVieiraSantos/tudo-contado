@@ -15,15 +15,26 @@ export async function GET() {
       paymentMethod: paymentMethodFormatter(e.paymentMethod),
       status: paymentStatusFormatter(e.status)
     }))
+
     const dashboardInfoIncome = rawDashboardInfo?.income.map(i => ({
       ...i,
       value: i.value / 100
     }))
 
+    const dashboardInfoCreditCard = rawDashboardInfo?.creditCard.map(cc => ({
+      ...cc,
+      creditLimit: cc.creditLimit / 100,
+      expense: cc.expense.map(c => ({
+        ...c,
+        value: c.value / 100
+      }))
+    }))
+
     const dashboardInfo = {
       ...rawDashboardInfo,
       expense: dashboardInfoExpense,
-      income: dashboardInfoIncome
+      income: dashboardInfoIncome,
+      creditCard: dashboardInfoCreditCard
     } as const
 
     return NextResponse.json(

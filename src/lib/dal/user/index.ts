@@ -12,16 +12,17 @@ export const getDataFromUserId = async () => {
       creditCard: {
         select: {
           id: true,
-          brand: true,
+          cardBrand: true,
           lastNumber: true,
           holder: true,
-          validity: true,
+          expMonth: true,
+          expYear: true,
           creditLimit: true,
           expense: {
             select: {
               value: true,
               status: true,
-              dueDate: true
+              date: true
             }
           }
         }

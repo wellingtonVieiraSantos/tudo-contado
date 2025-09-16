@@ -41,16 +41,20 @@ export const useGetDashboard = () => {
         return {
           id: e.id,
           value: e.value,
+          category: e.category,
           description: e.description,
           date: e.date,
+          dueDate: e.dueDate,
           paymentMethod: e.paymentMethod,
+          creditCardId: e.creditCardId,
+          installments: e.installments,
           status: e.status,
           type: 'expense' as const
         }
       }) || []
     return [...incomeArray, ...expenseArray]
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .filter((arr, i) => {
+      .filter((_arr, i) => {
         return i < 10
       })
   }, [response?.data])
@@ -102,11 +106,22 @@ export const useGetDashboard = () => {
 
     const total = expenseAmounthPerCategory
       .map(e => e.value)
-      .filter(e => e !== null)
       .reduce((curr, acc) => acc + Number(curr), 0)
 
     return { expenseAmounthPerCategory, total }
   }, [response?.data?.expense])
+
+  const CreditCardData = useMemo(() => {
+    const creditCard = response?.data?.creditCard
+
+    const cardExpense = creditCard?.map(cc => {
+      return cc.expense
+        .map(c => c.value)
+        .reduce((curr, acc) => acc + Number(curr), 0)
+    })
+
+    return { creditCard, cardExpense }
+  }, [])
 
   return {
     response,
@@ -115,6 +130,7 @@ export const useGetDashboard = () => {
     lineChartData,
     pieChartData,
     recentTransactions,
+    CreditCardData,
     isLoading,
     error,
     refetch

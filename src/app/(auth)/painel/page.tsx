@@ -29,6 +29,14 @@ import Link from 'next/link'
 import Loading from './loading'
 import Image from 'next/image'
 import { ProgressBar } from '@/components/ui/ProgressBar'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselControlLeft,
+  CarouselControlMiniature,
+  CarouselControlRight,
+  CarouselItem
+} from '@/components/ui/Carousel'
 
 export default function Dashboard() {
   const {
@@ -37,7 +45,8 @@ export default function Dashboard() {
     pieChartData,
     totalExpenseCurrent,
     totalIncomeCurrent,
-    recentTransactions
+    recentTransactions,
+    CreditCardData
   } = useGetDashboard()
 
   if (isLoading) return <Loading />
@@ -117,46 +126,73 @@ export default function Dashboard() {
           </CardDescription>
           <Divider />
         </CardHeader>
-        <CardContent className='items-center justify-center gap-4'>
-          {/* <p>Nenhum cartao de credito cadastrado...</p> */}
-          <div className='relative w-75 lg:w-60 xl:w-75 h-45 rounded-xl bg-radial from-violet-800 to-violet-500 border border-foreground'>
-            <Image
-              src={'/chip.png'}
-              alt='chip credit card'
-              width={512}
-              height={512}
-              className='w-10 absolute top-3 left-5'
-            />
-            <Image
-              src={'/money.png'}
-              alt='chip credit card'
-              width={512}
-              height={512}
-              className='w-15 absolute top-0 right-3'
-            />
-            <div className='text-xl lg:text-base xl:text-xl absolute bottom-18 left-9 font-mono tracking-wider'>
-              **** **** **** 4528
-            </div>
-            <div className='absolute bottom-3 left-7 flex flex-col'>
-              <span className='opacity-70 text-[12px]'>Titular</span>
-              <span>John Doe</span>
-            </div>
-            <div className='absolute bottom-3 right-7 flex flex-col'>
-              <span className='opacity-70 text-[12px]'>Expira</span>
-              <span>09/29</span>
-            </div>
-          </div>
-          <div>
-            <ProgressBar value={20} className='w-75 lg:w-60 xl:w-75' />
-            <div className='flex justify-between items-center'>
-              <span className='text-xl lg:text-lg xl:text-xl font-montserrat'>
-                R$ 100,00
-              </span>
-              <span className='lg:text-sm text-foreground-secondary'>
-                Limite: R$ 1500,00
-              </span>
-            </div>
-          </div>
+        <CardContent className='items-center justify-center'>
+          {!CreditCardData.creditCard ? (
+            <p>Nenhum cartao de credito cadastrado...</p>
+          ) : (
+            <Carousel>
+              <CarouselContent>
+                {CreditCardData.creditCard?.map((card, i) => (
+                  <CarouselItem className='flex flex-col items-center pb-1 gap-3'>
+                    <div className='relative w-full max-w-75 h-45 rounded-xl bg-radial from-violet-800 to-violet-500 border border-foreground'>
+                      <Image
+                        src={'/chip.png'}
+                        alt='chip credit card'
+                        width={512}
+                        height={512}
+                        className='w-10 absolute top-3 left-5'
+                      />
+                      <Image
+                        src={'/money.png'}
+                        alt='chip credit card'
+                        width={512}
+                        height={512}
+                        className='w-15 absolute top-0 right-3'
+                      />
+                      <div className='text-xl lg:text-base xl:text-xl absolute bottom-18 left-9 font-mono tracking-wider'>
+                        **** **** **** {card.lastNumber}
+                      </div>
+                      <div className='absolute bottom-3 left-7 flex flex-col'>
+                        <span className='opacity-70 text-[12px]'>Titular</span>
+                        <span>{card.holder}</span>
+                      </div>
+                      <div className='absolute bottom-3 right-7 flex flex-col'>
+                        <span className='opacity-70 text-[12px]'>Expira</span>
+                        <span>
+                          {card.expMonth} / {card.expYear}
+                        </span>
+                      </div>
+                    </div>
+                    <div className='w-full max-w-75'>
+                      <ProgressBar
+                        value={
+                          ((CreditCardData.cardExpense?.find(
+                            (_ce, index) => i === index
+                          ) || 0) /
+                            card.creditLimit) *
+                          100
+                        }
+                      />
+                      <div className='flex justify-between items-center'>
+                        <span className='text-xl lg:text-lg xl:text-xl font-montserrat'>
+                          {valueFormatter(
+                            CreditCardData.cardExpense?.find(
+                              (_ce, index) => i === index
+                            ) as number
+                          )}
+                        </span>
+                        <span className='lg:text-sm text-foreground-secondary'>
+                          Limite: {valueFormatter(card.creditLimit)}
+                        </span>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselControlLeft />
+              <CarouselControlRight />
+            </Carousel>
+          )}
         </CardContent>
       </Card>
 

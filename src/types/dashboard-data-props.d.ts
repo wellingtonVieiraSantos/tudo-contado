@@ -1,4 +1,9 @@
-import { CategoryType, PaymentMethodType, StatusType } from '@prisma/client'
+import {
+  CardBrand,
+  CategoryType,
+  PaymentMethodType,
+  StatusType
+} from '@prisma/client'
 
 export type dashboardDataProps = {
   name: string | null
@@ -10,7 +15,6 @@ export type dashboardDataProps = {
         date: Date
         description: string
       }[]
-
   expense:
     | {
         id: string
@@ -20,16 +24,23 @@ export type dashboardDataProps = {
         dueDate: Date
         description: string
         paymentMethod: PaymentMethodType
-        installments: number
+        creditCardId: String | undefined
+        installments: number | undefined
         status: StatusType
       }[]
-
   creditCard:
     | {
-        lastNumber: number
+        id: string
+        lastNumber: string
         creditLimit: number
-        validity: Date
+        expMonth: string
+        expYear: string
         holder: string
-        brand: string
+        cardBrand: CardBrand
+        expense: {
+          value: number
+          status: StatusType
+          date: Date
+        }[]
       }[]
 } | null
