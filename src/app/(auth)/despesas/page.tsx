@@ -221,7 +221,7 @@ export default function Expense() {
             </Button>
             <Button
               onClick={() => {
-                if (selectedExpense) handleDeleteExpense(selectedExpense.id)
+                if (selectedExpense) handleDeleteExpense(selectedExpense.id!)
                 setIsOpen(false)
               }}
               className='w-full lg:flex-1 bg-destructive hover:bg-destructive/50'
