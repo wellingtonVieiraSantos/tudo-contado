@@ -49,9 +49,11 @@ export default async function RootLayout({
           offset={{ bottom: '11vh' }}
           toastOptions={{
             classNames: {
-              error: '!bg-destructive/50',
-              success: '!bg-success/50',
-              toast: '!bg-card !text-foreground !border-border'
+              toast: '!text-base !text-foreground !border-border',
+              error: '!bg-destructive',
+              success: '!bg-button',
+              info: '!bg-info',
+              warning: '!bg-amber-500'
             }
           }}
         />

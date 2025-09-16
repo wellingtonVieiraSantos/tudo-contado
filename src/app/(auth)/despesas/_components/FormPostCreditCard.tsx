@@ -1,3 +1,4 @@
+'use client'
 import {
   Form,
   FormControl,
@@ -24,11 +25,12 @@ import { creditCardType } from '@/types/creditcard-data-props'
 import { CardBrand } from '@prisma/client'
 import { cardBrandFormatter } from '@/lib/cardBrandFormatter'
 import { usePostCreditCard } from '../_hooks/use-post-creditcard'
+import { Dispatch, SetStateAction } from 'react'
 
 export const FormPostCreditCard = ({
   setStep
 }: {
-  setStep: (data: number) => void
+  setStep: Dispatch<SetStateAction<number>>
 }) => {
   const {
     register,
@@ -37,7 +39,7 @@ export const FormPostCreditCard = ({
     formState: { errors }
   } = useForm<creditCardType>({ resolver: zodResolver(creditCardSchema) })
 
-  const { isPending, onSubmit } = usePostCreditCard()
+  const { isPending, onSubmit } = usePostCreditCard(setStep)
 
   const cardBrands = Object.keys(CardBrand) as CardBrand[]
 

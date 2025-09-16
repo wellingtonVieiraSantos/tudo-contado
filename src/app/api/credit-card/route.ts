@@ -50,7 +50,11 @@ export async function POST(req: NextRequest) {
 
     const postedCreditCard = await postCreditCard(data)
     return NextResponse.json(
-      { success: true, data: postedCreditCard },
+      {
+        success: true,
+        data: postedCreditCard,
+        message: 'Cartão cadastrado com sucesso.'
+      },
       { status: 201 }
     )
   } catch (e) {

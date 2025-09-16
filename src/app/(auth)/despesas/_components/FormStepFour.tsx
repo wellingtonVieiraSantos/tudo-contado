@@ -23,8 +23,8 @@ import { Controller, useForm } from 'react-hook-form'
 type FormStepFourProps = {
   isPending: boolean
   formData: Partial<expenseType>
-  onNext: (data: expenseFormStepFour) => void
-  setStep: (data: number) => void
+  onNext: (data: Partial<expenseType>) => void
+  setStep: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const FormStepFour = ({
@@ -38,12 +38,8 @@ export const FormStepFour = ({
     defaultValues: formData
   })
 
-  const onSubmit = (data: expenseFormStepFour) => {
-    onNext(data)
-  }
-
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onNext)}>
       <FormField name='status' className='w-fit'>
         <FormLabel>Situação</FormLabel>
         <FormControl asChild>

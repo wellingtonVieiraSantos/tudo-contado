@@ -7,7 +7,7 @@ import {
 import z from 'zod'
 
 export const expenseSchemaInitial = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   value: z.coerce
     .number({ message: 'Campo obrigatório' })
     .positive({ message: 'Apenas valores positivos' })
@@ -22,7 +22,6 @@ export const expenseSchemaInitial = z.object({
     .string({
       message: 'Para pagamento com crédito é necessário vincular um cartão.'
     })
-    .uuid()
     .optional(),
   installments: z.coerce
     .number({ message: 'O valor deve ser um número' })

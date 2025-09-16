@@ -87,7 +87,7 @@ model CreditCard {
   expMonth    String
   expYear     String
   holder      String
-  cardBrand   CardBrand  @default(OTHER)
+  cardBrand   CardBrand   @default(OTHER)
   expense     Expense[]
   user        User        @relation(fields: [userId], references: [id])
 
@@ -99,7 +99,7 @@ model Income {
   userId       String
   type         IncomeType  @default(VARIABLE)
   value        Int
-  date         DateTime
+  date         DateTime    @db.Date
   description  String
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
@@ -113,8 +113,8 @@ model Expense {
   type          ExpenseType       @default(VARIABLE)
   paymentMethod PaymentMethodType @default(PIX)
   value         Int
-  date          DateTime
-  dueDate       DateTime?
+  date          DateTime          @db.Date
+  dueDate       DateTime?         @db.Date
   installments  Int? 
   description   String
   category      CategoryType      @default(OTHER)
@@ -165,7 +165,7 @@ model ProductPrice {
   userId           String
   value            Int
   location         String
-  date             DateTime
+  date             DateTime 
   createdAt        DateTime       @default(now())
   productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
   user             User           @relation(fields: [userId], references: [id])

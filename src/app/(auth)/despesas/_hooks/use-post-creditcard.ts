@@ -1,8 +1,8 @@
 'use client'
 import { queryClient } from '@/lib/query-client'
+import { ApiResponse } from '@/types/api-response'
 import { creditCardType } from '@/types/creditcard-data-props'
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
 import { toast } from 'sonner'
 
 const fetchCreditCard = async (data: creditCardType) => {
@@ -16,16 +16,18 @@ const fetchCreditCard = async (data: creditCardType) => {
     const errBody = await res.json()
     throw new Error(errBody.message || 'Ocorreu um erro ao cadastrar o cartão')
   }
-  return res.json()
+  return res.json() as Promise<ApiResponse<creditCardType[]>>
 }
 
-export const usePostCreditCard = () => {
-  const [isOpen, setIsOpen] = useState(false)
-
+export const usePostCreditCard = (
+  setStep: (value: React.SetStateAction<number>) => void
+) => {
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreditCard,
-    onSuccess: () => {
+    onSuccess: res => {
+      toast.success(res.message)
       queryClient.invalidateQueries({ queryKey: ['creditCard'] })
+      setStep(2)
     },
     onError: (error: Error) => {
       toast.error(error.message)
@@ -34,8 +36,7 @@ export const usePostCreditCard = () => {
 
   const onSubmit = async (data: creditCardType) => {
     mutate(data)
-    setIsOpen(false)
   }
 
-  return { isOpen, setIsOpen, onSubmit, isPending }
+  return { onSubmit, isPending }
 }

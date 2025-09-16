@@ -13,11 +13,7 @@ const fetchCreditCard = async () => {
 }
 
 export const useGetCreditCard = () => {
-  const {
-    data: response,
-    isLoading,
-    error
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['creditCard'],
     queryFn: fetchCreditCard,
     staleTime: Infinity
@@ -25,7 +21,7 @@ export const useGetCreditCard = () => {
 
   return {
     isLoading,
-    response,
+    data,
     error
   }
 }

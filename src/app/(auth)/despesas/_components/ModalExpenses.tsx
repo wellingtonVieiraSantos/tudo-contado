@@ -46,7 +46,7 @@ export const ModalExpense = ({
     creditCardId: undefined,
     installments: undefined,
     date: new Date(),
-    dueDate: undefined,
+    dueDate: new Date(),
     status: 'PAID'
   })
 
@@ -57,6 +57,10 @@ export const ModalExpense = ({
         installments: selectedExpenseUpdate.installments ?? undefined,
         date: format(
           selectedExpenseUpdate.date,
+          'yyyy-MM-dd'
+        ) as unknown as Date,
+        dueDate: format(
+          selectedExpenseUpdate.dueDate || new Date(),
           'yyyy-MM-dd'
         ) as unknown as Date
       }
@@ -72,7 +76,7 @@ export const ModalExpense = ({
   const handleFinish = (data: Partial<expenseType>) => {
     const result = expenseSchema.safeParse({ ...formData, ...data })
     if (result.success) {
-      onSubmit
+      onSubmit(result.data)
     } else {
       console.error('Erro de validação final', result.error)
     }

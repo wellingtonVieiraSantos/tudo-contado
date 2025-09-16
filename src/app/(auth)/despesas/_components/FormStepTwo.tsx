@@ -25,11 +25,12 @@ import { PaymentMethodType } from '@prisma/client'
 import { ArrowLeft, ArrowRight, CreditCard, Plus } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useGetCreditCard } from '../_hooks/use-get-creditcard'
 
 type FormStepTwoProps = {
   formData: Partial<expenseType>
   onNext: (data: expenseFormStepTwo) => void
-  setStep: (data: number) => void
+  setStep: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const FormStepTwo = ({
@@ -60,14 +61,10 @@ export const FormStepTwo = ({
 
   const paymentMethod = Object.keys(PaymentMethodType) as PaymentMethodType[]
 
-  const onSubmit = (data: expenseFormStepTwo) => {
-    onNext(data)
-  }
-
-  const creditCards = true
+  const { data: creditCards } = useGetCreditCard()
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onNext)}>
       <FormField name='paymentMethod' className='w-fit'>
         <FormLabel>Forma de pagamento</FormLabel>
         <FormControl asChild>
@@ -109,7 +106,13 @@ export const FormStepTwo = ({
                     <SelectTrigger>
                       <SelectValue placeholder='Vincule a um cartão cadastrado' />
                     </SelectTrigger>
-                    <SelectContent></SelectContent>
+                    <SelectContent>
+                      {creditCards.data.map(creditCard => (
+                        <SelectItem key={creditCard.id} value={creditCard.id!}>
+                          {'**** **** **** ' + creditCard.lastNumber}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 )}
               />

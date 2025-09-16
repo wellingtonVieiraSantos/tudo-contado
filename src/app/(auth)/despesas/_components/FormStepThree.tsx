@@ -11,13 +11,14 @@ import {
 import { expenseFormStepThree, expenseType } from '@/types/expense-data-props'
 import { step3Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
 type FormStepThreeProps = {
   formData: Partial<expenseType>
   onNext: (data: expenseFormStepThree) => void
-  setStep: (data: number) => void
+  setStep: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const FormStepThree = ({
@@ -31,15 +32,21 @@ export const FormStepThree = ({
     formState: { errors }
   } = useForm<expenseFormStepThree>({
     resolver: zodResolver(step3Schema),
-    defaultValues: formData
+    defaultValues: {
+      ...formData,
+      date: format(
+        formData.date || new Date(),
+        'yyyy-MM-dd'
+      ) as unknown as Date,
+      dueDate: format(
+        formData.dueDate || new Date(),
+        'yyyy-MM-dd'
+      ) as unknown as Date
+    }
   })
 
-  const onSubmit = (data: expenseFormStepThree) => {
-    onNext(data)
-  }
-
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onNext)}>
       <FormField name='date'>
         <FormLabel>Data de compra</FormLabel>
         <FormControl asChild>
