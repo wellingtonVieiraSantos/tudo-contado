@@ -17,6 +17,7 @@ export const getCreditCard = async () => {
       holder: true,
       expMonth: true,
       expYear: true,
+      billingDay: true,
       cardBrand: true
     },
     orderBy: {
@@ -35,6 +36,7 @@ export const postCreditCard = async (data: creditCardType) => {
       holder: data.holder,
       expMonth: data.expMonth,
       expYear: data.expYear,
+      billingDay: data.billingDay,
       cardBrand: data.cardBrand,
       user: { connect: { id: user.id } }
     }

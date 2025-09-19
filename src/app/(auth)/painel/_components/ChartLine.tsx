@@ -33,7 +33,7 @@ export const ChartLine = ({
       </CardHeader>
       <CardContent className='size-full pt-3 max-h-100'>
         <LineChart
-          className='min-w-85'
+          className='min-w-85 h-full'
           localeText={{
             loading: 'Carregando dados...',
             noData: 'Nenhum dado encontrado.'
@@ -65,6 +65,7 @@ export const ChartLine = ({
                 )
                 return format(date, 'MMM', { locale: ptBR })
               }),
+
               scaleType: 'band',
               disableTicks: true
             }

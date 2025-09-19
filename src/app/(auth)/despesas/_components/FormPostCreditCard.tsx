@@ -17,7 +17,7 @@ import {
   SelectContent,
   SelectItem
 } from '@/components/ui/Select'
-import { CreditCard, User, Send, DollarSign, X } from 'lucide-react'
+import { CreditCard, User, Send, DollarSign, X, Calendar } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { creditCardSchema } from '@/validators/formCreditCard'
@@ -46,7 +46,7 @@ export const FormPostCreditCard = ({
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormField name='lastNumber'>
-        <FormLabel>Número</FormLabel>
+        <FormLabel>Número *</FormLabel>
         <FormControl asChild>
           <Input
             icon={CreditCard}
@@ -61,8 +61,24 @@ export const FormPostCreditCard = ({
           </FormMessage>
         )}
       </FormField>
+      <FormField name='billingDay'>
+        <FormLabel>Vencimento fatura *</FormLabel>
+        <FormControl asChild className='w-12'>
+          <Input
+            id='billingDay'
+            {...register('billingDay')}
+            placeholder='dd'
+            className='p-0 text-center'
+          />
+        </FormControl>
+        {errors.billingDay && (
+          <FormMessage className='text-destructive'>
+            {errors.billingDay?.message}
+          </FormMessage>
+        )}
+      </FormField>
       <FormField name='creditLimit'>
-        <FormLabel>Limite</FormLabel>
+        <FormLabel>Limite de crédito *</FormLabel>
         <FormControl asChild>
           <Input
             icon={DollarSign}
@@ -79,8 +95,9 @@ export const FormPostCreditCard = ({
           </FormMessage>
         )}
       </FormField>
+
       <FormField name='holder'>
-        <FormLabel>Nome</FormLabel>
+        <FormLabel>Nome *</FormLabel>
         <FormControl asChild>
           <Input
             icon={User}
@@ -95,34 +112,27 @@ export const FormPostCreditCard = ({
           </FormMessage>
         )}
       </FormField>
-      <h2 className='font-poppins mt-3'>Vencimento</h2>
-      <div className='flex relative gap-6 w-fit'>
+      <h2 className='font-poppins mt-3'>Vencimento do cartão *</h2>
+      <div className='flex items-center gap-2 w-fit'>
         <FormField name='expMonth'>
-          <FormLabel className='text-sm text-foreground-secondary'>
-            Mês
-          </FormLabel>
-          <FormControl asChild className='w-13'>
+          <FormControl asChild className='w-12'>
             <Input
               id='expMonth'
               {...register('expMonth')}
-              className='pr-2 pl-4'
-              placeholder='10'
+              className='px-0 text-center'
+              placeholder='mm'
             />
           </FormControl>
         </FormField>
-        <span className='absolute bottom-1 right-1/2 translate-x-1/2 text-base text-foreground-secondary'>
-          /
-        </span>
+        <span className='mt-3 text-xl text-foreground-secondary'>/</span>
         <FormField name='expYear'>
-          <FormLabel className='text-sm text-foreground-secondary'>
-            Ano
-          </FormLabel>
-          <FormControl asChild className='w-13'>
+          <FormControl asChild className='w-20'>
             <Input
               id='expYear'
               {...register('expYear')}
-              className='pr-2 pl-4'
-              placeholder='25'
+              className=' px-0 text-center'
+              placeholder='aaaa'
+              maxLength={4}
             />
           </FormControl>
         </FormField>
@@ -140,7 +150,7 @@ export const FormPostCreditCard = ({
         )}
       </div>
       <FormField name='cardBrand' className='w-fit'>
-        <FormLabel>Bandeira</FormLabel>
+        <FormLabel>Bandeira *</FormLabel>
         <FormControl asChild>
           <Controller
             name='cardBrand'

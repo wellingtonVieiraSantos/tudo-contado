@@ -12,7 +12,8 @@ import {
   AlertTriangle,
   Trophy,
   Sigma,
-  Plus
+  Plus,
+  CreditCard
 } from 'lucide-react'
 
 import valueFormatter from '@/lib/valueFormatter'
@@ -36,6 +37,16 @@ import {
   CarouselControlRight,
   CarouselItem
 } from '@/components/ui/Carousel'
+import {
+  Modal,
+  ModalContent,
+  ModalDescription,
+  ModalHeader,
+  ModalTitle,
+  ModalTrigger
+} from '@/components/ui/Modal'
+import Stepper from '@mui/material/Stepper'
+import { FormPostCreditCard } from '../despesas/_components/FormPostCreditCard'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },
@@ -133,9 +144,31 @@ export default function Dashboard() {
           </CardDescription>
           <Divider />
         </CardHeader>
-        <CardContent className='items-center justify-center'>
-          {CreditCardData.creditCard?.length === 0 ? (
-            <p>Nenhum cartao de credito cadastrado...</p>
+        <CardContent className=' items-center justify-center'>
+          {CreditCardData.creditCard?.length !== 0 ? (
+            <div className='flex flex-col gap-13 items-center'>
+              <p className='text-foreground-secondary'>
+                Nenhum cartão de crédito cadastrado...
+              </p>
+              <Modal /* open={isOpen} onOpenChange={open => setIsOpen(open)} */>
+                <ModalTrigger asChild>
+                  <Button type='button'>
+                    <CreditCard />
+                    Cadastrar novo cartão
+                  </Button>
+                </ModalTrigger>
+                <ModalContent>
+                  <ModalHeader>
+                    <ModalTitle>Cartão de crédito</ModalTitle>
+                    <ModalDescription className='text-sm text-foreground-secondary'>
+                      Cadastre ou atualize seus cartões de crédito.
+                    </ModalDescription>
+                  </ModalHeader>
+                  <Divider className='bg-gradient-to-r via-foreground-secondary' />
+                  {/* <FormPostCreditCard /> */}
+                </ModalContent>
+              </Modal>
+            </div>
           ) : (
             <Carousel>
               <CarouselContent>
@@ -227,7 +260,7 @@ export default function Dashboard() {
         <CardContent className='h-max'>
           {recentTransactions.length === 0 && (
             <p className='text-foreground-secondary text-center'>
-              Nemhuma transação recente...
+              Nenhuma transação recente...
             </p>
           )}
           <ScrollArea orientation='vertical' className='lg:h-100'>

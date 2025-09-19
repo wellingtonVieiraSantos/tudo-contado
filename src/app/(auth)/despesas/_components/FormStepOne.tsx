@@ -50,7 +50,7 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormField name='value'>
-        <FormLabel>Valor</FormLabel>
+        <FormLabel>Valor *</FormLabel>
         <FormControl asChild>
           <Input
             icon={Wallet}
@@ -68,7 +68,7 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
         )}
       </FormField>
       <FormField name='description'>
-        <FormLabel>Descrição</FormLabel>
+        <FormLabel>Descrição *</FormLabel>
         <FormControl asChild>
           <Textarea
             id='description'
@@ -83,7 +83,7 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
         )}
       </FormField>
       <FormField name='type'>
-        <FormLabel>Tipo</FormLabel>
+        <FormLabel>Tipo *</FormLabel>
         <Controller
           name='type'
           control={control}
@@ -101,7 +101,7 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
         />
       </FormField>
       <FormField name='category'>
-        <FormLabel>Categoria</FormLabel>
+        <FormLabel>Categoria *</FormLabel>
         <Controller
           name='category'
           control={control}

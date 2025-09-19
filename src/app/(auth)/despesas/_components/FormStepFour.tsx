@@ -41,7 +41,7 @@ export const FormStepFour = ({
   return (
     <Form onSubmit={handleSubmit(onNext)}>
       <FormField name='status' className='w-fit'>
-        <FormLabel>Situação</FormLabel>
+        <FormLabel>Situação *</FormLabel>
         <FormControl asChild>
           <Controller
             name='status'

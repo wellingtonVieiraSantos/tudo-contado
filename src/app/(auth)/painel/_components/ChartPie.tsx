@@ -32,7 +32,7 @@ export const ChartPie = ({
         <PieChart
           localeText={{
             loading: 'Carregando dados...',
-            noData: 'Nenhum dado encontrado.'
+            noData: 'Nenhum dado encontrado'
           }}
           series={[
             {
@@ -89,6 +89,18 @@ export const ChartPie = ({
                   {
                     color: 'oklch(0.99 0.0146 98.28)'
                   }
+              }
+            },
+            loadingOverlay: {
+              sx: {
+                fill: 'oklch(0.99 0.0146 98.28)',
+                fontSize: '1rem'
+              }
+            },
+            noDataOverlay: {
+              sx: {
+                fill: 'oklch(0.99 0.0146 98.28)',
+                fontSize: '1rem'
               }
             }
           }}

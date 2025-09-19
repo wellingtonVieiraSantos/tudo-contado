@@ -86,6 +86,7 @@ model CreditCard {
   creditLimit Int
   expMonth    String
   expYear     String
+  billingDay  String
   holder      String
   cardBrand   CardBrand   @default(OTHER)
   expense     Expense[]

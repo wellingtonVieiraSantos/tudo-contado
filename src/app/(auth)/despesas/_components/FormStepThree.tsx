@@ -37,7 +37,7 @@ export const FormStepThree = ({
   return (
     <Form onSubmit={handleSubmit(onNext)}>
       <FormField name='date'>
-        <FormLabel>Data de compra</FormLabel>
+        <FormLabel>Data de compra *</FormLabel>
         <Controller
           name='date'
           control={control}
