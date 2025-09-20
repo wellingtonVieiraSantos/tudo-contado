@@ -156,7 +156,7 @@ export const FormStepTwo = ({
           Anterior
         </Button>
         <FormSubmit asChild type='submit'>
-          <Button disabled={!creditCards}>
+          <Button disabled={!!creditCards}>
             Proximo
             <ArrowRight />
           </Button>

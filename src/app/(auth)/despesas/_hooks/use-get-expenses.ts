@@ -8,7 +8,7 @@ import { ApiResponse } from '@/types/api-response'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 
 const fetchExpenses = async () => {
-  const response = await fetch('api/expense')
+  const response = await fetch('/api/expense')
   if (!response.ok) {
     throw new Error('Falha ao buscar despesas')
   }

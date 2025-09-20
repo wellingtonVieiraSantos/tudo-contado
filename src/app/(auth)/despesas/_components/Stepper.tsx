@@ -5,7 +5,7 @@ export const Stepper = ({ step }: { step: number }) => {
   const [stepStage] = useState(['Geral', 'Pagamento', 'Datas', 'Status'])
 
   return (
-    <div className='flex justify-center text-sm text-foreground-secondary'>
+    <div className=' flex justify-center text-sm text-foreground-secondary'>
       {stepStage.map((stage, index) => (
         <div
           key={stage}
@@ -46,7 +46,7 @@ export const Stepper = ({ step }: { step: number }) => {
             {step > index + 1
               ? 'Completo'
               : index + 1 === step
-              ? 'Em progresso'
+              ? 'Em progr...'
               : 'Pendente'}
           </span>
         </div>

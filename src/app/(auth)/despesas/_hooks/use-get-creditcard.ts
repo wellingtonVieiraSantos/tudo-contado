@@ -5,7 +5,7 @@ import { ApiResponse } from '@/types/api-response'
 import { creditCardType } from '@/types/creditcard-data-props'
 
 const fetchCreditCard = async () => {
-  const response = await fetch('api/credit-card')
+  const response = await fetch('/api/credit-card')
   if (!response.ok) {
     throw new Error('Falha ao buscar cartões')
   }

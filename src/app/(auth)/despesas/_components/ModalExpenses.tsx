@@ -121,7 +121,7 @@ export const ModalExpense = ({
       }}
     >
       <ModalTrigger asChild>{children}</ModalTrigger>
-      <ModalContent>
+      <ModalContent className='max-h-[50vh] overflow-y-auto'>
         <ModalHeader>
           <ModalTitle>Despesas</ModalTitle>
           <ModalDescription className='text-sm text-foreground-secondary'>

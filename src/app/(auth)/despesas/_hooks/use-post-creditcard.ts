@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 const fetchCreditCard = async (data: creditCardType) => {
-  const res = await fetch('api/credit-card', {
+  const res = await fetch('/api/credit-card', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }

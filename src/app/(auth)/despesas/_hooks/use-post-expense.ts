@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const fetchExpense = async (data: expenseType) => {
-  const res = await fetch('api/expense', {
+  const res = await fetch('/api/expense', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }
@@ -14,8 +14,6 @@ const fetchExpense = async (data: expenseType) => {
 }
 
 export const usePostExpense = () => {
-  const [isOpen, setIsOpen] = useState(false)
-
   const { mutate, isPending } = useMutation({
     mutationFn: fetchExpense,
     onSuccess: () => {
@@ -25,8 +23,7 @@ export const usePostExpense = () => {
 
   const onSubmit = async (data: expenseType) => {
     mutate(data)
-    setIsOpen(false)
   }
 
-  return { isOpen, setIsOpen, onSubmit, isPending }
+  return { onSubmit, isPending }
 }

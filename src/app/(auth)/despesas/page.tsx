@@ -53,12 +53,12 @@ export default function Expense() {
     isLoading
   } = useGetExpenses()
 
-  const {
+  /*  const {
     isOpen: isOpenPost,
     setIsOpen: setIsOpenPost,
     onSubmit,
     isPending
-  } = usePostExpense()
+  } = usePostExpense() */
 
   const {
     handleDeleteExpense,
@@ -68,14 +68,14 @@ export default function Expense() {
     selectedExpense
   } = useDelExpense()
 
-  const {
+  /*  const {
     isOpen: isOpenPut,
     setIsOpen: setIsOpenPut,
     isPending: isPendingPut,
     openUpdateModal,
     handleUpdateExpense,
     selectedExpense: selectedExpenseUpdate
-  } = usePutExpense()
+  } = usePutExpense() */
 
   if (isLoading) return <Loading />
 
@@ -104,19 +104,13 @@ export default function Expense() {
                 </span>{' '}
                 {formatedCurrency(totals.pending)}
               </p>
-              <ModalExpense
-                isOpen={isOpenPost}
-                setIsOpen={setIsOpenPost}
-                isPending={isPending}
-                onSubmit={onSubmit}
+
+              <Button
+                size='icon'
+                className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
               >
-                <Button
-                  size='icon'
-                  className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
-                >
-                  <Plus />
-                </Button>
-              </ModalExpense>
+                <Plus />
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -189,13 +183,7 @@ export default function Expense() {
             </Card>
           ))}
       </div>
-      <ModalExpense
-        isOpen={isOpenPut}
-        setIsOpen={setIsOpenPut}
-        isPending={isPendingPut}
-        onSubmit={handleUpdateExpense}
-        selectedExpenseUpdate={selectedExpenseUpdate!}
-      />
+
       <Modal open={isOpen} onOpenChange={setIsOpen}>
         <ModalContent>
           <ModalHeader>
@@ -245,17 +233,11 @@ export default function Expense() {
             <CardDescription className='text-center'>
               Nenhuma despesa registrada. Que tal adicionar a primeira?
             </CardDescription>
-            <ModalExpense
-              isOpen={isOpenPost}
-              setIsOpen={setIsOpenPost}
-              isPending={isPending}
-              onSubmit={onSubmit}
-            >
-              <Button className='w-full max-w-xl lg:w-fit'>
-                <BanknoteArrowUp />
-                Cadastre uma nova despesa
-              </Button>
-            </ModalExpense>
+
+            <Button className='w-full max-w-xl lg:w-fit'>
+              <BanknoteArrowUp />
+              Cadastre uma nova despesa
+            </Button>
           </CardContent>
         </Card>
       )}

@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const fetchExpense = async (data: expenseType) => {
-  const res = await fetch('api/expense', {
+  const res = await fetch('/api/expense', {
     method: 'PUT',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }

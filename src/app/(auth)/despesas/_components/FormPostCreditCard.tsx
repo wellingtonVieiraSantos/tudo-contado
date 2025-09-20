@@ -68,6 +68,7 @@ export const FormPostCreditCard = ({
             id='billingDay'
             {...register('billingDay')}
             placeholder='dd'
+            maxLength={2}
             className='p-0 text-center'
           />
         </FormControl>
@@ -121,6 +122,7 @@ export const FormPostCreditCard = ({
               {...register('expMonth')}
               className='px-0 text-center'
               placeholder='mm'
+              maxLength={2}
             />
           </FormControl>
         </FormField>
@@ -178,14 +180,20 @@ export const FormPostCreditCard = ({
           </FormMessage>
         )}
       </FormField>
-      <div className='my-3 flex justify-between'>
-        <Button type='button' variant='border' onClick={() => setStep(2)}>
+      <div className='my-3 flex flex-col sm:flex-row gap-2 justify-between'>
+        <Button
+          type='button'
+          variant='border'
+          className='w-full'
+          onClick={() => setStep(2)}
+        >
           <X />
           Cancelar
         </Button>
         <FormSubmit asChild>
           <Button
             disabled={isPending}
+            className='w-full'
             variant={`${isPending ? 'loading' : 'default'}`}
           >
             {isPending ? 'Cadastrando...' : 'Cadastrar cartão'}

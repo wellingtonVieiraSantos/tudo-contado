@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const fetchExpense = async (id: string) => {
-  const res = await fetch(`api/expense?id=${id}`, {
+  const res = await fetch(`/api/expense?id=${id}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' }
   })
