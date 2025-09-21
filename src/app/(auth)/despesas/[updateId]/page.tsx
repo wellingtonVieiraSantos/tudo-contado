@@ -38,10 +38,6 @@ export default function Atualização() {
     }
   }, [data])
 
-  const onPrev = () => {
-    setStep(prev => (prev >= 2 ? prev - 1 : 1))
-  }
-
   const handleNextStep = (data: Partial<expenseType>) => {
     setFormData(prev => ({ ...prev, ...data }))
     setStep(prev => prev + 1)
@@ -91,8 +87,9 @@ export default function Atualização() {
         return null
     }
   }
+
   return (
-    <div className='flex flex-col flex-wrap p-3 gap-3 pb-22'>
+    <div className='min-h-full flex flex-col p-3 gap-3 pb-22 lg:pb-3'>
       <div className='h-10 flex items-center gap-6 text-lg'>
         <Link href='/despesas'>
           <Undo2 size={24} />

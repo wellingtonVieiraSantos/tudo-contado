@@ -10,10 +10,8 @@ import {
   CardTitle
 } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
-
 import formatedCurrency from '@/lib/valueFormatter'
 import { UserBarSettings } from '@/components/UserBarSettings'
-import { ModalExpense } from './_components/ModalExpenses'
 import { Button } from '@/components/ui/Button'
 import {
   BanknoteArrowUp,
@@ -39,8 +37,6 @@ import { categoryFormatter } from '@/lib/categoryFormatter'
 import Loading from './loading'
 import { useGetExpenses } from './_hooks/use-get-expenses'
 import { useDelExpense } from './_hooks/use-del-expense'
-import { usePostExpense } from './_hooks/use-post-expense'
-import { usePutExpense } from './_hooks/use-put-expense'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import Link from 'next/link'
 
@@ -54,13 +50,6 @@ export default function Expense() {
     isLoading
   } = useGetExpenses()
 
-  /*  const {
-    isOpen: isOpenPost,
-    setIsOpen: setIsOpenPost,
-    onSubmit,
-    isPending
-  } = usePostExpense() */
-
   const {
     handleDeleteExpense,
     isOpen,
@@ -68,15 +57,6 @@ export default function Expense() {
     openDeleteModal,
     selectedExpense
   } = useDelExpense()
-
-  /*  const {
-    isOpen: isOpenPut,
-    setIsOpen: setIsOpenPut,
-    isPending: isPendingPut,
-    openUpdateModal,
-    handleUpdateExpense,
-    selectedExpense: selectedExpenseUpdate
-  } = usePutExpense() */
 
   if (isLoading) return <Loading />
 
@@ -230,10 +210,12 @@ export default function Expense() {
               Nenhuma despesa registrada. Que tal adicionar a primeira?
             </CardDescription>
 
-            <Button className='w-full max-w-xl lg:w-fit'>
-              <BanknoteArrowUp />
-              Cadastre uma nova despesa
-            </Button>
+            <Link href='/despesas/cadastro'>
+              <Button className='w-full max-w-xl lg:w-fit'>
+                <BanknoteArrowUp />
+                Cadastre uma nova despesa
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       )}

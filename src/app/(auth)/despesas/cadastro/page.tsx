@@ -1,11 +1,5 @@
 'use client'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/Card'
+import { Card, CardContent } from '@/components/ui/Card'
 import { Divider } from '@/components/ui/Divider'
 import { Stepper } from '../_components/Stepper'
 import { useState } from 'react'
@@ -17,9 +11,8 @@ import { FormStepThree } from '../_components/FormStepThree'
 import { FormStepFour } from '../_components/FormStepFour'
 import { FormPostCreditCard } from '../_components/FormPostCreditCard'
 import { usePostExpense } from '../_hooks/use-post-expense'
-import { ArrowLeft, Undo2 } from 'lucide-react'
+import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
-import { UserBarSettings } from '@/components/UserBarSettings'
 
 export default function Cadastro() {
   const [step, setStep] = useState(1)
