@@ -1,11 +1,11 @@
 import { getExpenseById } from '@/lib/dal/expenses'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 type Params = { params: { id: string } }
 
-export async function GET(_: Request, { params }: Params) {
+export async function GET(_: NextRequest, { params }: Params) {
   try {
-    const { id } = await params
+    const { id } = params
 
     const rawExpense = await getExpenseById(id)
 

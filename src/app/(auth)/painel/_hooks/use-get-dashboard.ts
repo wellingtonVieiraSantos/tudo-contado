@@ -121,7 +121,7 @@ export const useGetDashboard = () => {
     })
 
     return { creditCard, cardExpense }
-  }, [])
+  }, [response?.data?.creditCard])
 
   return {
     response,
