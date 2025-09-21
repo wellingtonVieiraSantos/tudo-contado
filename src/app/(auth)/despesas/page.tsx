@@ -142,7 +142,10 @@ export default function Expense() {
               </CardContent>
               <CardFooter>
                 <Link href={`/despesas/${expense.id}`}>
-                  <Button variant='border' className='self-end bg-info/40 px-4'>
+                  <Button
+                    variant='border'
+                    className='self-end bg-info/40 md:px-4'
+                  >
                     <RefreshCw />
                     <span className='hidden md:inline-block'>Atualizar</span>
                   </Button>
@@ -150,7 +153,7 @@ export default function Expense() {
                 <Button
                   variant='border'
                   onClick={() => openDeleteModal(expense)}
-                  className='self-end bg-destructive/40 px-4'
+                  className='self-end bg-destructive/40 md:px-4'
                 >
                   <X />
                   <span className='hidden md:inline-block'>Deletar</span>
@@ -163,7 +166,7 @@ export default function Expense() {
       <Modal open={isOpen} onOpenChange={setIsOpen}>
         <ModalContent>
           <ModalHeader>
-            <ModalTitle>Deseja apagar a despesa?</ModalTitle>
+            <ModalTitle>Apagar a despesa</ModalTitle>
             <ModalDescription className='text-sm text-foreground-secondary'>
               Essa ação apagará permanentemente essa despesa, deseja mesmo fazer
               isso?
@@ -188,7 +191,7 @@ export default function Expense() {
                 if (selectedExpense) handleDeleteExpense(selectedExpense.id!)
                 setIsOpen(false)
               }}
-              className='w-full lg:flex-1 bg-destructive hover:bg-destructive/50'
+              className='w-full lg:flex-1 bg-destructive/70 hover:bg-destructive/40'
             >
               <Trash />
               Apagar despesa

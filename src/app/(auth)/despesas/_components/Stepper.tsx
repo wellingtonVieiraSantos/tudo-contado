@@ -1,9 +1,8 @@
 import { Check } from 'lucide-react'
-import { useState } from 'react'
+
+const stepStage = ['Geral', 'Pagamento', 'Datas', 'Status']
 
 export const Stepper = ({ step }: { step: number }) => {
-  const [stepStage] = useState(['Geral', 'Pagamento', 'Datas', 'Status'])
-
   return (
     <div className=' flex justify-center text-sm text-foreground-secondary'>
       {stepStage.map((stage, index) => (

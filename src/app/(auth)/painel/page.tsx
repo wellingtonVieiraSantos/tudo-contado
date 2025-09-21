@@ -45,8 +45,6 @@ import {
   ModalTitle,
   ModalTrigger
 } from '@/components/ui/Modal'
-import Stepper from '@mui/material/Stepper'
-import { FormPostCreditCard } from '../despesas/_components/FormPostCreditCard'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },

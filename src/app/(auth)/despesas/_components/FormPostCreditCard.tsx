@@ -17,7 +17,7 @@ import {
   SelectContent,
   SelectItem
 } from '@/components/ui/Select'
-import { CreditCard, User, Send, DollarSign, X, Calendar } from 'lucide-react'
+import { CreditCard, User, Send, DollarSign, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { creditCardSchema } from '@/validators/formCreditCard'

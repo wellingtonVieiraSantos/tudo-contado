@@ -1,7 +1,6 @@
 import { queryClient } from '@/lib/query-client'
 import { expenseType } from '@/types/expense-data-props'
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
 
 const fetchExpense = async (data: expenseType) => {
   const res = await fetch('/api/expense', {
