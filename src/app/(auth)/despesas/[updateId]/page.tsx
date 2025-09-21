@@ -1,14 +1,9 @@
 'use client'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/Card'
-import { Divider } from '@/components/ui/Divider'
+import { Card, CardContent } from '@/components/ui/Card'
+import { Undo2 } from 'lucide-react'
+import Link from 'next/link'
 import { Stepper } from '../_components/Stepper'
-import { useState } from 'react'
+import { Divider } from '@/components/ui/Divider'
 import { expenseType } from '@/types/expense-data-props'
 import { expenseSchema } from '@/validators/formExpense'
 import { FormStepOne } from '../_components/FormStepOne'
@@ -16,39 +11,46 @@ import { FormStepTwo } from '../_components/FormStepTwo'
 import { FormStepThree } from '../_components/FormStepThree'
 import { FormStepFour } from '../_components/FormStepFour'
 import { FormPostCreditCard } from '../_components/FormPostCreditCard'
-import { usePostExpense } from '../_hooks/use-post-expense'
-import { ArrowLeft, Undo2 } from 'lucide-react'
-import Link from 'next/link'
-import { UserBarSettings } from '@/components/UserBarSettings'
+import { useEffect, useState } from 'react'
+import { usePutExpense } from '../_hooks/use-put-expense'
+import { useGetExpenseById } from '../_hooks/use-get-expense-by-id'
+import { useParams } from 'next/navigation'
 
-export default function Cadastro() {
+export default function Atualização() {
+  const { updateId }: { updateId: string } = useParams()
+
+  const { isPending, handleUpdateExpense } = usePutExpense()
+  const { data } = useGetExpenseById(updateId)
+
   const [step, setStep] = useState(1)
-  const [formDataCadastro, setFormDataCadastro] = useState<
-    Partial<expenseType>
-  >({
-    value: undefined,
-    description: '',
-    type: 'VARIABLE',
-    category: 'OTHER',
-    paymentMethod: 'PIX',
-    creditCardId: undefined,
-    installments: undefined,
-    date: new Date(),
-    dueDate: new Date(),
-    status: 'PAID'
-  })
+  const [formData, setFormData] = useState<Partial<expenseType>>({ ...data })
 
-  const { onSubmit, isPending } = usePostExpense()
+  useEffect(() => {
+    if (data) {
+      const cleaned = {
+        ...data,
+        installments: data.installments ?? undefined,
+        date: data.date,
+
+        dueDate: data.dueDate || new Date()
+      }
+      setFormData(cleaned)
+    }
+  }, [data])
+
+  const onPrev = () => {
+    setStep(prev => (prev >= 2 ? prev - 1 : 1))
+  }
 
   const handleNextStep = (data: Partial<expenseType>) => {
-    setFormDataCadastro(prev => ({ ...prev, ...data }))
+    setFormData(prev => ({ ...prev, ...data }))
     setStep(prev => prev + 1)
   }
 
   const handleFinish = (data: Partial<expenseType>) => {
-    const result = expenseSchema.safeParse({ ...formDataCadastro, ...data })
+    const result = expenseSchema.safeParse({ ...formData, ...data })
     if (result.success) {
-      onSubmit(result.data)
+      handleUpdateExpense(result.data)
     } else {
       console.error('Erro de validação final', result.error)
     }
@@ -57,13 +59,11 @@ export default function Cadastro() {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return (
-          <FormStepOne formData={formDataCadastro} onNext={handleNextStep} />
-        )
+        return <FormStepOne formData={formData} onNext={handleNextStep} />
       case 2:
         return (
           <FormStepTwo
-            formData={formDataCadastro}
+            formData={formData}
             onNext={handleNextStep}
             setStep={setStep}
           />
@@ -71,7 +71,7 @@ export default function Cadastro() {
       case 3:
         return (
           <FormStepThree
-            formData={formDataCadastro}
+            formData={formData}
             onNext={handleNextStep}
             setStep={setStep}
           />
@@ -80,7 +80,7 @@ export default function Cadastro() {
         return (
           <FormStepFour
             isPending={isPending}
-            formData={formDataCadastro}
+            formData={formData}
             onNext={handleFinish}
             setStep={setStep}
           />
@@ -91,14 +91,13 @@ export default function Cadastro() {
         return null
     }
   }
-
   return (
-    <div className='min-h-full flex flex-col p-3 gap-3 pb-22 lg:pb-3'>
+    <div className='flex flex-col flex-wrap p-3 gap-3 pb-22'>
       <div className='h-10 flex items-center gap-6 text-lg'>
         <Link href='/despesas'>
           <Undo2 size={24} />
         </Link>
-        <span>Cadastro de despesa</span>
+        <span>Atualização de despesa</span>
       </div>
       <Card className='w-full m-auto lg:w-2xl'>
         <CardContent className='p-4'>

@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const fetchExpense = async (data: expenseType) => {
-  const res = await fetch('/api/expense', {
+  const res = await fetch('/api/expense/', {
     method: 'PUT',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }
@@ -14,11 +14,6 @@ const fetchExpense = async (data: expenseType) => {
 }
 
 export const usePutExpense = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedExpense, setSelectedExpense] = useState<null | expenseType>(
-    null
-  )
-
   const { mutate, isPending } = useMutation({
     mutationFn: fetchExpense,
     onSuccess: () => {
@@ -27,24 +22,11 @@ export const usePutExpense = () => {
   })
 
   const handleUpdateExpense = async (data: expenseType) => {
-    if (!selectedExpense) return
-    const id = selectedExpense.id
-    const dataUpdate = { ...data, id }
-    mutate(dataUpdate)
-    setIsOpen(false)
-  }
-
-  const openUpdateModal = (expense: expenseType) => {
-    setSelectedExpense(expense)
-    setIsOpen(true)
+    mutate(data)
   }
 
   return {
-    isOpen,
-    setIsOpen,
     isPending,
-    handleUpdateExpense,
-    openUpdateModal,
-    selectedExpense
+    handleUpdateExpense
   }
 }

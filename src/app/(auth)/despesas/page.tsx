@@ -42,6 +42,7 @@ import { useDelExpense } from './_hooks/use-del-expense'
 import { usePostExpense } from './_hooks/use-post-expense'
 import { usePutExpense } from './_hooks/use-put-expense'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
+import Link from 'next/link'
 
 export default function Expense() {
   const {
@@ -82,7 +83,6 @@ export default function Expense() {
   return (
     <div className='flex flex-col flex-wrap p-3 gap-3 pb-22'>
       <UserBarSettings title='Despesas' />
-      {isLoading && <p>Carregando...</p>}
       {filteredExpenses?.length !== 0 && (
         <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
           <Card className='w-full p-2 lg:bg-none lg:bg-card bg-gradient-to-br from-button to-badge pb-8'>
@@ -104,13 +104,14 @@ export default function Expense() {
                 </span>{' '}
                 {formatedCurrency(totals.pending)}
               </p>
-
-              <Button
-                size='icon'
-                className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
-              >
-                <Plus />
-              </Button>
+              <Link href='/despesas/cadastro'>
+                <Button
+                  size='icon'
+                  className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
+                >
+                  <Plus />
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
@@ -160,17 +161,12 @@ export default function Expense() {
                 </Badge>
               </CardContent>
               <CardFooter>
-                <Button
-                  variant='border'
-                  onClick={() => {
-                    openUpdateModal(expense)
-                  }}
-                  disabled={isOpenPut}
-                  className='self-end bg-info/40 px-4'
-                >
-                  <RefreshCw />
-                  <span className='hidden md:inline-block'>Atualizar</span>
-                </Button>
+                <Link href={`/despesas/${expense.id}`}>
+                  <Button variant='border' className='self-end bg-info/40 px-4'>
+                    <RefreshCw />
+                    <span className='hidden md:inline-block'>Atualizar</span>
+                  </Button>
+                </Link>
                 <Button
                   variant='border'
                   onClick={() => openDeleteModal(expense)}

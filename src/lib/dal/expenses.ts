@@ -34,6 +34,31 @@ export const getExpenses = async () => {
   })
 }
 
+export const getExpenseById = async (id: string) => {
+  await requireUser()
+  return await prisma.expense.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      value: true,
+      description: true,
+      category: true,
+      type: true,
+      date: true,
+      dueDate: true,
+      installments: true,
+      paymentMethod: true,
+      creditCardId: true,
+      status: true,
+      creditCard: {
+        select: {
+          lastNumber: true
+        }
+      }
+    }
+  })
+}
+
 export const postExpense = async (data: expenseType) => {
   const user = await requireUser()
 

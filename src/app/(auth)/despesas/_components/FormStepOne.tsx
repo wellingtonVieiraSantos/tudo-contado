@@ -23,6 +23,7 @@ import { step1Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CategoryType } from '@prisma/client'
 import { ArrowRight, Wallet } from 'lucide-react'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 type FormStepOneProps = {
@@ -35,11 +36,16 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors }
   } = useForm<expenseFormStepOne>({
     resolver: zodResolver(step1Schema),
     defaultValues: formData
   })
+
+  useEffect(() => {
+    reset(formData)
+  }, [formData, reset])
 
   const category = Object.keys(CategoryType) as CategoryType[]
 
@@ -122,7 +128,7 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
         />
       </FormField>
       <FormSubmit asChild>
-        <Button className='mt-3 justify-self-end' type='submit'>
+        <Button className='mt-3 justify-self-end px-8' type='submit'>
           Proximo
           <ArrowRight />
         </Button>
