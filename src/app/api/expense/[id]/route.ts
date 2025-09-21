@@ -1,9 +1,10 @@
 import { getExpenseById } from '@/lib/dal/expenses'
 import { NextRequest, NextResponse } from 'next/server'
 
-type Params = { params: { id: string } }
-
-export async function GET(_: NextRequest, { params }: Params) {
+export async function GET(
+  _: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const { id } = params
 
