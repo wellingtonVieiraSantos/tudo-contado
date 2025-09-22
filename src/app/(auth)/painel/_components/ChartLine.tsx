@@ -25,7 +25,7 @@ export const ChartLine = ({
   }[]
 }) => {
   return (
-    <Card className='flex flex-col p-2 lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-5'>
+    <Card className='flex flex-col p-2 lg:col-start-2 lg:col-end-3 lg:row-start-3 lg:row-end-4 xl:col-start-1 xl:col-end-3 xl:row-end-5'>
       <CardHeader>
         <CardTitle>Controle mensal</CardTitle>
         <CardDescription>Dados dos ultimos 6 meses</CardDescription>

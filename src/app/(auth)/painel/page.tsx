@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
@@ -68,21 +69,21 @@ export default function Dashboard() {
   if (isLoading) return <Loading />
 
   return (
-    <div className='w-full lg:h-screen grid grid-cols-1 lg:grid-rows-[auto_1fr_1fr_1fr] lg:grid-cols-3 gap-3 p-3 pb-24 lg:pb-0'>
+    <div className='w-full lg:h-screen grid grid-cols-1 lg:grid-rows-[auto_auto_auto] lg:grid-cols-2 xl:grid-cols-3 gap-3 p-3 pb-24 lg:pb-0'>
       <UserBarSettings title='Dashboard' />
-      <Card className='lg:col-start-1 lg:col-end-2 lg:row-start-2 lg:row-end-3 p-2 lg:bg-none lg:bg-card bg-gradient-to-br from-button to-badge'>
+      <Card className='h-full lg:col-start-1 lg:col-end-2 lg:row-start-2 lg:row-end-3 p-2 lg:bg-none lg:bg-card bg-gradient-to-br from-button to-badge'>
         <CardHeader>
-          <CardTitle className=' flex items-center gap-3'>
-            <Sigma />
+          <CardTitle className='flex gap-3'>
+            <Sigma size={18} />
             Balança Financeira
           </CardTitle>
           <CardDescription className='hidden lg:flex'>
-            Visão geral do balanço financeiro do mês
+            Visão geral do mês
           </CardDescription>
           <Divider className='hidden lg:flex' />
         </CardHeader>
-        <CardContent className='relative flex flex-col md:items-center gap-6 justify-center lg:-mt-12 lg:h-full'>
-          <div className='absolute -top-7 right-1'>
+        <CardContent className='flex flex-col md:items-center gap-6 justify-center lg:-mt-10 lg:h-full'>
+          <div className='absolute top-2 right-1'>
             {totalIncomeCurrent - totalExpenseCurrent > 0 ? (
               <Trophy strokeWidth={1.2} className='size-7 lg:text-warning' />
             ) : (
@@ -93,7 +94,7 @@ export default function Dashboard() {
             )}
           </div>
           <h2
-            className={`text-3xl tracking-wide ${
+            className={`text-3xl tracking-wide text-center ${
               totalIncomeCurrent - totalExpenseCurrent < 0
                 ? 'lg:text-destructive'
                 : 'lg:text-success'
@@ -101,18 +102,18 @@ export default function Dashboard() {
           >
             {valueFormatter(totalIncomeCurrent - totalExpenseCurrent)}
           </h2>
-          <div className='flex md:justify-center lg:justify-start xl:justify-center gap-2 flex-wrap lg:gap-2'>
-            <div className='tracking-wide flex items-center gap-2'>
+          <div className='flex justify-center gap-2 flex-wrap lg:gap-6'>
+            <div className='tracking-wide flex items-center gap-3'>
               <TrendingUp className='text-success size-6' />
-              <p className='font-montserrat'>
-                <span className='text-sm font-poppins'>Rendimentos:</span>{' '}
+              <p className='font-montserrat flex flex-col text-sm'>
+                <span className='text-[12px] font-poppins'>Rendimentos:</span>{' '}
                 {valueFormatter(totalIncomeCurrent)}
               </p>
             </div>
-            <div className=' tracking-wide flex items-center gap-2'>
+            <div className=' tracking-wide flex items-center gap-3'>
               <TrendingDown className='text-destructive size-6' />
-              <p className='font-montserrat'>
-                <span className='text-sm font-poppins'>Gastos: </span>
+              <p className='font-montserrat flex flex-col text-sm'>
+                <span className='text-[12px] font-poppins'>Despesas: </span>
                 {valueFormatter(totalExpenseCurrent)}
               </p>
             </div>
@@ -134,21 +135,19 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      <Card className='lg:col-start-3 lg:col-end-4 lg:row-start-2 lg:row-end-3 p-2'>
+      <Card className='lg:col-start-2 lg:col-end-3 lg:row-start-2 lg:row-end-3 xl:col-start-3 p-2'>
         <CardHeader>
-          <CardTitle>Cartões</CardTitle>
-          <CardDescription>
-            Acompanhamento das faturas dos seus cartões de crédito
-          </CardDescription>
+          <CardTitle>Cartões de crédito</CardTitle>
+          <CardDescription>Acompanhamento das faturas</CardDescription>
           <Divider />
         </CardHeader>
-        <CardContent className=' items-center justify-center'>
-          {CreditCardData.creditCard?.length !== 0 ? (
-            <div className='flex flex-col gap-13 items-center'>
+        <CardContent className='items-center justify-center'>
+          {CreditCardData.creditCard?.length === 0 ? (
+            <div className='flex flex-col gap-13 items-center text-center'>
               <p className='text-foreground-secondary'>
                 Nenhum cartão de crédito cadastrado...
               </p>
-              <Modal /* open={isOpen} onOpenChange={open => setIsOpen(open)} */>
+              <Modal>
                 <ModalTrigger asChild>
                   <Button type='button'>
                     <CreditCard />
@@ -201,7 +200,7 @@ export default function Dashboard() {
                       </div>
                       <div className='absolute bottom-3 left-7 flex flex-col'>
                         <span className='opacity-70 text-[12px]'>Titular</span>
-                        <span>{card.holder}</span>
+                        <span>{card.holder.toUpperCase()}</span>
                       </div>
                       <div className='absolute bottom-3 right-7 flex flex-col'>
                         <span className='opacity-70 text-[12px]'>Expira</span>
@@ -247,7 +246,7 @@ export default function Dashboard() {
 
       <ChartPie pieChartData={pieChartData} />
 
-      <Card className='overflow-hidden p-2 lg:col-start-3 lg:col-end-4 lg:row-start-3 lg:row-end-5'>
+      <Card className='overflow-hidden p-2 lg:col-start-2 lg:col-end-3 lg:row-start-4 lg:row-end-5 xl:col-start-3 xl:row-start-3 '>
         <CardHeader>
           <CardTitle>Movimentações Financeiras</CardTitle>
           <CardDescription>

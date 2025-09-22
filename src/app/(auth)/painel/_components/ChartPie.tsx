@@ -22,7 +22,7 @@ export const ChartPie = ({
   }
 }) => {
   return (
-    <Card className='flex flex-col p-2 lg:col-start-2 lg:col-end-3 lg:row-start-2 lg:row-end-3'>
+    <Card className='flex flex-col p-2 lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-5 xl:col-start-2 xl:col-end-3 xl:row-start-2 xl:row-end-3'>
       <CardHeader>
         <CardTitle>Gastos por categoria</CardTitle>
         <CardDescription>Principais categorias do mês</CardDescription>
@@ -38,7 +38,6 @@ export const ChartPie = ({
             {
               arcLabel: item =>
                 `${((item.value * 100) / pieChartData.total).toFixed(1)}%`,
-
               data: pieChartData.expenseAmounthPerCategory,
               highlightScope: { fade: 'global', highlight: 'item' },
               faded: {
