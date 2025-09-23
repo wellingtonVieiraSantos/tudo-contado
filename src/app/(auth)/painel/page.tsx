@@ -13,7 +13,10 @@ import {
   Trophy,
   Sigma,
   Plus,
-  CreditCard
+  CreditCard,
+  Check,
+  Ban,
+  TriangleAlert
 } from 'lucide-react'
 
 import valueFormatter from '@/lib/valueFormatter'
@@ -45,6 +48,8 @@ import {
   ModalTitle,
   ModalTrigger
 } from '@/components/ui/Modal'
+import { Badge } from '@/components/ui/Badge'
+import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },
@@ -134,7 +139,7 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      <Card className='lg:col-start-2 lg:col-end-3 lg:row-start-2 lg:row-end-3 xl:col-start-3 p-2'>
+      <Card className='relative lg:col-start-2 lg:col-end-3 lg:row-start-2 lg:row-end-3 xl:col-start-3 p-2'>
         <CardHeader>
           <CardTitle>Cartões de crédito</CardTitle>
           <CardDescription>Acompanhamento das faturas</CardDescription>
@@ -146,24 +151,10 @@ export default function Dashboard() {
               <p className='text-foreground-secondary'>
                 Nenhum cartão de crédito cadastrado...
               </p>
-              <Modal>
-                <ModalTrigger asChild>
-                  <Button type='button'>
-                    <CreditCard />
-                    Cadastrar novo cartão
-                  </Button>
-                </ModalTrigger>
-                <ModalContent>
-                  <ModalHeader>
-                    <ModalTitle>Cartão de crédito</ModalTitle>
-                    <ModalDescription className='text-sm text-foreground-secondary'>
-                      Cadastre ou atualize seus cartões de crédito.
-                    </ModalDescription>
-                  </ModalHeader>
-                  <Divider className='bg-gradient-to-r via-foreground-secondary' />
-                  {/* <FormPostCreditCard /> */}
-                </ModalContent>
-              </Modal>
+              <Button type='button'>
+                <CreditCard />
+                Cadastrar novo cartão
+              </Button>
             </div>
           ) : (
             <Carousel>
@@ -219,16 +210,26 @@ export default function Dashboard() {
                         }
                       />
                       <div className='flex justify-between items-center'>
-                        <span className='text-xl lg:text-lg xl:text-xl font-montserrat'>
-                          {valueFormatter(
-                            CreditCardData.cardExpense?.find(
-                              (_ce, index) => i === index
-                            ) as number
-                          )}
-                        </span>
-                        <span className='lg:text-sm text-foreground-secondary'>
-                          Limite: {valueFormatter(card.creditLimit)}
-                        </span>
+                        <div className='flex flex-col text-sm'>
+                          <span className='text-foreground-secondary'>
+                            Utilizado
+                          </span>
+                          <span className='text-base'>
+                            {valueFormatter(
+                              CreditCardData.cardExpense?.find(
+                                (_ce, index) => i === index
+                              ) as number
+                            )}
+                          </span>
+                        </div>
+                        <div className='flex flex-col text-sm'>
+                          <span className='text-foreground-secondary text-right'>
+                            Limite
+                          </span>
+                          <span className='text-base'>
+                            {valueFormatter(card.creditLimit)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </CarouselItem>
@@ -260,23 +261,50 @@ export default function Dashboard() {
             </p>
           )}
           <ScrollArea orientation='vertical' className='lg:h-100'>
-            {recentTransactions.map(trans => (
-              <div key={trans.id} className=' p-1 px-2 flex items-center gap-3'>
-                {trans.type === 'income' ? (
-                  <TrendingUp className='text-success' />
-                ) : (
-                  <TrendingDown className='text-destructive' />
-                )}
-                <div>
-                  <h3 className='font-poppins text-foreground-secondary'>
-                    {trans.description}
-                  </h3>
-                  <p>{valueFormatter(trans.value)}</p>
-                  {trans.type === 'expense' && <p>{trans.paymentMethod}</p>}
-                  {trans.type === 'expense' && <p>{trans.status}</p>}
+            <div className='grid gap-2'>
+              {recentTransactions.map(trans => (
+                <div key={trans.id} className='flex justify-between p-2'>
+                  <div className='flex items-center gap-3'>
+                    {trans.type === 'income' ? (
+                      <TrendingUp className='text-success' />
+                    ) : (
+                      <TrendingDown className='text-destructive' />
+                    )}
+                    <div className='grid gap-2'>
+                      <h3 className='font-poppins text-foreground-secondary'>
+                        {trans.description}
+                      </h3>
+                      <p>{valueFormatter(trans.value)}</p>
+                    </div>
+                  </div>
+                  <div className='text-right grid gap-2 pr-4'>
+                    {trans.type === 'expense' && (
+                      <Badge
+                        variant={
+                          trans.status === paymentStatusFormatter('PAID')
+                            ? 'success'
+                            : trans.status === paymentStatusFormatter('PENDING')
+                            ? 'warning'
+                            : 'error'
+                        }
+                        className='gap-2'
+                      >
+                        {trans.status === paymentStatusFormatter('PAID') ? (
+                          <Check size={18} />
+                        ) : trans.status ===
+                          paymentStatusFormatter('PENDING') ? (
+                          <TriangleAlert size={18} />
+                        ) : (
+                          <Ban size={18} />
+                        )}
+                        {trans.status}
+                      </Badge>
+                    )}
+                    {trans.type === 'expense' && <p>{trans.paymentMethod}</p>}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <Scrollbar orientation='vertical' />
           </ScrollArea>
         </CardContent>

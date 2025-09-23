@@ -17,6 +17,7 @@ export const getDataFromUserId = async () => {
           holder: true,
           expMonth: true,
           expYear: true,
+          billingDay: true,
           creditLimit: true,
           expense: {
             select: {

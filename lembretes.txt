@@ -1,0 +1,1 @@
+status despesa como step3, caso seja pago, ai sim ir para pagamento, caso seja pendente ou atrasado, pular pagamento.

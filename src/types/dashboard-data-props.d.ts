@@ -35,6 +35,7 @@ export type dashboardDataProps = {
         creditLimit: number
         expMonth: string
         expYear: string
+        billingDay: string
         holder: string
         cardBrand: CardBrand
         expense: {

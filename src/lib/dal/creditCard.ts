@@ -13,15 +13,43 @@ export const getCreditCard = async () => {
     select: {
       id: true,
       lastNumber: true,
+      holder: true,
+      expMonth: true,
+      expYear: true,
+      cardBrand: true
+    },
+    orderBy: {
+      expYear: 'desc'
+    }
+  })
+}
+
+export const getCreditCardById = async (id: string) => {
+  await requireUser()
+
+  return await prisma.creditCard.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      lastNumber: true,
       creditLimit: true,
       holder: true,
       expMonth: true,
       expYear: true,
       billingDay: true,
-      cardBrand: true
-    },
-    orderBy: {
-      expYear: 'desc'
+      cardBrand: true,
+      expense: {
+        select: {
+          id: true,
+          date: true,
+          description: true,
+          installments: true,
+          value: true
+        },
+        orderBy: {
+          date: 'desc'
+        }
+      }
     }
   })
 }

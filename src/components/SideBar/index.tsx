@@ -1,13 +1,19 @@
 import Link from 'next/link'
 import { Button } from '../ui/Button'
-import { BanknoteArrowUp, BanknoteArrowDown, HomeIcon } from 'lucide-react'
+import {
+  BanknoteArrowUp,
+  BanknoteArrowDown,
+  HomeIcon,
+  CreditCard
+} from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 
 const pages = [
   { name: 'Painel', icon: HomeIcon, url: '/painel' },
   { name: 'Renda', icon: BanknoteArrowUp, url: '/ganhos' },
-  { name: 'Despesas', icon: BanknoteArrowDown, url: '/despesas' }
+  { name: 'Despesas', icon: BanknoteArrowDown, url: '/despesas' },
+  { name: 'Crédito', icon: CreditCard, url: '/cartao-credito' }
   /* { name: 'Promoções', icon: Barcode, url: '/promocoes' } */
 ]
 

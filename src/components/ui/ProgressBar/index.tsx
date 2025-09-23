@@ -4,8 +4,10 @@ import { twMerge } from 'tailwind-merge'
 
 const ProgressBar = forwardRef<
   React.ComponentRef<typeof ProgressRadix.Root>,
-  React.ComponentPropsWithoutRef<typeof ProgressRadix.Root>
->(({ className, value, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof ProgressRadix.Root> & {
+    rounded?: 'rounded-full' | 'rounded-lg'
+  }
+>(({ className, value, rounded = 'rounded-full', ...props }, ref) => {
   return (
     <div className='relative w-full'>
       <ProgressRadix.Root
@@ -17,7 +19,7 @@ const ProgressBar = forwardRef<
         {...props}
       >
         <ProgressRadix.Indicator
-          className='w-full h-full flex-1 bg-foreground rounded-full transition-transform duration-[20] ease-in-out'
+          className={`w-full h-full flex-1 bg-foreground ${rounded} transition-transform duration-[20] ease-in-out`}
           style={{
             transform: `translateX(-${100 - (value || 0)}%)`
           }}

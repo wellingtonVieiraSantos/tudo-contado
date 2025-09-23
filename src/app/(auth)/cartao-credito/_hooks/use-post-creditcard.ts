@@ -16,7 +16,7 @@ const fetchCreditCard = async (data: creditCardType) => {
     const errBody = await res.json()
     throw new Error(errBody.message || 'Ocorreu um erro ao cadastrar o cartão')
   }
-  return res.json() as Promise<ApiResponse<creditCardType[]>>
+  return res.json() as Promise<ApiResponse<creditCardType>>
 }
 
 export const usePostCreditCard = (

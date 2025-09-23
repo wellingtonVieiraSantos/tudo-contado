@@ -25,7 +25,7 @@ import { PaymentMethodType } from '@prisma/client'
 import { ArrowLeft, ArrowRight, CreditCard, Plus } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useGetCreditCard } from '../_hooks/use-get-creditcard'
+import { useGetCreditCard } from '../../cartao-credito/_hooks/use-get-creditcards'
 
 type FormStepTwoProps = {
   formData: Partial<expenseType>
