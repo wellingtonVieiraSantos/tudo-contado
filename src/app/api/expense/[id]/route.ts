@@ -1,4 +1,4 @@
-import { getExpenseById } from '@/lib/dal/expenses'
+import { getExpenseById } from '@/dal/expenses'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(

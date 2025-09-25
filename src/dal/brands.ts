@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import normalizeStr from '@/lib/normalizeStr'
-import { requireUser } from './user/require-user'
+import { requireUser } from '../lib/require-user'
 
 export const getBrandsWhereContainsText = async (name: string) => {
   await requireUser()

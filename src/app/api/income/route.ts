@@ -4,7 +4,7 @@ import {
   getIncomes,
   postIncome,
   updateIncomeById
-} from '@/lib/dal/incomes'
+} from '@/dal/incomes'
 import { incomeSchema } from '@/validators/formIncome'
 import { format } from 'date-fns'
 import { dataIncomeUpdateProps } from '@/types/income-data-props'

@@ -5,19 +5,13 @@ import {
   getCreditCard,
   postCreditCard,
   updateCreditCardById
-} from '@/lib/dal/creditCard'
+} from '@/dal/creditCard'
 import { creditCardSchema } from '@/validators/formCreditCard'
 import { Prisma } from '@prisma/client'
 
 export async function GET() {
   try {
-    const rawCreditCard = await getCreditCard()
-
-    //normalize value and type to show in component, get in centavos, return in reais
-    const creditCard = rawCreditCard.map(cc => ({
-      ...cc,
-      creditLimit: cc.creditLimit / 100
-    }))
+    const creditCard = await getCreditCard()
 
     return NextResponse.json(
       { data: creditCard, success: true },

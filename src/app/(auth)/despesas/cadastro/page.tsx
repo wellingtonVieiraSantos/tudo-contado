@@ -13,6 +13,7 @@ import { FormPostCreditCard } from '../../cartao-credito/_components/FormPostCre
 import { usePostExpense } from '../_hooks/use-post-expense'
 import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
+import { FormStepZero } from '../_components/FormStepZero'
 
 export default function Cadastro() {
   const [step, setStep] = useState(1)
@@ -21,7 +22,7 @@ export default function Cadastro() {
   >({
     value: undefined,
     description: '',
-    type: 'VARIABLE',
+    kind: 'IMMEDIATE',
     category: 'OTHER',
     paymentMethod: 'PIX',
     creditCardId: undefined,
@@ -51,7 +52,7 @@ export default function Cadastro() {
     switch (step) {
       case 1:
         return (
-          <FormStepOne formData={formDataCadastro} onNext={handleNextStep} />
+          <FormStepZero formData={formDataCadastro} onNext={handleNextStep} />
         )
       case 2:
         return (
@@ -95,8 +96,12 @@ export default function Cadastro() {
       </div>
       <Card className='w-full m-auto lg:w-2xl'>
         <CardContent className='p-4'>
-          <Stepper step={step === 99 ? 2 : step} />
-          <Divider className='bg-gradient-to-r via-foreground-secondary' />
+          {step !== 1 && (
+            <>
+              <Stepper step={step === 99 ? 2 : step} />
+              <Divider className='bg-gradient-to-r via-foreground-secondary' />
+            </>
+          )}
           {renderStep()}
         </CardContent>
       </Card>

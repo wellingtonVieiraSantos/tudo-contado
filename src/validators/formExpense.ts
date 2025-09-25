@@ -1,9 +1,4 @@
-import {
-  CategoryType,
-  ExpenseType,
-  PaymentMethodType,
-  StatusType
-} from '@prisma/client'
+import { CategoryType, PaymentMethodType, StatusType } from '@prisma/client'
 import z from 'zod'
 
 export const expenseSchemaInitial = z.object({
@@ -14,8 +9,14 @@ export const expenseSchemaInitial = z.object({
     .refine(val => Math.round(val * 100) / 100 === val, {
       message: 'Máximo 2 casas decimais'
     }),
+  amount: z.coerce
+    .number({ message: 'Campo obrigatório' })
+    .positive({ message: 'Apenas valores positivos' })
+    .refine(val => Math.round(val * 100) / 100 === val, {
+      message: 'Máximo 2 casas decimais'
+    })
+    .optional(),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
-  type: z.nativeEnum(ExpenseType),
   category: z.nativeEnum(CategoryType),
   paymentMethod: z.nativeEnum(PaymentMethodType),
   creditCardId: z
@@ -35,11 +36,18 @@ export const expenseSchemaInitial = z.object({
       })
     })
     .optional(),
-  date: z.coerce.date({
+  expenseDate: z.coerce.date({
     errorMap: (issue, { defaultError }) => ({
       message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
     })
   }),
+  paidAt: z.coerce
+    .date({
+      errorMap: (issue, { defaultError }) => ({
+        message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
+      })
+    })
+    .optional(),
   status: z.nativeEnum(StatusType)
 })
 
@@ -54,10 +62,13 @@ export const expenseSchema = expenseSchemaInitial.refine(
   }
 )
 
+export const step0Schema = expenseSchemaInitial.pick({
+  status: true
+})
+
 export const step1Schema = expenseSchemaInitial.pick({
   value: true,
   description: true,
-  type: true,
   category: true
 })
 
@@ -80,12 +91,13 @@ export const step2Schema = expenseSchemaInitial
 
 export const step3Schema = expenseSchemaInitial
   .pick({
-    date: true,
-    dueDate: true
+    expenseDate: true,
+    dueDate: true,
+    paidAt: true
   })
   .refine(
     data => {
-      if (data.dueDate && data.dueDate < data.date) return false
+      if (data.dueDate && data.dueDate < data.expenseDate) return false
       return true
     },
     {
@@ -93,7 +105,13 @@ export const step3Schema = expenseSchemaInitial
       path: ['dueDate']
     }
   )
-
-export const step4Schema = expenseSchemaInitial.pick({
-  status: true
-})
+  .refine(
+    data => {
+      if (data.paidAt && data.paidAt < data.expenseDate) return false
+      return true
+    },
+    {
+      message: 'A data de pagamento não pode ser anterior a compra',
+      path: ['paidAt']
+    }
+  )

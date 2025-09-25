@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { requireUser } from './require-user'
+import { requireUser } from '../lib/require-user'
 
 export const getDataFromUserId = async () => {
   const user = await requireUser()

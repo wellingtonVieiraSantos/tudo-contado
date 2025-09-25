@@ -40,6 +40,9 @@ export default function Atualização() {
 
   const handleNextStep = (data: Partial<expenseType>) => {
     setFormData(prev => ({ ...prev, ...data }))
+    if (data.kind === 'IMMEDIATE' && step === 1) {
+      setStep(3)
+    }
     setStep(prev => prev + 1)
   }
 

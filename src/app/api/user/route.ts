@@ -1,4 +1,4 @@
-import { checkEmailExists, registerNewUser } from '@/lib/dal/user'
+import { checkEmailExists, registerNewUser } from '@/dal/user'
 import bcrypt from 'bcryptjs'
 import { NextRequest, NextResponse } from 'next/server'
 

@@ -1,5 +1,5 @@
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import { getDataFromUserId } from '@/lib/dal/user'
+import { getDataFromUserId } from '@/dal/user'
 import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { NextResponse } from 'next/server'

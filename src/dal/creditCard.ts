@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { requireUser } from './user/require-user'
+import { requireUser } from '../lib/require-user'
 import { creditCardType } from '@/types/creditcard-data-props'
 import { Prisma } from '@prisma/client'
 

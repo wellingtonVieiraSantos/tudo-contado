@@ -49,12 +49,26 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
 
   const category = Object.keys(CategoryType) as CategoryType[]
 
-  const onSubmit = (data: expenseFormStepOne) => {
-    onNext(data)
-  }
-
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onNext)}>
+      <FormField name='kind'>
+        <FormLabel>Tipo *</FormLabel>
+        <Controller
+          name='kind'
+          control={control}
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='IMMEDIATE'>Gasto imediato</SelectItem>
+                <SelectItem value='SCHEDULED'>Gasto futuro</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
+      </FormField>
       <FormField name='value'>
         <FormLabel>Valor *</FormLabel>
         <FormControl asChild>
@@ -87,24 +101,6 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
             {errors.description?.message}
           </FormMessage>
         )}
-      </FormField>
-      <FormField name='type'>
-        <FormLabel>Tipo *</FormLabel>
-        <Controller
-          name='type'
-          control={control}
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='FIXED'>Gasto fixo</SelectItem>
-                <SelectItem value='VARIABLE'>Gasto variável</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        />
       </FormField>
       <FormField name='category'>
         <FormLabel>Categoria *</FormLabel>

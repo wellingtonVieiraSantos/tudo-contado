@@ -162,7 +162,7 @@ export default function Dashboard() {
                 {CreditCardData.creditCard?.map((card, i) => (
                   <CarouselItem
                     key={card.id}
-                    className='flex flex-col items-center pb-1 gap-3'
+                    className='flex flex-col items-center pb-1 gap-3 cursor-pointer'
                   >
                     <div
                       className={`relative w-full max-w-75 h-45 rounded-xl bg-radial
@@ -197,39 +197,6 @@ export default function Dashboard() {
                         <span>
                           {card.expMonth} / {card.expYear}
                         </span>
-                      </div>
-                    </div>
-                    <div className='w-full max-w-75'>
-                      <ProgressBar
-                        value={
-                          ((CreditCardData.cardExpense?.find(
-                            (_ce, index) => i === index
-                          ) || 0) /
-                            card.creditLimit) *
-                          100
-                        }
-                      />
-                      <div className='flex justify-between items-center'>
-                        <div className='flex flex-col text-sm'>
-                          <span className='text-foreground-secondary'>
-                            Utilizado
-                          </span>
-                          <span className='text-base'>
-                            {valueFormatter(
-                              CreditCardData.cardExpense?.find(
-                                (_ce, index) => i === index
-                              ) as number
-                            )}
-                          </span>
-                        </div>
-                        <div className='flex flex-col text-sm'>
-                          <span className='text-foreground-secondary text-right'>
-                            Limite
-                          </span>
-                          <span className='text-base'>
-                            {valueFormatter(card.creditLimit)}
-                          </span>
-                        </div>
                       </div>
                     </div>
                   </CarouselItem>

@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { requireUser } from './user/require-user'
+import { requireUser } from '../lib/require-user'
 
 export const getPromotions = async () => {
   await requireUser()

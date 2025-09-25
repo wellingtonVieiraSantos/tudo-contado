@@ -114,13 +114,7 @@ export const useGetDashboard = () => {
   const CreditCardData = useMemo(() => {
     const creditCard = response?.data?.creditCard
 
-    const cardExpense = creditCard?.map(cc => {
-      return cc.expense
-        .map(c => c.value)
-        .reduce((curr, acc) => acc + Number(curr), 0)
-    })
-
-    return { creditCard, cardExpense }
+    return { creditCard }
   }, [response?.data?.creditCard])
 
   return {

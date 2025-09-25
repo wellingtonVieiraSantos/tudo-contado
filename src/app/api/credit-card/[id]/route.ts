@@ -1,4 +1,4 @@
-import { getCreditCardById } from '@/lib/dal/creditCard'
+import { getCreditCardById } from '@/dal/creditCard'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
