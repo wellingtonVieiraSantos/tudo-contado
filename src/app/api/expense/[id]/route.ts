@@ -1,4 +1,4 @@
-import { getExpenseById } from '@/dal/expenses'
+import { getExpenseByIdService } from '@/services/expenses/getExpenseByIdService'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
@@ -8,25 +8,19 @@ export async function GET(
   try {
     const { id } = await params
 
-    const rawExpense = await getExpenseById(id)
+    const expense = await getExpenseByIdService(id)
 
-    if (!rawExpense)
+    if (!expense)
       return NextResponse.json(
         { error: 'Nenhum dado encontrado.' },
         { status: 404 }
       )
 
-    //normalize value and type to show in component, get in centavos, return in reais
-    const expenses = {
-      ...rawExpense,
-      value: rawExpense.value / 100
-    }
-
-    return NextResponse.json({ data: expenses, success: true }, { status: 200 })
+    return NextResponse.json({ data: expense, success: true }, { status: 200 })
   } catch (e) {
-    console.log(e)
+    console.error('GET /expense/id', e)
     return NextResponse.json(
-      { error: 'Erro ao buscar dados das despesas.' },
+      { error: 'Erro ao buscar dados da despesa.' },
       { status: 500 }
     )
   }

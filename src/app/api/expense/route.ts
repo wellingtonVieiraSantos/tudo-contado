@@ -55,13 +55,6 @@ export async function PUT(req: NextRequest) {
       )
     }
 
-    const { value: rawValue } = result.data
-
-    const value = rawValue * 100
-
-    const id = result.data.id!
-    const data = { ...result.data, value }
-
     const updatedExpense = await updateExpenseByIdService(result.data)
     return NextResponse.json(
       { success: true, data: updatedExpense },
