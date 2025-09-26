@@ -36,9 +36,9 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
             despesa selecionado.
           </span>
         </FormLabel>
-        <Divider className='bg-gradient-to-r via-foreground-secondary' />
+        <Divider />
         <Controller
-          name='kind'
+          name='status'
           control={control}
           render={({ field }) => (
             <ToggleGroup
@@ -46,7 +46,7 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
               onValueChange={field.onChange}
               value={field.value}
             >
-              <ToggleGroupItem value='IMMEDIATE'>
+              <ToggleGroupItem value='PAID'>
                 <p className='flex items-center gap-2'>
                   <Zap strokeWidth={1.5} size={20} />
                   Imediata
@@ -56,7 +56,7 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
                   ao mercado e etc.
                 </span>
               </ToggleGroupItem>
-              <ToggleGroupItem value='SCHEDULED'>
+              <ToggleGroupItem value='PENDING'>
                 <p className='flex items-center gap-2'>
                   <Hourglass strokeWidth={1.5} size={20} />
                   Prevista
@@ -72,7 +72,7 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
       </FormField>
       <Stepper step={1} />
       <FormSubmit asChild>
-        <Button className='mt-3 justify-self-end px-8' type='submit'>
+        <Button className='mt-3 justify-self-end' type='submit'>
           Proximo
           <ArrowRight />
         </Button>

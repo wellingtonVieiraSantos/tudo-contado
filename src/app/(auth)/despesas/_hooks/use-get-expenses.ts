@@ -41,7 +41,7 @@ export const useGetExpenses = () => {
     return [
       ...new Set(
         data.map(expense =>
-          format(expense.date, "MMMM 'de' yyyy", { locale: ptBR })
+          format(expense.expenseDate, "MMMM 'de' yyyy", { locale: ptBR })
         )
       )
     ]
@@ -57,7 +57,7 @@ export const useGetExpenses = () => {
     return data.filter(expense => {
       const matchesMonth =
         !isMonthActive ||
-        format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) ===
+        format(expense.expenseDate, "MMMM 'de' yyyy", { locale: ptBR }) ===
           filters.month
 
       const matchesStatus =

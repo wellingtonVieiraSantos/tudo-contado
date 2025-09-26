@@ -11,19 +11,23 @@ import { expenseFormStepThree, expenseType } from '@/types/expense-data-props'
 import { step3Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Send } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
+import { Stepper } from './Stepper'
+import { Divider } from '@/components/ui/Divider'
 
 type FormStepThreeProps = {
   formData: Partial<expenseType>
   onNext: (data: expenseFormStepThree) => void
   setStep: React.Dispatch<React.SetStateAction<number>>
+  isPending: boolean
 }
 
 export const FormStepThree = ({
   formData,
   onNext,
-  setStep
+  setStep,
+  isPending
 }: FormStepThreeProps) => {
   const {
     handleSubmit,
@@ -36,10 +40,12 @@ export const FormStepThree = ({
 
   return (
     <Form onSubmit={handleSubmit(onNext)}>
-      <FormField name='date'>
+      <h2 className='py-3 text-center font-poppins'>Informações de data</h2>
+      <Divider />
+      <FormField name='expenseDate'>
         <FormLabel>Data de compra *</FormLabel>
         <Controller
-          name='date'
+          name='expenseDate'
           control={control}
           render={({ field }) => (
             <input
@@ -50,9 +56,9 @@ export const FormStepThree = ({
             />
           )}
         />
-        {errors.date && (
+        {errors.expenseDate && (
           <FormMessage className='text-destructive'>
-            {errors.date?.message}
+            {errors.expenseDate?.message}
           </FormMessage>
         )}
       </FormField>
@@ -76,15 +82,20 @@ export const FormStepThree = ({
           </FormMessage>
         )}
       </FormField>
+      <Stepper step={4} />
       <div className='flex gap-3 justify-between mt-3'>
-        <Button variant='border' type='button' onClick={() => setStep(2)}>
+        <Button variant='border' type='button' onClick={() => setStep(3)}>
           <ArrowLeft />
           Anterior
         </Button>
-        <FormSubmit asChild type='submit'>
-          <Button type='submit'>
-            Proximo
-            <ArrowRight />
+        <FormSubmit asChild>
+          <Button
+            type='submit'
+            disabled={isPending}
+            variant={isPending ? 'loading' : 'default'}
+          >
+            {isPending ? 'Cadastrando...' : 'Cadastrar'}
+            <Send />
           </Button>
         </FormSubmit>
       </div>

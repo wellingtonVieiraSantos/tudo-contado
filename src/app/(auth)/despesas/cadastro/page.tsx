@@ -1,14 +1,11 @@
 'use client'
 import { Card, CardContent } from '@/components/ui/Card'
-import { Divider } from '@/components/ui/Divider'
-import { Stepper } from '../_components/Stepper'
 import { useState } from 'react'
 import { expenseType } from '@/types/expense-data-props'
 import { expenseSchema } from '@/validators/formExpense'
 import { FormStepOne } from '../_components/FormStepOne'
 import { FormStepTwo } from '../_components/FormStepTwo'
 import { FormStepThree } from '../_components/FormStepThree'
-import { FormStepFour } from '../_components/FormStepFour'
 import { FormPostCreditCard } from '../../cartao-credito/_components/FormPostCreditCard'
 import { usePostExpense } from '../_hooks/use-post-expense'
 import { Undo2 } from 'lucide-react'
@@ -22,12 +19,11 @@ export default function Cadastro() {
   >({
     value: undefined,
     description: '',
-    kind: 'IMMEDIATE',
     category: 'OTHER',
     paymentMethod: 'PIX',
     creditCardId: undefined,
     installments: undefined,
-    date: new Date(),
+    expenseDate: new Date(),
     dueDate: new Date(),
     status: 'PAID'
   })
@@ -56,7 +52,7 @@ export default function Cadastro() {
         )
       case 2:
         return (
-          <FormStepTwo
+          <FormStepOne
             formData={formDataCadastro}
             onNext={handleNextStep}
             setStep={setStep}
@@ -64,7 +60,7 @@ export default function Cadastro() {
         )
       case 3:
         return (
-          <FormStepThree
+          <FormStepTwo
             formData={formDataCadastro}
             onNext={handleNextStep}
             setStep={setStep}
@@ -72,13 +68,14 @@ export default function Cadastro() {
         )
       case 4:
         return (
-          <FormStepFour
-            isPending={isPending}
+          <FormStepThree
             formData={formDataCadastro}
             onNext={handleFinish}
             setStep={setStep}
+            isPending={isPending}
           />
         )
+
       case 99:
         return <FormPostCreditCard setStep={setStep} />
       default:
@@ -94,16 +91,8 @@ export default function Cadastro() {
         </Link>
         <span>Cadastro de despesa</span>
       </div>
-      <Card className='w-full m-auto lg:w-2xl'>
-        <CardContent className='p-4'>
-          {step !== 1 && (
-            <>
-              <Stepper step={step === 99 ? 2 : step} />
-              <Divider className='bg-gradient-to-r via-foreground-secondary' />
-            </>
-          )}
-          {renderStep()}
-        </CardContent>
+      <Card className='w-full m-auto lg:w-3xl'>
+        <CardContent className='p-4 w-full'>{renderStep()}</CardContent>
       </Card>
     </div>
   )

@@ -111,7 +111,9 @@ export default function Expense() {
           filteredExpenses?.map(expense => (
             <Card key={expense.id} className=' w-full py-3'>
               <CardHeader>
-                <CardTitle>{format(expense.date, 'dd-MM-yyyy')}</CardTitle>
+                <CardTitle>
+                  {format(expense.expenseDate, 'dd-MM-yyyy')}
+                </CardTitle>
                 <CardDescription>
                   {categoryFormatter(expense.category)}
                 </CardDescription>

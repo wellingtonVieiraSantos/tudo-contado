@@ -9,29 +9,47 @@ import {
   FormSubmit
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import { expenseFormStepOne, expenseType } from '@/types/expense-data-props'
 import { step1Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CategoryType } from '@prisma/client'
-import { ArrowRight, Wallet } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  BadgeDollarSign,
+  BoneIcon,
+  Bus,
+  Cpu,
+  Cross,
+  Drama,
+  GraduationCap,
+  Heart,
+  House,
+  PawPrint,
+  Plus,
+  Refrigerator,
+  Shirt,
+  Wallet
+} from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { Stepper } from './Stepper'
+import { Divider } from '@/components/ui/Divider'
 
 type FormStepOneProps = {
   formData: Partial<expenseType>
   onNext: (data: expenseFormStepOne) => void
+  setStep: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
+export const FormStepOne = ({
+  formData,
+  onNext,
+  setStep
+}: FormStepOneProps) => {
   const {
     register,
     handleSubmit,
@@ -47,28 +65,29 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
     reset(formData)
   }, [formData, reset])
 
-  const category = Object.keys(CategoryType) as CategoryType[]
+  const categoryICon = [
+    House,
+    Refrigerator,
+    Bus,
+    GraduationCap,
+    Cross,
+    Shirt,
+    Cpu,
+    Heart,
+    Drama,
+    PawPrint,
+    BadgeDollarSign,
+    Plus
+  ]
 
+  const categories = Object.keys(CategoryType).map((key, i) => ({
+    type: key as CategoryType,
+    icon: categoryICon[i]
+  }))
   return (
     <Form onSubmit={handleSubmit(onNext)}>
-      <FormField name='kind'>
-        <FormLabel>Tipo *</FormLabel>
-        <Controller
-          name='kind'
-          control={control}
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='IMMEDIATE'>Gasto imediato</SelectItem>
-                <SelectItem value='SCHEDULED'>Gasto futuro</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        />
-      </FormField>
+      <h2 className='py-3 text-center font-poppins'>Informações básicas</h2>
+      <Divider />
       <FormField name='value'>
         <FormLabel>Valor *</FormLabel>
         <FormControl asChild>
@@ -108,27 +127,38 @@ export const FormStepOne = ({ formData, onNext }: FormStepOneProps) => {
           name='category'
           control={control}
           render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {category.map(value => (
-                  <SelectItem value={value} key={value}>
-                    {categoryFormatter(value)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <ToggleGroup
+              type='single'
+              onValueChange={field.onChange}
+              value={field.value}
+              className='grid-cols-2 sm:grid-cols-3'
+            >
+              {categories.map(category => (
+                <ToggleGroupItem
+                  value={category.type}
+                  className='text-sm flex-col'
+                >
+                  <category.icon strokeWidth={1.3} className='size-5' />
+                  {categoryFormatter(category.type)}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
           )}
         />
       </FormField>
-      <FormSubmit asChild>
-        <Button className='mt-3 justify-self-end px-8' type='submit'>
-          Proximo
-          <ArrowRight />
+      <Stepper step={2} />
+      <div className='flex gap-3 justify-between mt-3'>
+        <Button variant='border' type='button' onClick={() => setStep(1)}>
+          <ArrowLeft />
+          Anterior
         </Button>
-      </FormSubmit>
+        <FormSubmit asChild type='submit'>
+          <Button>
+            Proximo
+            <ArrowRight />
+          </Button>
+        </FormSubmit>
+      </div>
     </Form>
   )
 }

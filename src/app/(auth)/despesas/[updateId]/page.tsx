@@ -2,19 +2,17 @@
 import { Card, CardContent } from '@/components/ui/Card'
 import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
-import { Stepper } from '../_components/Stepper'
-import { Divider } from '@/components/ui/Divider'
 import { expenseType } from '@/types/expense-data-props'
 import { expenseSchema } from '@/validators/formExpense'
 import { FormStepOne } from '../_components/FormStepOne'
 import { FormStepTwo } from '../_components/FormStepTwo'
 import { FormStepThree } from '../_components/FormStepThree'
-import { FormStepFour } from '../_components/FormStepFour'
 import { FormPostCreditCard } from '../../cartao-credito/_components/FormPostCreditCard'
 import { useEffect, useState } from 'react'
 import { usePutExpense } from '../_hooks/use-put-expense'
 import { useGetExpenseById } from '../_hooks/use-get-expense-by-id'
 import { useParams } from 'next/navigation'
+import { FormStepZero } from '../_components/FormStepZero'
 
 export default function Atualização() {
   const { updateId }: { updateId: string } = useParams()
@@ -30,7 +28,7 @@ export default function Atualização() {
       const cleaned = {
         ...data,
         installments: data.installments ?? undefined,
-        date: data.date,
+        expenseDate: data.expenseDate,
 
         dueDate: data.dueDate || new Date()
       }
@@ -40,9 +38,7 @@ export default function Atualização() {
 
   const handleNextStep = (data: Partial<expenseType>) => {
     setFormData(prev => ({ ...prev, ...data }))
-    if (data.kind === 'IMMEDIATE' && step === 1) {
-      setStep(3)
-    }
+
     setStep(prev => prev + 1)
   }
 
@@ -58,10 +54,10 @@ export default function Atualização() {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <FormStepOne formData={formData} onNext={handleNextStep} />
+        return <FormStepZero formData={formData} onNext={handleNextStep} />
       case 2:
         return (
-          <FormStepTwo
+          <FormStepOne
             formData={formData}
             onNext={handleNextStep}
             setStep={setStep}
@@ -69,7 +65,7 @@ export default function Atualização() {
         )
       case 3:
         return (
-          <FormStepThree
+          <FormStepTwo
             formData={formData}
             onNext={handleNextStep}
             setStep={setStep}
@@ -77,13 +73,14 @@ export default function Atualização() {
         )
       case 4:
         return (
-          <FormStepFour
-            isPending={isPending}
+          <FormStepThree
             formData={formData}
             onNext={handleFinish}
             setStep={setStep}
+            isPending={isPending}
           />
         )
+
       case 99:
         return <FormPostCreditCard setStep={setStep} />
       default:
@@ -100,11 +97,7 @@ export default function Atualização() {
         <span>Atualização de despesa</span>
       </div>
       <Card className='w-full m-auto lg:w-2xl'>
-        <CardContent className='p-4'>
-          <Stepper step={step === 99 ? 2 : step} />
-          <Divider className='bg-gradient-to-r via-foreground-secondary' />
-          {renderStep()}
-        </CardContent>
+        <CardContent className='p-4'>{renderStep()}</CardContent>
       </Card>
     </div>
   )

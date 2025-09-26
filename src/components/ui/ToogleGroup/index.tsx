@@ -11,7 +11,7 @@ const ToggleGroup = forwardRef<
       {...props}
       ref={ref}
       className={twMerge(
-        `grid grid-co-1 sm:grid-cols-2 w-full gap-2 py-3 `,
+        `grid grid-co-1 sm:grid-cols-2 w-full gap-2 pb-3 `,
         className
       )}
     />

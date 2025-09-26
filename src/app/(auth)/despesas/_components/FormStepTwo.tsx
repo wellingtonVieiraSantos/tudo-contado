@@ -21,11 +21,15 @@ import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 import { expenseFormStepTwo, expenseType } from '@/types/expense-data-props'
 import { step2Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PaymentMethodType } from '@prisma/client'
 import { ArrowLeft, ArrowRight, CreditCard, Plus } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useGetCreditCard } from '../../cartao-credito/_hooks/use-get-creditcards'
+import { Stepper } from './Stepper'
+import { TabList, Tabs, TabTrigger } from '@/components/ui/Tab'
+import { PaymentMethodType } from '@prisma/client'
+import Image from 'next/image'
+import { Divider } from '@/components/ui/Divider'
 
 type FormStepTwoProps = {
   formData: Partial<expenseType>
@@ -59,31 +63,52 @@ export const FormStepTwo = ({
     }
   }, [paymentMethodWatch])
 
-  const paymentMethod = Object.keys(PaymentMethodType) as PaymentMethodType[]
+  const paymentMethodIcon = [
+    '/pix.svg',
+    '/dinheiro.svg',
+    '/card.svg',
+    '/debit.svg'
+  ]
+  const paymentMethod = Object.keys(PaymentMethodType).map((key, i) => ({
+    type: key as PaymentMethodType,
+    icon: paymentMethodIcon[i]
+  }))
 
   const { data: creditCards } = useGetCreditCard()
 
   return (
     <Form onSubmit={handleSubmit(onNext)}>
-      <FormField name='paymentMethod' className='w-fit'>
+      <h2 className='py-3 text-center font-poppins'>
+        Informações de pagamento
+      </h2>
+      <Divider />
+      <FormField name='paymentMethod' className=''>
         <FormLabel>Forma de pagamento</FormLabel>
         <FormControl asChild>
           <Controller
             name='paymentMethod'
             control={control}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {paymentMethod.map(value => (
-                    <SelectItem value={value} key={value}>
-                      {paymentMethodFormatter(value)}
-                    </SelectItem>
+              <Tabs value={field.value} onValueChange={field.onChange}>
+                <TabList className='w-full flex'>
+                  {paymentMethod.map((pay, i) => (
+                    <TabTrigger
+                      key={i}
+                      value={pay.type}
+                      className='flex-col sm:flex-row gap-2 sm:gap-3 pt-2 pb-1'
+                    >
+                      <Image
+                        src={pay.icon}
+                        alt={pay.type}
+                        width={20}
+                        height={20}
+                        className='invert-80'
+                      />
+                      {paymentMethodFormatter(pay.type)}
+                    </TabTrigger>
                   ))}
-                </SelectContent>
-              </Select>
+                </TabList>
+              </Tabs>
             )}
           />
         </FormControl>
@@ -91,7 +116,7 @@ export const FormStepTwo = ({
       {watch('paymentMethod') === 'CREDIT_CARD' && creditCards && (
         <>
           <FormField name='creditCardId' className='w-fit'>
-            <FormLabel>Número do Cartão</FormLabel>
+            <FormLabel>Número do Cartão *</FormLabel>
             <FormControl asChild>
               <Controller
                 name='creditCardId'
@@ -124,14 +149,15 @@ export const FormStepTwo = ({
             )}
           </FormField>
           <FormField name='installments'>
-            <FormLabel>Numero de parcelas</FormLabel>
+            <FormLabel>Numero de parcelas *</FormLabel>
             <FormControl asChild>
               <Input
                 icon={CreditCard}
                 id='installments'
                 {...register('installments')}
                 type='number'
-                placeholder='Para compra à vista, digite 1'
+                placeholder='À vista, digite 1'
+                className='w-fit'
               />
             </FormControl>
             {errors.installments && (
@@ -143,15 +169,16 @@ export const FormStepTwo = ({
         </>
       )}
       <Button
-        className='my-3 justify-self-center'
+        className='my-8 justify-self-center'
         type='button'
         onClick={() => setStep(99)}
       >
         <Plus />
         Adicionar novo cartão
       </Button>
+      <Stepper step={3} />
       <div className='flex gap-3 justify-between mt-3'>
-        <Button variant='border' type='button' onClick={() => setStep(1)}>
+        <Button variant='border' type='button' onClick={() => setStep(2)}>
           <ArrowLeft />
           Anterior
         </Button>
