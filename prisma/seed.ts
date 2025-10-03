@@ -115,7 +115,7 @@ main()
     process.exit(1)
   }) */
 
-async function main() {
+/* async function main() {
   // pega todas as despesas que ainda não têm expenseDate
   const expenses = await prisma.expense.findMany({
     where: { expenseDate: null },
@@ -142,3 +142,4 @@ main()
     console.error(e)
     process.exit(1)
   })
+ */
