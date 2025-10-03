@@ -40,18 +40,10 @@ import {
   CarouselControlRight,
   CarouselItem
 } from '@/components/ui/Carousel'
-import {
-  Modal,
-  ModalContent,
-  ModalDescription,
-  ModalHeader,
-  ModalTitle,
-  ModalTrigger
-} from '@/components/ui/Modal'
+
 import { Badge } from '@/components/ui/Badge'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import { dataFormatter } from '@/lib/dataFormatter'
 import { format } from 'date-fns'
 
 const cardBrand = [
