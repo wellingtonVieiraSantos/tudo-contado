@@ -1,9 +1,20 @@
 import { getSumExpensesValuesByMonthRangeService } from '@/services/expenses/getExpenseByMonthRangeService'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const expense = await getSumExpensesValuesByMonthRangeService(0)
+    const searchParams = req.nextUrl.searchParams
+
+    const qtdMonth = Number(searchParams.get('qtdMonth'))
+
+    if (isNaN(qtdMonth)) {
+      return NextResponse.json(
+        { error: 'Parâmetro inválido: qtdMonth deve ser um número.' },
+        { status: 400 }
+      )
+    }
+
+    const expense = await getSumExpensesValuesByMonthRangeService(qtdMonth)
 
     if (!expense)
       return NextResponse.json(

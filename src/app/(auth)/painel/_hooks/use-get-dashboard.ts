@@ -5,8 +5,8 @@ import { ApiResponse } from '@/types/api-response'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-const fetchSumExpenses = async () => {
-  const response = await fetch('api/expense/summary')
+const fetchSumExpenses = async (qtdMonth: number) => {
+  const response = await fetch(`api/expense/summary?qtdMonth=${qtdMonth}`)
   if (!response.ok) {
     throw new Error('Falha ao buscar soma dos gastos.')
   }
@@ -14,18 +14,19 @@ const fetchSumExpenses = async () => {
 }
 
 const fetchSumIncomes = async () => {
-  const response = await fetch('api/income/summary')
+  const response = await fetch(`api/income/summary/`)
   if (!response.ok) {
     throw new Error('Falha ao buscar soma dos ganhos.')
   }
   return response.json()
 }
 
-export const useGetDashboard = () => {
+export const useGetDashboard = (qtdMonth: number = 0) => {
   const { data: responseExpense, isLoading } = useQuery({
-    queryKey: ['sumExpense'],
-    queryFn: fetchSumExpenses
+    queryKey: ['sumExpense', qtdMonth],
+    queryFn: () => fetchSumExpenses(qtdMonth)
   })
+
   const { data: responseIncome } = useQuery({
     queryKey: ['sumIncome'],
     queryFn: fetchSumIncomes
