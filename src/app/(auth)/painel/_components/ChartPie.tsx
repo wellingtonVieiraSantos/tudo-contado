@@ -19,7 +19,10 @@ export const ChartPie = ({
         _sum: number
         category: CategoryType
       }[]
+    | undefined
 }) => {
+  if (!pieChartData) return
+
   const chartData = pieChartData.map((item, i) => ({
     id: i,
     value: item._sum,

@@ -50,6 +50,9 @@ import {
 } from '@/components/ui/Modal'
 import { Badge } from '@/components/ui/Badge'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
+import { categoryFormatter } from '@/lib/categoryFormatter'
+import { dataFormatter } from '@/lib/dataFormatter'
+import { format } from 'date-fns'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },
@@ -65,7 +68,9 @@ export default function Dashboard() {
     sumExpenseActualMonth,
     sumIncomeActualMonth,
     lineChartData,
-    pieChartData
+    pieChartData,
+    CreditCardData,
+    recentTransactions
   } = useGetDashboard()
 
   if (isLoading) return <Loading />
@@ -144,7 +149,7 @@ export default function Dashboard() {
           <Divider />
         </CardHeader>
         <CardContent className='items-center justify-center'>
-          {/* {CreditCardData.creditCard?.length === 0 ? (
+          {CreditCardData?.length === 0 ? (
             <div className='flex flex-col gap-13 items-center text-center'>
               <p className='text-foreground-secondary'>
                 Nenhum cartão de crédito cadastrado...
@@ -157,14 +162,14 @@ export default function Dashboard() {
           ) : (
             <Carousel>
               <CarouselContent>
-                {CreditCardData.creditCard?.map((card, i) => (
+                {CreditCardData?.map((card, i) => (
                   <CarouselItem
                     key={card.id}
                     className='flex flex-col items-center pb-1 gap-3 cursor-pointer'
                   >
                     <div
-                      className={`relative w-full max-w-75 h-45 rounded-xl bg-radial
-                        from-sky-800 border border-foreground-secondary`}
+                      className={`relative m-auto w-full max-w-max h-45 aspect-video rounded-xl bg-radial
+                          from-sky-800 border border-disabled`}
                     >
                       <Image
                         src={'/chip.png'}
@@ -175,7 +180,7 @@ export default function Dashboard() {
                       />
                       <Image
                         src={
-                          cardBrand.find(b => b.title === card.cardBrand)
+                          cardBrand.find(b => b.title === card?.cardBrand)
                             ?.url ?? ''
                         }
                         alt='bandeira do cartão de crédito'
@@ -184,17 +189,40 @@ export default function Dashboard() {
                         className='w-16 absolute top-0 right-5'
                       />
                       <div className='text-xl lg:text-base xl:text-xl absolute bottom-18 left-9 font-mono tracking-wider'>
-                        **** **** **** {card.lastNumber}
+                        **** **** **** {card?.lastNumber}
                       </div>
                       <div className='absolute bottom-3 left-7 flex flex-col'>
                         <span className='opacity-70 text-[12px]'>Titular</span>
-                        <span>{card.holder.toUpperCase()}</span>
+                        <span>{card?.holder.toUpperCase()}</span>
                       </div>
                       <div className='absolute bottom-3 right-7 flex flex-col'>
                         <span className='opacity-70 text-[12px]'>Expira</span>
                         <span>
-                          {card.expMonth} / {card.expYear}
+                          {card?.expMonth} / {card?.expYear}
                         </span>
+                      </div>
+                    </div>
+                    <div className='w-full max-w-75'>
+                      <ProgressBar
+                        value={(card.amount / card.creditLimit) * 100}
+                      />
+                      <div className='flex justify-between items-center'>
+                        <div className='flex flex-col text-sm'>
+                          <span className='text-foreground-secondary'>
+                            Utilizado
+                          </span>
+                          <span className='text-base'>
+                            {valueFormatter(card.amount)}
+                          </span>
+                        </div>
+                        <div className='flex flex-col text-sm'>
+                          <span className='text-foreground-secondary text-right'>
+                            Limite
+                          </span>
+                          <span className='text-base'>
+                            {valueFormatter(card.creditLimit)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </CarouselItem>
@@ -203,7 +231,7 @@ export default function Dashboard() {
               <CarouselControlLeft />
               <CarouselControlRight />
             </Carousel>
-          )} */}
+          )}
         </CardContent>
       </Card>
 
@@ -220,15 +248,18 @@ export default function Dashboard() {
           <Divider />
         </CardHeader>
         <CardContent className='h-max'>
-          {/* {recentTransactions.length === 0 && (
+          {!recentTransactions && (
             <p className='text-foreground-secondary text-center'>
               Nenhuma transação recente...
             </p>
-          )} */}
+          )}
           <ScrollArea orientation='vertical' className='lg:h-100'>
             <div className='grid gap-2'>
-              {/* {recentTransactions.map(trans => (
-                <div key={trans.id} className='flex justify-between p-2'>
+              {recentTransactions?.map(trans => (
+                <div
+                  key={trans.id}
+                  className='flex justify-between p-2 border border-disabled/30 rounded'
+                >
                   <div className='flex items-center gap-3'>
                     {trans.type === 'income' ? (
                       <TrendingUp className='text-success' />
@@ -236,6 +267,9 @@ export default function Dashboard() {
                       <TrendingDown className='text-destructive' />
                     )}
                     <div className='grid gap-2'>
+                      <p className='text-sm'>
+                        {format(trans.date, 'dd-MM-yy')}
+                      </p>
                       <h3 className='font-poppins text-foreground-secondary'>
                         {trans.description}
                       </h3>
@@ -246,29 +280,30 @@ export default function Dashboard() {
                     {trans.type === 'expense' && (
                       <Badge
                         variant={
-                          trans.status === paymentStatusFormatter('PAID')
+                          trans.status === 'PAID'
                             ? 'success'
-                            : trans.status === paymentStatusFormatter('PENDING')
+                            : trans.status === 'PENDING'
                             ? 'warning'
                             : 'error'
                         }
                         className='gap-2'
                       >
-                        {trans.status === paymentStatusFormatter('PAID') ? (
+                        {trans.status === 'PAID' ? (
                           <Check size={18} />
-                        ) : trans.status ===
-                          paymentStatusFormatter('PENDING') ? (
+                        ) : trans.status === 'PENDING' ? (
                           <TriangleAlert size={18} />
                         ) : (
                           <Ban size={18} />
                         )}
-                        {trans.status}
+                        {paymentStatusFormatter(trans.status)}
                       </Badge>
                     )}
-                    {trans.type === 'expense' && <p>{trans.paymentMethod}</p>}
+                    {trans.type === 'expense' && (
+                      <p>{categoryFormatter(trans.category)}</p>
+                    )}
                   </div>
                 </div>
-              ))} */}
+              ))}
             </div>
             <Scrollbar orientation='vertical' />
           </ScrollArea>

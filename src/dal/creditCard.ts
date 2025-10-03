@@ -16,7 +16,15 @@ export const getCreditCard = async () => {
       holder: true,
       expMonth: true,
       expYear: true,
-      cardBrand: true
+      cardBrand: true,
+      creditLimit: true,
+      payment: {
+        select: {
+          id: true,
+          amount: true,
+          paidAt: true
+        }
+      }
     },
     orderBy: {
       expYear: 'desc'
@@ -38,16 +46,13 @@ export const getCreditCardById = async (id: string) => {
       expYear: true,
       billingDay: true,
       cardBrand: true,
-      expense: {
+      payment: {
         select: {
           id: true,
-          date: true,
-          description: true,
-          installments: true,
-          value: true
+          paidAt: true
         },
         orderBy: {
-          date: 'desc'
+          paidAt: 'desc'
         }
       }
     }

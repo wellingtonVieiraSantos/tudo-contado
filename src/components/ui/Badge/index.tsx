@@ -5,9 +5,9 @@ const variantClasses = {
   default: 'bg-badge text-badge-foreground',
   outline: 'border',
   info: 'bg-info text-info-foreground',
-  success: 'bg-success text-success-foreground',
-  warning: 'bg-warning/90 text-warning-foreground',
-  error: 'bg-destructive text-destructive-foreground',
+  success: 'bg-success/60 text-success-foreground',
+  warning: 'bg-warning/70 text-warning-foreground',
+  error: 'bg-destructive/60 text-destructive-foreground',
   notification:
     'absolute px-1 -top-1 -right-3 rounded-full px-0 bg-badge text-badge-foreground'
 }

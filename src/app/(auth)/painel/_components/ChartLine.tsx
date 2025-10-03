@@ -20,10 +20,15 @@ export const ChartLine = ({
   lineChartData
 }: {
   lineChartData: {
-    incomeAmountPerMonth: number[]
-    expenseAmountPerMonth: number[]
+    incomeAmountPerMonth: number[] | undefined
+    expenseAmountPerMonth: number[] | undefined
   }
 }) => {
+  if (
+    !lineChartData.expenseAmountPerMonth ||
+    !lineChartData.incomeAmountPerMonth
+  )
+    return
   return (
     <Card className='flex flex-col p-2 lg:col-start-2 lg:col-end-3 lg:row-start-3 lg:row-end-4 xl:col-start-1 xl:col-end-3 xl:row-end-5'>
       <CardHeader>
