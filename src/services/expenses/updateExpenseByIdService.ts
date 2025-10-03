@@ -22,7 +22,7 @@ export const updateExpenseByIdService = async (data: expenseType) => {
   if (data.status === 'PAID') {
     const existingPayment = await findPaymentByExpenseId(expense.id)
 
-    existingPayment
+    return existingPayment
       ? await updatePaymentById(existingPayment.id, {
           amount: (data.amount ?? data.value) * 100,
           method: data.paymentMethod,

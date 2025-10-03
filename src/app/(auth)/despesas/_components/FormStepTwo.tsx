@@ -61,7 +61,7 @@ export const FormStepTwo = ({
       setValue('creditCardId', undefined)
       setValue('installments', undefined)
     }
-  }, [paymentMethodWatch])
+  }, [paymentMethodWatch, setValue])
 
   const paymentMethodIcon = [
     '/pix.svg',
