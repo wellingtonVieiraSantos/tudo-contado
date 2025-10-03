@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/types/api-response'
-import { creditCardType } from '@/types/creditcard-data-props'
+import { creditCardTypeDashboard } from '@/types/creditcard-data-props'
 import { CategoryType, StatusType } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -44,7 +44,7 @@ const fetchCreditCard = async () => {
   if (!response.ok) {
     throw new Error('Falha ao buscar cartões')
   }
-  return response.json() as Promise<ApiResponse<creditCardType[]>>
+  return response.json() as Promise<ApiResponse<creditCardTypeDashboard[]>>
 }
 const fetchLastTransactions = async () => {
   const response = await fetch('/api/transactions')
