@@ -60,15 +60,7 @@ const cardBrand = [
 ]
 
 export default function Dashboard() {
-  const {
-    isLoading,
-    lineChartData,
-    pieChartData,
-    totalExpenseCurrent,
-    totalIncomeCurrent,
-    recentTransactions,
-    CreditCardData
-  } = useGetDashboard()
+  const { isLoading, sumExpenseActualMonth, sumIncome } = useGetDashboard()
 
   if (isLoading) return <Loading />
 
@@ -88,7 +80,7 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent className='flex flex-col md:items-center gap-6 justify-center lg:-mt-10 lg:h-full'>
           <div className='absolute top-2 right-1'>
-            {totalIncomeCurrent - totalExpenseCurrent > 0 ? (
+            {sumIncome - sumExpenseActualMonth > 0 ? (
               <Trophy strokeWidth={1.2} className='size-7 lg:text-warning' />
             ) : (
               <AlertTriangle
@@ -99,26 +91,26 @@ export default function Dashboard() {
           </div>
           <h2
             className={`text-3xl tracking-wide text-center ${
-              totalIncomeCurrent - totalExpenseCurrent < 0
+              sumIncome - sumExpenseActualMonth < 0
                 ? 'lg:text-destructive'
                 : 'lg:text-success'
             }`}
           >
-            {valueFormatter(totalIncomeCurrent - totalExpenseCurrent)}
+            {valueFormatter(sumIncome - sumExpenseActualMonth)}
           </h2>
           <div className='flex justify-center gap-2 flex-wrap lg:gap-6'>
             <div className='tracking-wide flex items-center gap-3'>
               <TrendingUp className='text-success size-6' />
               <p className='font-montserrat flex flex-col text-sm'>
                 <span className='text-[12px] font-poppins'>Rendimentos:</span>{' '}
-                {valueFormatter(totalIncomeCurrent)}
+                {valueFormatter(sumIncome)}
               </p>
             </div>
             <div className=' tracking-wide flex items-center gap-3'>
               <TrendingDown className='text-destructive size-6' />
               <p className='font-montserrat flex flex-col text-sm'>
                 <span className='text-[12px] font-poppins'>Despesas: </span>
-                {valueFormatter(totalExpenseCurrent)}
+                {valueFormatter(sumExpenseActualMonth)}
               </p>
             </div>
           </div>
@@ -146,7 +138,7 @@ export default function Dashboard() {
           <Divider />
         </CardHeader>
         <CardContent className='items-center justify-center'>
-          {CreditCardData.creditCard?.length === 0 ? (
+          {/* {CreditCardData.creditCard?.length === 0 ? (
             <div className='flex flex-col gap-13 items-center text-center'>
               <p className='text-foreground-secondary'>
                 Nenhum cartão de crédito cadastrado...
@@ -205,13 +197,13 @@ export default function Dashboard() {
               <CarouselControlLeft />
               <CarouselControlRight />
             </Carousel>
-          )}
+          )} */}
         </CardContent>
       </Card>
-
+      {/* 
       <ChartLine lineChartData={lineChartData} />
 
-      <ChartPie pieChartData={pieChartData} />
+      <ChartPie pieChartData={pieChartData} /> */}
 
       <Card className='overflow-hidden p-2 lg:col-start-2 lg:col-end-3 lg:row-start-4 lg:row-end-5 xl:col-start-3 xl:row-start-3 '>
         <CardHeader>
@@ -222,14 +214,14 @@ export default function Dashboard() {
           <Divider />
         </CardHeader>
         <CardContent className='h-max'>
-          {recentTransactions.length === 0 && (
+          {/* {recentTransactions.length === 0 && (
             <p className='text-foreground-secondary text-center'>
               Nenhuma transação recente...
             </p>
-          )}
+          )} */}
           <ScrollArea orientation='vertical' className='lg:h-100'>
             <div className='grid gap-2'>
-              {recentTransactions.map(trans => (
+              {/* {recentTransactions.map(trans => (
                 <div key={trans.id} className='flex justify-between p-2'>
                   <div className='flex items-center gap-3'>
                     {trans.type === 'income' ? (
@@ -270,7 +262,7 @@ export default function Dashboard() {
                     {trans.type === 'expense' && <p>{trans.paymentMethod}</p>}
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
             <Scrollbar orientation='vertical' />
           </ScrollArea>

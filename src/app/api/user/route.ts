@@ -20,12 +20,9 @@ export async function POST(req: NextRequest) {
 
     await registerNewUser(name, email, password)
 
-    return NextResponse.json(
-      { success: true, data: { email, rawPassword } },
-      { status: 201 }
-    )
+    return NextResponse.json({ success: true, data: email }, { status: 201 })
   } catch (e) {
-    console.log(e)
+    console.error('POST /user', e)
     return NextResponse.json({ error: 'Erro ao criar conta.' }, { status: 500 })
   }
 }

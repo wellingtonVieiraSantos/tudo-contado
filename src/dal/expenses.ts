@@ -66,8 +66,24 @@ export const findExpenseById = (expenseId: string) => {
   })
 }
 
-export const createExpense = (data: Prisma.ExpenseCreateInput) =>
-  prisma.expense.create({ data })
+export const findExpensesByMonthRange = async (
+  userId: string,
+  monthRange: Date
+) => {
+  return await prisma.$queryRaw<{ month: string; total: number }[]>`
+  SELECT DATE_TRUNC('month', "expenseDate") AS month,
+        SUM(value)::int as total
+  FROM "Expense"
+  WHERE "userId" = ${userId}
+    AND "expenseDate" >= ${monthRange}
+  GROUP BY month
+  ORDER BY month DESC;
+  `
+}
+
+export const createExpense = (data: Prisma.ExpenseCreateInput) => {
+  return prisma.expense.create({ data })
+}
 
 export const updateExpenseById = (
   expenseId: string,

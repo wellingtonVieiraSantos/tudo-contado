@@ -1,1 +1,4 @@
 status despesa como step3, caso seja pago, ai sim ir para pagamento, caso seja pendente ou atrasado, pular pagamento.
+
++ criar um get inicial para incomes e expenses com take 10 e desc, e filtrar por get de mes.
++ no dashboard get dos incomes e expenses dos ultimos 6 meses

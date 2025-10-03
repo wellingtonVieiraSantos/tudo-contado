@@ -20,21 +20,19 @@ import {
   ArrowLeft,
   ArrowRight,
   BadgeDollarSign,
-  BoneIcon,
   Bus,
   Cpu,
   Cross,
   Drama,
+  Ellipsis,
   GraduationCap,
   Heart,
   House,
   PawPrint,
-  Plus,
   Refrigerator,
   Shirt,
   Wallet
 } from 'lucide-react'
-import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Stepper } from './Stepper'
 import { Divider } from '@/components/ui/Divider'
@@ -54,16 +52,11 @@ export const FormStepOne = ({
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors }
   } = useForm<expenseFormStepOne>({
     resolver: zodResolver(step1Schema),
     defaultValues: formData
   })
-
-  useEffect(() => {
-    reset(formData)
-  }, [formData, reset])
 
   const categoryICon = [
     House,
@@ -77,7 +70,7 @@ export const FormStepOne = ({
     Drama,
     PawPrint,
     BadgeDollarSign,
-    Plus
+    Ellipsis
   ]
 
   const categories = Object.keys(CategoryType).map((key, i) => ({
@@ -131,10 +124,11 @@ export const FormStepOne = ({
               type='single'
               onValueChange={field.onChange}
               value={field.value}
-              className='grid-cols-2 sm:grid-cols-3'
+              className='grid-cols-2 sm:grid-cols-4'
             >
               {categories.map(category => (
                 <ToggleGroupItem
+                  key={category.type}
                   value={category.type}
                   className='text-sm flex-col'
                 >

@@ -1,6 +1,7 @@
 import z from 'zod'
 
 export const incomeSchema = z.object({
+  id: z.string().optional(),
   value: z.coerce
     .number({ message: 'Campo obrigatório' })
     .positive({ message: 'Apenas valores positivos' })
@@ -9,7 +10,9 @@ export const incomeSchema = z.object({
     }),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
   type: z.enum(['FIXED', 'VARIABLE']),
-  dateString: z
-    .string()
-    .refine(val => !isNaN(Date.parse(val)), { message: 'Data inválida' })
+  date: z.coerce.date({
+    errorMap: (issue, { defaultError }) => ({
+      message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
+    })
+  })
 })

@@ -20,7 +20,7 @@ export default function Cadastro() {
     value: undefined,
     description: '',
     category: 'OTHER',
-    paymentMethod: 'PIX',
+    paymentMethod: undefined,
     creditCardId: undefined,
     installments: undefined,
     expenseDate: new Date(),

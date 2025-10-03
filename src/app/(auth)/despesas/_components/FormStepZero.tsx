@@ -45,6 +45,7 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
               type='single'
               onValueChange={field.onChange}
               value={field.value}
+              className='py-10'
             >
               <ToggleGroupItem value='PAID'>
                 <p className='flex items-center gap-2'>

@@ -1,30 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server'
-import {
-  deleteIncomeById,
-  getIncomes,
-  postIncome,
-  updateIncomeById
-} from '@/dal/incomes'
+import { deleteIncomeByIdService } from '@/services/incomes/deleteIncomeByIdService'
+import { getAllIncomesService } from '@/services/incomes/getAllIncomesService'
+import { postIncomeService } from '@/services/incomes/postIncomeService'
+import { updateIncomeByIdService } from '@/services/incomes/updateIncomeByIdService'
 import { incomeSchema } from '@/validators/formIncome'
-import { format } from 'date-fns'
-import { dataIncomeUpdateProps } from '@/types/income-data-props'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    const rawIncomes = await getIncomes()
+    const income = await getAllIncomesService()
 
-    //normalize value and type to show in component, get in centavos, return in reais
-    const incomes = rawIncomes.map(income => ({
-      ...income,
-      value: income.value / 100,
-      dateString: format(income.date, 'yyyy-MM-dd')
-    }))
-
-    return NextResponse.json({ data: incomes, success: true }, { status: 200 })
+    return NextResponse.json({ data: income, success: true }, { status: 200 })
   } catch (e) {
-    console.log(e)
+    console.error('GET /income', e)
+
     return NextResponse.json(
-      { error: 'Erro ao buscar dados da renda.' },
+      { error: 'Erro ao buscar dados dos rendimentos.' },
       { status: 500 }
     )
   }
@@ -34,27 +24,21 @@ export async function POST(req: NextRequest) {
   try {
     const result = incomeSchema.safeParse(await req.json())
     if (!result.success) {
-      return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Dados inválidos', issues: result.error.issues },
+        { status: 400 }
+      )
     }
 
-    const {
-      type,
-      value: rawValue,
-      dateString: rawDate,
-      description
-    } = result.data
-    const value = rawValue * 100
-    const date = new Date(rawDate)
-
-    const postedIncome = await postIncome(type, value, date, description)
+    const postedIncome = await postIncomeService(result.data)
     return NextResponse.json(
       { success: true, data: postedIncome },
       { status: 201 }
     )
   } catch (e) {
-    console.log(e)
+    console.error('POST /income', e)
     return NextResponse.json(
-      { error: 'Erro ao cadastrar nova renda.' },
+      { error: 'Erro ao cadastrar novo rendimento.' },
       { status: 500 }
     )
   }
@@ -62,27 +46,23 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const {
-      id,
-      type,
-      dateString,
-      value: rawValue,
-      description
-    }: dataIncomeUpdateProps = await req.json()
+    const result = incomeSchema.safeParse(await req.json())
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Dados inválidos', issues: result.error.issues },
+        { status: 400 }
+      )
+    }
 
-    const value = rawValue * 100
-    const date = new Date(dateString + 'T00:00:00')
-    const data = { type, value, description, date }
-
-    const updatedIncome = await updateIncomeById(id, data)
+    const updatedIncome = await updateIncomeByIdService(result.data)
     return NextResponse.json(
       { success: true, data: updatedIncome },
       { status: 201 }
     )
   } catch (e) {
-    console.log(e)
+    console.error('PUT /income', e)
     return NextResponse.json(
-      { error: 'Erro ao atualizar a renda.' },
+      { error: 'Erro ao atualizar o rendimento.' },
       { status: 500 }
     )
   }
@@ -96,13 +76,16 @@ export async function DELETE(req: NextRequest) {
   try {
     if (!id) return NextResponse.json({ success: false }, { status: 404 })
 
-    await deleteIncomeById(id)
+    const deletedIncome = await deleteIncomeByIdService(id)
 
-    return NextResponse.json({ success: true }, { status: 200 })
-  } catch (e) {
-    console.log(e)
     return NextResponse.json(
-      { error: 'Erro ao apagar a renda.' },
+      { success: true, data: deletedIncome },
+      { status: 200 }
+    )
+  } catch (e) {
+    console.error('DEL /income', e)
+    return NextResponse.json(
+      { error: 'Erro ao apagar o rendimento.' },
       { status: 500 }
     )
   }

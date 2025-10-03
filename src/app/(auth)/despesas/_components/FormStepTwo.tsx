@@ -82,7 +82,7 @@ export const FormStepTwo = ({
         Informações de pagamento
       </h2>
       <Divider />
-      <FormField name='paymentMethod' className=''>
+      <FormField name='paymentMethod' className='pt-10'>
         <FormLabel>Forma de pagamento</FormLabel>
         <FormControl asChild>
           <Controller
@@ -174,7 +174,7 @@ export const FormStepTwo = ({
         onClick={() => setStep(99)}
       >
         <Plus />
-        Adicionar novo cartão
+        Adicionar cartão de crédito
       </Button>
       <Stepper step={3} />
       <div className='flex gap-3 justify-between mt-3'>

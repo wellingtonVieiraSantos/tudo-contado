@@ -42,7 +42,7 @@ export const FormStepThree = ({
     <Form onSubmit={handleSubmit(onNext)}>
       <h2 className='py-3 text-center font-poppins'>Informações de data</h2>
       <Divider />
-      <FormField name='expenseDate'>
+      <FormField name='expenseDate' className='pt-10'>
         <FormLabel>Data de compra *</FormLabel>
         <Controller
           name='expenseDate'
@@ -50,7 +50,7 @@ export const FormStepThree = ({
           render={({ field }) => (
             <input
               type='date'
-              className='text-foreground-secondary border p-1 px-2'
+              className='text-foreground-secondary border p-1 px-2 w-fit'
               {...field}
               value={format(field.value, 'yyyy-MM-dd')}
             />
@@ -62,7 +62,7 @@ export const FormStepThree = ({
           </FormMessage>
         )}
       </FormField>
-      <FormField name='dueDate'>
+      <FormField name='dueDate' className='pb-10'>
         <FormLabel>Data de vencimento</FormLabel>
         <Controller
           name='dueDate'
@@ -70,7 +70,7 @@ export const FormStepThree = ({
           render={({ field }) => (
             <input
               type='date'
-              className='text-foreground-secondary border p-1 px-2'
+              className='text-foreground-secondary border p-1 px-2 w-fit'
               {...field}
               value={format(field.value!, 'yyyy-MM-dd')}
             />

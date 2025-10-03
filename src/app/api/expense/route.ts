@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { deleteExpenseById, updateExpenseById } from '@/dal/expenses'
 import { expenseSchema } from '@/validators/formExpense'
 import { postExpenseService } from '@/services/expenses/postExpenseService'
 import { getAllExpensesService } from '@/services/expenses/getAllExpensesService'

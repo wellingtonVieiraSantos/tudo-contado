@@ -185,7 +185,7 @@ export const FormPostCreditCard = ({
           type='button'
           variant='border'
           className='w-full'
-          onClick={() => setStep(2)}
+          onClick={() => setStep(3)}
         >
           <X />
           Cancelar

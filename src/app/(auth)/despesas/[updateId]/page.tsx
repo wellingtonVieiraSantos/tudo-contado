@@ -27,9 +27,10 @@ export default function Atualização() {
     if (data) {
       const cleaned = {
         ...data,
-        installments: data.installments ?? undefined,
         expenseDate: data.expenseDate,
-
+        paymentMethod: data.payments[0]?.method ?? undefined,
+        installments: data.payments[0]?.installments ?? undefined,
+        creditCardId: data.payments[0]?.creditCard ?? undefined,
         dueDate: data.dueDate || new Date()
       }
       setFormData(cleaned)
@@ -96,8 +97,8 @@ export default function Atualização() {
         </Link>
         <span>Atualização de despesa</span>
       </div>
-      <Card className='w-full m-auto lg:w-2xl'>
-        <CardContent className='p-4'>{renderStep()}</CardContent>
+      <Card className='w-full m-auto lg:w-3xl'>
+        <CardContent className='p-4 w-full'>{renderStep()}</CardContent>
       </Card>
     </div>
   )

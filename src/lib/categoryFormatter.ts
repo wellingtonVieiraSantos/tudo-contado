@@ -12,7 +12,7 @@ export const CateroryTypeRenamed = {
   ENTERTAINMENT: 'Lazer',
   PETS: 'Pets',
   FINANCIAL: 'Financeiro',
-  OTHER: 'Outros'
+  OTHER: 'Outro'
 }
 
 export const categoryFormatter = (category: keyof typeof CategoryType) => {

@@ -2,30 +2,48 @@ import { CateroryTypeRenamed } from '@/lib/categoryFormatter'
 import { months } from '@/lib/dashboardMonths'
 import { dataFormatter } from '@/lib/dataFormatter'
 import { ApiResponse } from '@/types/api-response'
-import { dashboardDataProps } from '@/types/dashboard-data-props'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-const fetchDashboard = async () => {
-  const response = await fetch('api/dashboard')
+const fetchSumExpenses = async () => {
+  const response = await fetch('api/expense/summary')
   if (!response.ok) {
-    throw new Error('Falha ao buscar Rendimentos')
+    throw new Error('Falha ao buscar soma dos gastos.')
   }
-  return response.json() as Promise<ApiResponse<dashboardDataProps>>
+  return response.json()
+}
+
+const fetchSumIncomes = async () => {
+  const response = await fetch('api/income/summary')
+  if (!response.ok) {
+    throw new Error('Falha ao buscar soma dos ganhos.')
+  }
+  return response.json()
 }
 
 export const useGetDashboard = () => {
-  const {
-    data: response,
-    isLoading,
-    error,
-    refetch
-  } = useQuery({
-    queryKey: ['dashboard'],
-    queryFn: fetchDashboard
+  const { data: responseExpense, isLoading } = useQuery({
+    queryKey: ['sumExpense'],
+    queryFn: fetchSumExpenses
+  })
+  const { data: responseIncome } = useQuery({
+    queryKey: ['sumIncome'],
+    queryFn: fetchSumIncomes
   })
 
-  const recentTransactions = useMemo(() => {
+  console.log(responseExpense)
+
+  const sumExpenseActualMonth = useMemo(() => {
+    return responseExpense?.data[0]?.total ?? 0
+  }, [responseExpense?.data[0]?.total])
+
+  const sumIncome = useMemo(() => {
+    return responseIncome?.data.sum ?? 0
+  }, [responseIncome?.data.sum])
+
+  return { sumExpenseActualMonth, sumIncome, isLoading }
+
+  /* const recentTransactions = useMemo(() => {
     const incomeArray =
       response?.data?.income.map(i => {
         return {
@@ -128,5 +146,5 @@ export const useGetDashboard = () => {
     isLoading,
     error,
     refetch
-  }
+  } */
 }
