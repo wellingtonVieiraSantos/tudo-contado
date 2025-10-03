@@ -20,9 +20,9 @@ export const ChartLine = ({
   lineChartData
 }: {
   lineChartData: {
-    incomeAmountPerMonth: number | null
-    expenseAmountPerMonth: number | null
-  }[]
+    incomeAmountPerMonth: number[]
+    expenseAmountPerMonth: number[]
+  }
 }) => {
   return (
     <Card className='flex flex-col p-2 lg:col-start-2 lg:col-end-3 lg:row-start-3 lg:row-end-4 xl:col-start-1 xl:col-end-3 xl:row-end-5'>
@@ -40,14 +40,14 @@ export const ChartLine = ({
           }}
           series={[
             {
-              data: [...lineChartData.map(data => data.incomeAmountPerMonth)],
+              data: [...lineChartData.incomeAmountPerMonth.map(data => data)],
               label: 'Rendimentos',
               showMark: false,
               color: 'oklch(0.8729 0.1535 163.22)',
               valueFormatter
             },
             {
-              data: [...lineChartData.map(data => data.expenseAmountPerMonth)],
+              data: [...lineChartData.expenseAmountPerMonth.map(data => data)],
               label: 'Despesas',
               showMark: false,
               color: 'oklch(0.7368 0.2078 25.33)',

@@ -1,9 +1,9 @@
-import { getSumIncomesValuesPerMonthService } from '@/services/incomes/getSumIncomesValuesPerMonthService'
+import { getSumIncomesValuesByMonthRangeService } from '@/services/incomes/getSumIncomesValuesByMonthRangeService'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    const income = await getSumIncomesValuesPerMonthService()
+    const income = await getSumIncomesValuesByMonthRangeService()
 
     if (!income)
       return NextResponse.json(

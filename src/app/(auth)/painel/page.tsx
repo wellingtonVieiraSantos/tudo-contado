@@ -60,7 +60,13 @@ const cardBrand = [
 ]
 
 export default function Dashboard() {
-  const { isLoading, sumExpenseActualMonth, sumIncome } = useGetDashboard()
+  const {
+    isLoading,
+    sumExpenseActualMonth,
+    sumIncomeActualMonth,
+    lineChartData,
+    pieChartData
+  } = useGetDashboard()
 
   if (isLoading) return <Loading />
 
@@ -80,7 +86,7 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent className='flex flex-col md:items-center gap-6 justify-center lg:-mt-10 lg:h-full'>
           <div className='absolute top-2 right-1'>
-            {sumIncome - sumExpenseActualMonth > 0 ? (
+            {sumIncomeActualMonth - sumExpenseActualMonth > 0 ? (
               <Trophy strokeWidth={1.2} className='size-7 lg:text-warning' />
             ) : (
               <AlertTriangle
@@ -91,19 +97,19 @@ export default function Dashboard() {
           </div>
           <h2
             className={`text-3xl tracking-wide text-center ${
-              sumIncome - sumExpenseActualMonth < 0
+              sumIncomeActualMonth - sumExpenseActualMonth < 0
                 ? 'lg:text-destructive'
                 : 'lg:text-success'
             }`}
           >
-            {valueFormatter(sumIncome - sumExpenseActualMonth)}
+            {valueFormatter(sumIncomeActualMonth - sumExpenseActualMonth)}
           </h2>
           <div className='flex justify-center gap-2 flex-wrap lg:gap-6'>
             <div className='tracking-wide flex items-center gap-3'>
               <TrendingUp className='text-success size-6' />
               <p className='font-montserrat flex flex-col text-sm'>
                 <span className='text-[12px] font-poppins'>Rendimentos:</span>{' '}
-                {valueFormatter(sumIncome)}
+                {valueFormatter(sumIncomeActualMonth)}
               </p>
             </div>
             <div className=' tracking-wide flex items-center gap-3'>
@@ -200,10 +206,10 @@ export default function Dashboard() {
           )} */}
         </CardContent>
       </Card>
-      {/* 
+
       <ChartLine lineChartData={lineChartData} />
 
-      <ChartPie pieChartData={pieChartData} /> */}
+      <ChartPie pieChartData={pieChartData} />
 
       <Card className='overflow-hidden p-2 lg:col-start-2 lg:col-end-3 lg:row-start-4 lg:row-end-5 xl:col-start-3 xl:row-start-3 '>
         <CardHeader>

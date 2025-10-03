@@ -1,9 +1,9 @@
-import { getSumExpensesValuesByMonthRangeService } from '@/services/expenses/getSumExpenseValuesByMonthRangeService'
+import { getActualMonthExpensesByCategoryService } from '@/services/expenses/getActualMonthExpensesByCategoryService'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    const expense = await getSumExpensesValuesByMonthRangeService()
+    const expense = await getActualMonthExpensesByCategoryService()
 
     if (!expense)
       return NextResponse.json(
@@ -13,9 +13,9 @@ export async function GET() {
 
     return NextResponse.json({ data: expense, success: true }, { status: 200 })
   } catch (e) {
-    console.error('GET /expense/summary', e)
+    console.error('GET /expense/by-category', e)
     return NextResponse.json(
-      { error: 'Erro ao buscar soma das despesas.' },
+      { error: 'Erro ao buscar soma das despesas por categoria.' },
       { status: 500 }
     )
   }

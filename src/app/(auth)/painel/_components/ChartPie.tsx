@@ -6,21 +6,28 @@ import {
   CardTitle
 } from '@/components/ui/Card'
 import { Divider } from '@/components/ui/Divider'
+import { categoryFormatter } from '@/lib/categoryFormatter'
 import { chartsTooltipClasses } from '@mui/x-charts/ChartsTooltip'
 import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart'
+import { CategoryType } from '@prisma/client'
 
 export const ChartPie = ({
   pieChartData
 }: {
-  pieChartData: {
-    expenseAmounthPerCategory: {
-      id: number
-      value: number
-      label: string
-    }[]
-    total: number
-  }
+  pieChartData:
+    | {
+        _sum: number
+        category: CategoryType
+      }[]
 }) => {
+  const chartData = pieChartData.map((item, i) => ({
+    id: i,
+    value: item._sum,
+    label: categoryFormatter(item.category)
+  }))
+
+  const total = pieChartData.reduce((acc, cur) => acc + cur._sum, 0)
+
   return (
     <Card className='flex flex-col p-2 lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-5 xl:col-start-2 xl:col-end-3 xl:row-start-2 xl:row-end-3'>
       <CardHeader>
@@ -36,9 +43,8 @@ export const ChartPie = ({
           }}
           series={[
             {
-              arcLabel: item =>
-                `${((item.value * 100) / pieChartData.total).toFixed(1)}%`,
-              data: pieChartData.expenseAmounthPerCategory,
+              arcLabel: item => `${((item.value * 100) / total).toFixed(1)}%`,
+              data: chartData,
               highlightScope: { fade: 'global', highlight: 'item' },
               faded: {
                 innerRadius: 30,

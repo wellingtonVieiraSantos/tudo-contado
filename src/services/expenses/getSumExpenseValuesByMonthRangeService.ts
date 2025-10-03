@@ -1,15 +1,10 @@
 import { findExpensesByMonthRange } from '@/dal/expenses'
 import { requireUser } from '@/lib/require-user'
-import { subMonths } from 'date-fns'
 
-export const getSumExpensesValuesByMonthRangeService = async (
-  qtdMonth: number
-) => {
+export const getSumExpensesValuesByMonthRangeService = async () => {
   const { id } = await requireUser()
 
-  const monthRange = subMonths(new Date(), qtdMonth)
-
-  const expense = await findExpensesByMonthRange(id!, monthRange)
+  const expense = await findExpensesByMonthRange(id!)
 
   const normalizedExpense = expense.map(exp => ({
     ...exp,

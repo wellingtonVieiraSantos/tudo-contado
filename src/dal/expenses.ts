@@ -66,18 +66,38 @@ export const findExpenseById = (expenseId: string) => {
   })
 }
 
-export const findExpensesByMonthRange = async (
+export const findActualMonthExpensesByCategory = async (
   userId: string,
-  monthRange: Date
+  startOfMonth: Date,
+  endOfMonth: Date
 ) => {
-  return await prisma.$queryRaw<{ month: string; total: number }[]>`
-  SELECT DATE_TRUNC('month', "expenseDate") AS month,
-        SUM(value)::int as total
-  FROM "Expense"
-  WHERE "userId" = ${userId}
-    AND "expenseDate" >= ${monthRange}
-  GROUP BY month
-  ORDER BY month DESC;
+  return await prisma.expense.groupBy({
+    by: ['category'],
+    _sum: { value: true },
+    where: {
+      userId,
+      expenseDate: {
+        gte: startOfMonth,
+        lte: endOfMonth
+      }
+    }
+  })
+}
+
+export const findExpensesByMonthRange = async (userId: string) => {
+  return await prisma.$queryRaw<{ month: Date; total: number }[]>`
+    SELECT gs.month,
+           COALESCE(SUM(e.value), 0)::int AS total
+    FROM generate_series(
+      DATE_TRUNC('month', CURRENT_DATE) - interval '5 months',
+      DATE_TRUNC('month', CURRENT_DATE),
+      interval '1 month'
+    ) AS gs(month)
+    LEFT JOIN "Expense" e
+      ON DATE_TRUNC('month', e."expenseDate") = gs.month
+     AND e."userId" = ${userId}
+    GROUP BY gs.month
+    ORDER BY gs.month ASC;
   `
 }
 

@@ -1,48 +1,86 @@
 import { CateroryTypeRenamed } from '@/lib/categoryFormatter'
-import { months } from '@/lib/dashboardMonths'
-import { dataFormatter } from '@/lib/dataFormatter'
 import { ApiResponse } from '@/types/api-response'
+import { CategoryType } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-const fetchSumExpenses = async (qtdMonth: number) => {
-  const response = await fetch(`api/expense/summary?qtdMonth=${qtdMonth}`)
+const fetchSumExpenses = async () => {
+  const response = await fetch(`api/expense/summary`)
   if (!response.ok) {
     throw new Error('Falha ao buscar soma dos gastos.')
   }
-  return response.json()
+  return response.json() as Promise<
+    ApiResponse<{ month: Date; total: number }[]>
+  >
 }
 
 const fetchSumIncomes = async () => {
-  const response = await fetch(`api/income/summary/`)
+  const response = await fetch(`api/income/summary`)
   if (!response.ok) {
     throw new Error('Falha ao buscar soma dos ganhos.')
   }
-  return response.json()
+  return response.json() as Promise<
+    ApiResponse<{ month: Date; total: number }[]>
+  >
 }
 
-export const useGetDashboard = (qtdMonth: number = 0) => {
+const fetchSumExpensesByCategory = async () => {
+  const response = await fetch(`api/expense/by-category`)
+  if (!response.ok) {
+    throw new Error('Falha ao buscar soma dos gastos por categoria.')
+  }
+  return response.json() as Promise<
+    ApiResponse<
+      {
+        _sum: number
+        category: CategoryType
+      }[]
+    >
+  >
+}
+
+export const useGetDashboard = () => {
   const { data: responseExpense, isLoading } = useQuery({
-    queryKey: ['sumExpense', qtdMonth],
-    queryFn: () => fetchSumExpenses(qtdMonth)
+    queryKey: ['sumExpensesByMonth'],
+    queryFn: fetchSumExpenses
+  })
+
+  const { data: responseExpensebyCategory } = useQuery({
+    queryKey: ['sumExpensesByCategory'],
+    queryFn: fetchSumExpensesByCategory
   })
 
   const { data: responseIncome } = useQuery({
-    queryKey: ['sumIncome'],
+    queryKey: ['sumIncomeByMonth'],
     queryFn: fetchSumIncomes
   })
 
-  console.log(responseExpense)
-
   const sumExpenseActualMonth = useMemo(() => {
-    return responseExpense?.data[0]?.total ?? 0
-  }, [responseExpense?.data[0]?.total])
+    return responseExpense!.data[responseExpense!.data.length - 1].total
+  }, [responseExpense?.data[1]?.total])
 
-  const sumIncome = useMemo(() => {
-    return responseIncome?.data.sum ?? 0
-  }, [responseIncome?.data.sum])
+  const sumIncomeActualMonth = useMemo(() => {
+    return responseIncome!.data[responseIncome!.data.length - 1].total
+  }, [responseIncome?.data[1]?.total])
 
-  return { sumExpenseActualMonth, sumIncome, isLoading }
+  const lineChartData = useMemo(() => {
+    const expenseAmountPerMonth = responseExpense!.data.map(exp => exp.total)
+    const incomeAmountPerMonth = responseIncome!.data.map(inc => inc.total)
+
+    return { incomeAmountPerMonth, expenseAmountPerMonth }
+  }, [responseExpense?.data, responseIncome?.data])
+
+  const pieChartData = useMemo(() => {
+    return responseExpensebyCategory!.data
+  }, [responseExpensebyCategory?.data])
+
+  return {
+    sumExpenseActualMonth,
+    sumIncomeActualMonth,
+    isLoading,
+    lineChartData,
+    pieChartData
+  }
 
   /* const recentTransactions = useMemo(() => {
     const incomeArray =

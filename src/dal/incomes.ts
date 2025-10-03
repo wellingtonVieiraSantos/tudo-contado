@@ -32,15 +32,21 @@ export const findIncomeById = async (incomeId: string) => {
   })
 }
 
-export const sumIncomesValuesPerMonth = (
-  userId: string,
-  startDate: Date,
-  endDate: Date
-) => {
-  return prisma.income.aggregate({
-    _sum: { value: true },
-    where: { userId, date: { gte: startDate, lte: endDate } }
-  })
+export const findIncomesByMonthRange = async (userId: string) => {
+  return await prisma.$queryRaw<{ month: Date; total: number }[]>`
+    SELECT gs.month,
+           COALESCE(SUM(i.value), 0)::int AS total
+    FROM generate_series(
+      DATE_TRUNC('month', CURRENT_DATE) - interval '5 months',
+      DATE_TRUNC('month', CURRENT_DATE),
+      interval '1 month'
+    ) AS gs(month)
+    LEFT JOIN "Income" i
+      ON DATE_TRUNC('month', i."date") = gs.month
+     AND i."userId" = ${userId}
+    GROUP BY gs.month
+    ORDER BY gs.month ASC;
+  `
 }
 
 export const createIncome = async (data: Prisma.IncomeCreateInput) => {
