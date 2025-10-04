@@ -1,9 +1,9 @@
 import { queryClient } from '@/lib/query-client'
-import { dataIncomeUpdateProps, incomeType } from '@/types/income-data-props'
+import { IncomeDataProps, incomeType } from '@/types/income-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
-const fetchIncome = async (data: dataIncomeUpdateProps) => {
+const fetchIncome = async (data: IncomeDataProps) => {
   const res = await fetch('api/income', {
     method: 'PUT',
     body: JSON.stringify(data),
@@ -15,8 +15,9 @@ const fetchIncome = async (data: dataIncomeUpdateProps) => {
 
 export const usePutIncome = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedIncome, setSelectedIncome] =
-    useState<null | dataIncomeUpdateProps>(null)
+  const [selectedIncome, setSelectedIncome] = useState<null | IncomeDataProps>(
+    null
+  )
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchIncome,
@@ -33,7 +34,7 @@ export const usePutIncome = () => {
     setIsOpen(false)
   }
 
-  const openUpdateModal = (income: dataIncomeUpdateProps) => {
+  const openUpdateModal = (income: IncomeDataProps) => {
     setSelectedIncome(income)
     setIsOpen(true)
   }

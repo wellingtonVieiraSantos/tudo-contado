@@ -5,7 +5,4 @@ import { z } from 'zod'
 export type incomeType = z.infer<typeof incomeSchema>
 
 /* get */
-export type IncomeDataProps = incomeType & { id: string; date: Date }
-
-/* put */
-export type dataIncomeUpdateProps = Omit<IncomeDataProps, 'date'>
+export type IncomeDataProps = incomeType & { id: string }

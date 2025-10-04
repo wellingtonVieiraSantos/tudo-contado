@@ -29,7 +29,7 @@ import { Button } from '@/components/ui/Button'
 import { Send, Wallet } from 'lucide-react'
 import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { dataIncomeUpdateProps, incomeType } from '@/types/income-data-props'
+import { incomeType } from '@/types/income-data-props'
 import { useEffect } from 'react'
 
 type ModalIncomeProps = {
@@ -38,7 +38,7 @@ type ModalIncomeProps = {
   onSubmit: (data: incomeType) => Promise<void>
   isPending: boolean
   children?: React.ReactNode
-  selectedIncomeUpdate?: dataIncomeUpdateProps
+  selectedIncomeUpdate?: incomeType
 }
 
 export const ModalIncome = ({
@@ -65,7 +65,7 @@ export const ModalIncome = ({
         value: selectedIncomeUpdate.value,
         description: selectedIncomeUpdate.description,
         type: selectedIncomeUpdate.type,
-        dateString: selectedIncomeUpdate.dateString
+        date: selectedIncomeUpdate.date
       })
     }
   }, [selectedIncomeUpdate, reset])
@@ -139,13 +139,13 @@ export const ModalIncome = ({
               <input
                 type='date'
                 id='dateString'
-                {...register('dateString')}
+                {...register('date')}
                 className='text-foreground-secondary border p-1 px-2'
               />
             </FormControl>
-            {errors.dateString && (
+            {errors.date && (
               <FormMessage className='text-destructive'>
-                {errors.dateString?.message}
+                {errors.date?.message}
               </FormMessage>
             )}
           </FormField>
