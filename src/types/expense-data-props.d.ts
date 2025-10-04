@@ -5,6 +5,7 @@ import {
   step2Schema,
   step3Schema
 } from '@/validators/formExpense'
+import { PaymentMethodType, StatusType, CategoryType } from '@prisma/client'
 import { z } from 'zod'
 
 /* post */
@@ -17,3 +18,30 @@ export type expenseFormStepThree = z.infer<typeof step3Schema>
 
 /* put */
 export type ExpenseUpdateProps = expenseType & { id: string }
+
+export type expensesGetType = {
+  value: number
+  payments:
+    | {
+        amount: number
+        id: string
+        installments: number | null
+        paidAt: Date
+        creditCard: {
+          id: string
+          lastNumber: string
+        } | null
+        method: PaymentMethodType
+      }[]
+    | null
+  id: string
+  status: StatusType
+  description: string
+  category: CategoryType
+  dueDate: Date | null
+  expenseDate: Date
+}
+
+export type expenseWithPaymentsType = expenseType & {
+  payments?: expensesGetType['payments']
+}

@@ -9,26 +9,8 @@ export const expenseSchemaInitial = z.object({
     .refine(val => Math.round(val * 100) / 100 === val, {
       message: 'Máximo 2 casas decimais'
     }),
-  amount: z.coerce
-    .number({ message: 'Campo obrigatório' })
-    .positive({ message: 'Apenas valores positivos' })
-    .refine(val => Math.round(val * 100) / 100 === val, {
-      message: 'Máximo 2 casas decimais'
-    })
-    .optional(),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
   category: z.nativeEnum(CategoryType),
-  paymentMethod: z.nativeEnum(PaymentMethodType),
-  creditCardId: z
-    .string({
-      message: 'Para pagamento com crédito é necessário vincular um cartão.'
-    })
-    .optional(),
-  installments: z.coerce
-    .number({ message: 'O valor deve ser um número' })
-    .min(1, { message: 'Parcelas devem ser entre 1 e 36' })
-    .max(36)
-    .optional(),
   dueDate: z.coerce
     .date({
       errorMap: (issue, { defaultError }) => ({
@@ -41,14 +23,32 @@ export const expenseSchemaInitial = z.object({
       message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
     })
   }),
+  status: z.nativeEnum(StatusType),
+  amount: z.coerce
+    .number({ message: 'Campo obrigatório' })
+    .positive({ message: 'Apenas valores positivos' })
+    .refine(val => Math.round(val * 100) / 100 === val, {
+      message: 'Máximo 2 casas decimais'
+    })
+    .optional(),
+  paymentMethod: z.nativeEnum(PaymentMethodType),
+  creditCardId: z
+    .string({
+      message: 'Para pagamento com crédito é necessário vincular um cartão.'
+    })
+    .optional(),
+  installments: z.coerce
+    .number({ message: 'O valor deve ser um número' })
+    .min(1, { message: 'Parcelas devem ser entre 1 e 36' })
+    .max(36)
+    .optional(),
   paidAt: z.coerce
     .date({
       errorMap: (issue, { defaultError }) => ({
         message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
       })
     })
-    .optional(),
-  status: z.nativeEnum(StatusType)
+    .optional()
 })
 
 export const expenseSchema = expenseSchemaInitial.refine(

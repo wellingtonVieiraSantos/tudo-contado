@@ -2,7 +2,10 @@
 import { Card, CardContent } from '@/components/ui/Card'
 import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
-import { expenseType } from '@/types/expense-data-props'
+import {
+  expenseType,
+  expenseWithPaymentsType
+} from '@/types/expense-data-props'
 import { expenseSchema } from '@/validators/formExpense'
 import { FormStepOne } from '../_components/FormStepOne'
 import { FormStepTwo } from '../_components/FormStepTwo'
@@ -21,17 +24,19 @@ export default function Atualização() {
   const { data } = useGetExpenseById(updateId)
 
   const [step, setStep] = useState(1)
-  const [formData, setFormData] = useState<Partial<expenseType>>({ ...data })
+  const [formData, setFormData] = useState<Partial<expenseType>>({})
 
   useEffect(() => {
     if (data) {
+      const typedData = data as expenseWithPaymentsType
+      const payment = typedData.payments?.[0]
+
       const cleaned = {
-        ...data,
-        expenseDate: data.expenseDate,
-        paymentMethod: data.payments[0]?.method ?? undefined,
-        installments: data.payments[0]?.installments ?? undefined,
-        creditCardId: data.payments[0]?.creditCard ?? undefined,
-        dueDate: data.dueDate || new Date()
+        ...typedData,
+        paymentMethod: payment?.method ?? undefined,
+        installments: payment?.installments ?? undefined,
+        creditCardId: payment?.creditCard?.id ?? undefined,
+        dueDate: typedData.dueDate || new Date()
       }
       setFormData(cleaned)
     }
