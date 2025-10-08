@@ -97,11 +97,11 @@ export default function Income() {
                 isPending={isPending}
                 onSubmit={onSubmit}
               >
-                <Button
-                  size='icon'
-                  className='size-9 bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-110 hover:bg-button-foreground'
-                >
+                <Button className='bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-105 hover:bg-button-foreground font-poppins'>
                   <Plus />
+                  <span className='hidden md:inline-block'>
+                    Novo rendimento
+                  </span>
                 </Button>
               </ModalIncome>
             </CardContent>

@@ -31,6 +31,7 @@ import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { incomeType } from '@/types/income-data-props'
 import { useEffect } from 'react'
+import { format } from 'date-fns'
 
 type ModalIncomeProps = {
   isOpen: boolean
@@ -135,14 +136,18 @@ export const ModalIncome = ({
           </FormField>
           <FormField name='date'>
             <FormLabel>Data de obtenção</FormLabel>
-            <FormControl asChild>
-              <input
-                type='date'
-                id='dateString'
-                {...register('date')}
-                className='text-foreground-secondary border p-1 px-2'
-              />
-            </FormControl>
+            <Controller
+              name='date'
+              control={control}
+              render={({ field }) => (
+                <input
+                  type='date'
+                  className='text-foreground-secondary border p-1 px-2 w-fit'
+                  {...field}
+                  value={format(field.value || new Date(), 'yyyy-MM-dd')}
+                />
+              )}
+            />
             {errors.date && (
               <FormMessage className='text-destructive'>
                 {errors.date?.message}
