@@ -62,7 +62,7 @@ const CardContent = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
       <div
-        className={twMerge(`px-4 py-1 flex flex-col gap-1.5`, className)}
+        className={twMerge(`px-2 py-1 flex flex-col gap-1.5`, className)}
         ref={ref}
         {...props}
       />

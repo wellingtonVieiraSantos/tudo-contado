@@ -43,6 +43,26 @@ type FormStepOneProps = {
   setStep: React.Dispatch<React.SetStateAction<number>>
 }
 
+const categoryICon = [
+  House,
+  Refrigerator,
+  Bus,
+  GraduationCap,
+  Cross,
+  Shirt,
+  Cpu,
+  Heart,
+  Drama,
+  PawPrint,
+  BadgeDollarSign,
+  Ellipsis
+]
+
+export const categories = Object.keys(CategoryType).map((key, i) => ({
+  type: key as CategoryType,
+  icon: categoryICon[i]
+}))
+
 export const FormStepOne = ({
   formData,
   onNext,
@@ -58,25 +78,6 @@ export const FormStepOne = ({
     defaultValues: formData
   })
 
-  const categoryICon = [
-    House,
-    Refrigerator,
-    Bus,
-    GraduationCap,
-    Cross,
-    Shirt,
-    Cpu,
-    Heart,
-    Drama,
-    PawPrint,
-    BadgeDollarSign,
-    Ellipsis
-  ]
-
-  const categories = Object.keys(CategoryType).map((key, i) => ({
-    type: key as CategoryType,
-    icon: categoryICon[i]
-  }))
   return (
     <Form onSubmit={handleSubmit(onNext)}>
       <h2 className='py-3 text-center font-poppins'>Informações básicas</h2>

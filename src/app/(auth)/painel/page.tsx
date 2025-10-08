@@ -16,7 +16,8 @@ import {
   CreditCard,
   Check,
   Ban,
-  TriangleAlert
+  TriangleAlert,
+  BanknoteArrowUp
 } from 'lucide-react'
 
 import valueFormatter from '@/lib/valueFormatter'
@@ -45,6 +46,8 @@ import { Badge } from '@/components/ui/Badge'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { categories } from '../despesas/_components/FormStepOne'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },
@@ -157,7 +160,7 @@ export default function Dashboard() {
                 {CreditCardData?.map((card, i) => (
                   <CarouselItem
                     key={card.id}
-                    className='flex flex-col items-center pb-1 gap-3 cursor-pointer'
+                    className='flex flex-col items-center gap-3 cursor-pointer'
                   >
                     <div
                       className={`relative m-auto w-full max-w-max h-45 aspect-video rounded-xl bg-radial
@@ -198,7 +201,7 @@ export default function Dashboard() {
                       <ProgressBar
                         value={(card.amount / card.creditLimit) * 100}
                       />
-                      <div className='flex justify-between items-center'>
+                      <div className='flex justify-between items-center pt-1'>
                         <div className='flex flex-col text-sm'>
                           <span className='text-foreground-secondary'>
                             Utilizado
@@ -246,29 +249,40 @@ export default function Dashboard() {
             </p>
           )}
           <ScrollArea orientation='vertical' className='lg:h-100'>
-            <div className='grid gap-2'>
+            <div className='grid gap-3'>
               {recentTransactions?.map(trans => (
                 <div
                   key={trans.id}
-                  className='flex justify-between p-2 border border-disabled/30 rounded'
+                  className='grid grid-cols-[2fr_1fr] sm:p-2 gap-3'
                 >
-                  <div className='flex items-center gap-3'>
-                    {trans.type === 'income' ? (
-                      <TrendingUp className='text-success' />
-                    ) : (
-                      <TrendingDown className='text-destructive' />
-                    )}
+                  <div className='flex gap-2'>
+                    <div className='size-15 shrink-0 grid place-items-center rounded-xl bg-hover'>
+                      {trans.type === 'income' ? (
+                        <BanknoteArrowUp className='text-success' size={30} />
+                      ) : (
+                        (() => {
+                          const category = categories.find(
+                            c => c.type === trans.category
+                          )
+                          const Icon = category?.icon
+                          return Icon ? (
+                            <Icon className='text-badge' size={30} />
+                          ) : null
+                        })()
+                      )}
+                    </div>
                     <div className='grid gap-2'>
-                      <p className='text-sm'>
-                        {format(trans.date, 'dd-MM-yy')}
-                      </p>
-                      <h3 className='font-poppins text-foreground-secondary'>
+                      <h3 className='font-poppins line-clamp-1'>
                         {trans.description}
                       </h3>
-                      <p>{valueFormatter(trans.value)}</p>
+                      <p className='text-[12px] text-foreground-secondary'>
+                        {format(trans.date, "dd 'de' MMM, yyy", {
+                          locale: ptBR
+                        })}
+                      </p>
                     </div>
                   </div>
-                  <div className='text-right grid gap-2 pr-4'>
+                  <div className='text-right flex flex-col items-end justify-center gap-2 sm:pr-4'>
                     {trans.type === 'expense' && (
                       <Badge
                         variant={
@@ -278,21 +292,21 @@ export default function Dashboard() {
                             ? 'warning'
                             : 'error'
                         }
-                        className='gap-2'
+                        className='gap-1 text-[10px] px-1 h-5'
                       >
                         {trans.status === 'PAID' ? (
-                          <Check size={18} />
+                          <Check size={15} strokeWidth={1.4} />
                         ) : trans.status === 'PENDING' ? (
-                          <TriangleAlert size={18} />
+                          <TriangleAlert size={15} strokeWidth={1.4} />
                         ) : (
-                          <Ban size={18} />
+                          <Ban size={15} strokeWidth={1.4} />
                         )}
                         {paymentStatusFormatter(trans.status)}
                       </Badge>
                     )}
-                    {trans.type === 'expense' && (
-                      <p>{categoryFormatter(trans.category)}</p>
-                    )}
+                    <p className='font-montserrat text-sm sm:text-lg line-clamp-1'>
+                      {valueFormatter(trans.value)}
+                    </p>
                   </div>
                 </div>
               ))}
