@@ -44,7 +44,6 @@ import {
 
 import { Badge } from '@/components/ui/Badge'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
-import { categoryFormatter } from '@/lib/categoryFormatter'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { categories } from '../despesas/_components/FormStepOne'

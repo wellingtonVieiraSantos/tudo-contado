@@ -20,14 +20,12 @@ type FormStepThreeProps = {
   formData: Partial<expenseType>
   onNext: (data: expenseFormStepThree) => void
   setStep: React.Dispatch<React.SetStateAction<number>>
-  isPending: boolean
 }
 
 export const FormStepThree = ({
   formData,
   onNext,
-  setStep,
-  isPending
+  setStep
 }: FormStepThreeProps) => {
   const {
     handleSubmit,
@@ -88,14 +86,10 @@ export const FormStepThree = ({
           <ArrowLeft />
           Anterior
         </Button>
-        <FormSubmit asChild>
-          <Button
-            type='submit'
-            disabled={isPending}
-            variant={isPending ? 'loading' : 'default'}
-          >
-            {isPending ? 'Cadastrando...' : 'Cadastrar'}
-            <Send />
+        <FormSubmit asChild type='submit'>
+          <Button>
+            Proximo
+            <ArrowRight />
           </Button>
         </FormSubmit>
       </div>

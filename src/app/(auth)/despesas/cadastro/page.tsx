@@ -11,6 +11,7 @@ import { usePostExpense } from '../_hooks/use-post-expense'
 import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
 import { FormStepZero } from '../_components/FormStepZero'
+import { FormStepResume } from '../_components/FormStepResume'
 
 export default function Cadastro() {
   const [step, setStep] = useState(1)
@@ -69,6 +70,14 @@ export default function Cadastro() {
       case 4:
         return (
           <FormStepThree
+            formData={formDataCadastro}
+            onNext={handleNextStep}
+            setStep={setStep}
+          />
+        )
+      case 5:
+        return (
+          <FormStepResume
             formData={formDataCadastro}
             onNext={handleFinish}
             setStep={setStep}

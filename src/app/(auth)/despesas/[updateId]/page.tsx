@@ -16,6 +16,7 @@ import { usePutExpense } from '../_hooks/use-put-expense'
 import { useGetExpenseById } from '../_hooks/use-get-expense-by-id'
 import { useParams } from 'next/navigation'
 import { FormStepZero } from '../_components/FormStepZero'
+import { FormStepResume } from '../_components/FormStepResume'
 
 export default function Atualização() {
   const { updateId }: { updateId: string } = useParams()
@@ -80,6 +81,15 @@ export default function Atualização() {
       case 4:
         return (
           <FormStepThree
+            formData={formData}
+            onNext={handleNextStep}
+            setStep={setStep}
+          />
+        )
+
+      case 5:
+        return (
+          <FormStepResume
             formData={formData}
             onNext={handleFinish}
             setStep={setStep}
