@@ -266,7 +266,7 @@ export default function Dashboard() {
                           )
                           const Icon = category?.icon
                           return Icon ? (
-                            <Icon className='text-badge' size={30} />
+                            <Icon className='text-destructive/80' size={30} />
                           ) : null
                         })()
                       )}

@@ -28,7 +28,7 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
 
   return (
     <Form onSubmit={handleSubmit(onNext)}>
-      <FormField name='kind' className='items-center'>
+      <FormField name='status' className='items-center'>
         <FormLabel className='flex flex-col text-center gap-3'>
           <p>Tipo de despesa</p>
           <span className='text-sm text-foreground-secondary text-balance'>
@@ -53,8 +53,8 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
                   Imediata
                 </p>
                 <span className='text-sm text-foreground-secondary text-balance'>
-                  Para gastos imediatos, como uma compra de um lanche, uma ida
-                  ao mercado e etc.
+                  Para gastos já pagos imediatamente, como uma compra de um
+                  lanche, uma ida ao mercado e etc.
                 </span>
               </ToggleGroupItem>
               <ToggleGroupItem value='PENDING'>
@@ -63,8 +63,8 @@ export const FormStepZero = ({ formData, onNext }: FormStepZeroProps) => {
                   Prevista
                 </p>
                 <span className='text-sm text-foreground-secondary text-balance'>
-                  Para gastos programados, como por exemplo uma conta de luz,
-                  boletos e etc.
+                  Para gastos à pagar de forma futura, como uma conta de luz,
+                  boletos ou compras no crédito.
                 </span>
               </ToggleGroupItem>
             </ToggleGroup>

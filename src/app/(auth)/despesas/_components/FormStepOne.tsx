@@ -145,7 +145,7 @@ export const FormStepOne = ({
       <div className='flex gap-3 justify-between mt-3'>
         <Button variant='border' type='button' onClick={() => setStep(1)}>
           <ArrowLeft />
-          Anterior
+          Voltar
         </Button>
         <FormSubmit asChild type='submit'>
           <Button>

@@ -98,7 +98,7 @@ export const FormPostCreditCard = ({
       </FormField>
 
       <FormField name='holder'>
-        <FormLabel>Nome *</FormLabel>
+        <FormLabel>Nome no cartão*</FormLabel>
         <FormControl asChild>
           <Input
             icon={User}
