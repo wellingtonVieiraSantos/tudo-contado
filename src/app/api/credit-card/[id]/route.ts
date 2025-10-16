@@ -1,4 +1,4 @@
-import { getCreditCardById } from '@/dal/creditCard'
+import { getCreditCardByIdService } from '@/services/creditCard/getCreditCardByIdService'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
@@ -8,7 +8,7 @@ export async function GET(
   try {
     const { id } = await params
 
-    const creditCard = await getCreditCardById(id)
+    const creditCard = await getCreditCardByIdService(id)
 
     if (!creditCard)
       return NextResponse.json(

@@ -1,14 +1,10 @@
 import { prisma } from '@/lib/prisma'
-import { requireUser } from '../lib/require-user'
-import { creditCardType } from '@/types/creditcard-data-props'
 import { Prisma } from '@prisma/client'
 
-export const getCreditCard = async () => {
-  const user = await requireUser()
-
+export const findCreditCard = async (userId: string) => {
   return await prisma.creditCard.findMany({
     where: {
-      user: { id: user.id }
+      user: { id: userId }
     },
     select: {
       id: true,
@@ -32,9 +28,7 @@ export const getCreditCard = async () => {
   })
 }
 
-export const getCreditCardById = async (id: string) => {
-  await requireUser()
-
+export const findCreditCardById = async (id: string) => {
   return await prisma.creditCard.findUnique({
     where: { id },
     select: {
@@ -49,7 +43,8 @@ export const getCreditCardById = async (id: string) => {
       payment: {
         select: {
           id: true,
-          paidAt: true
+          paidAt: true,
+          amount: true
         },
         orderBy: {
           paidAt: 'desc'
@@ -59,28 +54,14 @@ export const getCreditCardById = async (id: string) => {
   })
 }
 
-export const postCreditCard = async (data: creditCardType) => {
-  const user = await requireUser()
-
-  return await prisma.creditCard.create({
-    data: {
-      lastNumber: data.lastNumber,
-      creditLimit: data.creditLimit,
-      holder: data.holder,
-      expMonth: data.expMonth,
-      expYear: data.expYear,
-      billingDay: data.billingDay,
-      cardBrand: data.cardBrand,
-      user: { connect: { id: user.id } }
-    }
-  })
+export const createCreditCard = async (data: Prisma.CreditCardCreateInput) => {
+  return await prisma.creditCard.create({ data })
 }
 
 export const updateCreditCardById = async (
   id: string,
   data: Prisma.CreditCardUpdateInput
 ) => {
-  await requireUser()
   return await prisma.creditCard.update({
     where: { id },
     data
@@ -88,6 +69,5 @@ export const updateCreditCardById = async (
 }
 
 export const deleteCreditCardById = async (id: string) => {
-  await requireUser()
   return await prisma.creditCard.delete({ where: { id } })
 }

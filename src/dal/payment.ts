@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 
-export const findPaymentByExpenseId = (paymentId: string) => {
-  return prisma.payment.findUnique({
+export const findPaymentByExpenseId = async (paymentId: string) => {
+  return await prisma.payment.findUnique({
     where: { id: paymentId },
     select: {
       id: true,
@@ -20,15 +20,15 @@ export const findPaymentByExpenseId = (paymentId: string) => {
   })
 }
 
-export const createPayment = (data: Prisma.PaymentCreateInput) => {
-  return prisma.payment.create({ data })
+export const createPayment = async (data: Prisma.PaymentCreateInput) => {
+  return await prisma.payment.create({ data })
 }
 
-export const updatePaymentById = (
+export const updatePaymentById = async (
   paymentId: string,
   data: Prisma.PaymentUpdateInput
 ) => {
-  return prisma.payment.update({
+  return await prisma.payment.update({
     where: { id: paymentId },
     data
   })

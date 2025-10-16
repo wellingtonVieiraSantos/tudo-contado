@@ -7,17 +7,15 @@ import {
 import { requireUser } from '@/lib/require-user'
 import { expenseType } from '@/types/expense-data-props'
 
-export const updateExpenseByIdService = async (data: expenseType) => {
+export const updateExpenseByIdService = async (rawData: expenseType) => {
   await requireUser()
 
-  const expense = await updateExpenseById(data.id!, {
-    value: data.value * 100,
-    expenseDate: data.expenseDate,
-    dueDate: data.dueDate,
-    description: data.description,
-    category: data.category,
-    status: data.status
-  })
+  const data = {
+    ...rawData,
+    value: rawData.value * 100
+  }
+
+  const expense = await updateExpenseById(data.id!, data)
 
   if (data.status === 'PAID') {
     const existingPayment = await findPaymentByExpenseId(expense.id)

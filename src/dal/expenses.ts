@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 
-export const findExpenses = (userId: string) => {
-  return prisma.expense.findMany({
+export const findExpenses = async (userId: string) => {
+  return await prisma.expense.findMany({
     where: {
       user: { id: userId }
     },
@@ -36,8 +36,8 @@ export const findExpenses = (userId: string) => {
   })
 }
 
-export const findExpenseById = (expenseId: string) => {
-  return prisma.expense.findUnique({
+export const findExpenseById = async (expenseId: string) => {
+  return await prisma.expense.findUnique({
     where: { id: expenseId },
     select: {
       id: true,
@@ -101,20 +101,20 @@ export const findExpensesByMonthRange = async (userId: string) => {
   `
 }
 
-export const createExpense = (data: Prisma.ExpenseCreateInput) => {
-  return prisma.expense.create({ data })
+export const createExpense = async (data: Prisma.ExpenseCreateInput) => {
+  return await prisma.expense.create({ data })
 }
 
-export const updateExpenseById = (
+export const updateExpenseById = async (
   expenseId: string,
   data: Prisma.ExpenseUpdateInput
 ) => {
-  return prisma.expense.update({
+  return await prisma.expense.update({
     where: { id: expenseId },
     data
   })
 }
 
-export const deleteExpenseById = (expenseId: string) => {
-  return prisma.expense.delete({ where: { id: expenseId } })
+export const deleteExpenseById = async (expenseId: string) => {
+  return await prisma.expense.delete({ where: { id: expenseId } })
 }

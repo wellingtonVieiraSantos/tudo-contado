@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { CategoryType, StatusType } from '@prisma/client'
 
 export const findLastTransactions = async (userId: string) => {
-  return prisma.$queryRaw<
+  return await prisma.$queryRaw<
     {
       id: string
       value: number

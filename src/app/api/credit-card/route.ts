@@ -1,24 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-import {
-  deleteCreditCardById,
-  getCreditCard,
-  postCreditCard,
-  updateCreditCardById
-} from '@/dal/creditCard'
 import { creditCardSchema } from '@/validators/formCreditCard'
 import { Prisma } from '@prisma/client'
+import { getAllCreditCardService } from '@/services/creditCard/getAllCreditCardService'
+import { postCreditCardService } from '@/services/creditCard/postCreditCardService'
+import { updateCreditCardByIdService } from '@/services/creditCard/updateCreditCardByIdService'
+import { deleteCreditCardByIdService } from '@/services/creditCard/deleteCreditCardByIdService'
 
 export async function GET() {
   try {
-    const creditCard = await getCreditCard()
+    const creditCard = await getAllCreditCardService()
 
     return NextResponse.json(
       { data: creditCard, success: true },
       { status: 200 }
     )
   } catch (e) {
-    console.log(e)
+    console.error('GET /credit-card', e)
     return NextResponse.json(
       { error: 'Erro ao buscar dados dos cartões.' },
       { status: 500 }
@@ -30,19 +27,13 @@ export async function POST(req: NextRequest) {
   try {
     const result = creditCardSchema.safeParse(await req.json())
     if (!result.success) {
-      return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Dados inválidos', issues: result.error.issues },
+        { status: 400 }
+      )
     }
 
-    const { creditLimit: rawValue } = result.data
-
-    const creditLimit = rawValue * 100
-
-    const data = {
-      ...result.data,
-      creditLimit
-    }
-
-    const postedCreditCard = await postCreditCard(data)
+    const postedCreditCard = await postCreditCardService(result.data)
     return NextResponse.json(
       {
         success: true,
@@ -52,6 +43,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     )
   } catch (e) {
+    console.error('POST /credit-card', e)
     if (
       e instanceof Prisma.PrismaClientKnownRequestError &&
       e.code === 'P2002'
@@ -72,23 +64,19 @@ export async function PUT(req: NextRequest) {
   try {
     const result = creditCardSchema.safeParse(await req.json())
     if (!result.success) {
-      return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Dados inválidos', issues: result.error.issues },
+        { status: 400 }
+      )
     }
 
-    const { creditLimit: rawValue } = result.data
-
-    const creditLimit = rawValue * 100
-
-    const id = result.data.id!
-    const data = { ...result.data, creditLimit }
-
-    const updatedExpense = await updateCreditCardById(id, data)
+    const updatedExpense = await updateCreditCardByIdService(result.data)
     return NextResponse.json(
       { success: true, data: updatedExpense },
       { status: 201 }
     )
   } catch (e) {
-    console.log(e)
+    console.error('PUT /credit-card', e)
     return NextResponse.json(
       { error: 'Erro ao atualizar o cartão.' },
       { status: 500 }
@@ -104,11 +92,14 @@ export async function DELETE(req: NextRequest) {
   try {
     if (!id) return NextResponse.json({ success: false }, { status: 404 })
 
-    await deleteCreditCardById(id)
+    const deletedCreditCard = await deleteCreditCardByIdService(id)
 
-    return NextResponse.json({ success: true }, { status: 200 })
+    return NextResponse.json(
+      { success: true, data: deletedCreditCard },
+      { status: 200 }
+    )
   } catch (e) {
-    console.log(e)
+    console.error('DEL /expense', e)
     return NextResponse.json(
       { error: 'Erro ao apagar o cartão.' },
       { status: 500 }
