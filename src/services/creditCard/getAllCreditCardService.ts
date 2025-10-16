@@ -9,7 +9,7 @@ export const getAllCreditCardService = async () => {
   const creditCard = rawCreditCard.map(cc => ({
     ...cc,
     creditLimit: cc.creditLimit / 100,
-    payments: cc.payment.map(pay => ({
+    payment: cc.payment.map(pay => ({
       ...pay,
       amount: pay.amount / 100
     }))

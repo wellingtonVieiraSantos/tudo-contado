@@ -117,7 +117,6 @@ export const useGetDashboard = () => {
     return responseCard?.data.map(card => {
       return {
         ...card,
-        creditLimit: card.creditLimit / 100,
         amount: card.payment.reduce(
           (acc, current) => acc + current.amount,
           0
