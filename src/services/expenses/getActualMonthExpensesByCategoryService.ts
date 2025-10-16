@@ -5,7 +5,7 @@ import { endOfMonth, startOfMonth } from 'date-fns'
 export const getActualMonthExpensesByCategoryService = async () => {
   const { id } = await requireUser()
 
-  const today = new Date('2025-09-10')
+  const today = new Date()
 
   const start = startOfMonth(today)
   const end = endOfMonth(today)
