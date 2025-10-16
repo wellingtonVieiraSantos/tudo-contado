@@ -36,8 +36,8 @@ export default function Cadastro() {
     setStep(prev => prev + 1)
   }
 
-  const handleFinish = (data: Partial<expenseType>) => {
-    const result = expenseSchema.safeParse({ ...formDataCadastro, ...data })
+  const handleFinish = () => {
+    const result = expenseSchema.safeParse(formDataCadastro)
     if (result.success) {
       onSubmit(result.data)
     } else {

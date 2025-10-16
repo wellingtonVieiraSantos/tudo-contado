@@ -19,7 +19,7 @@ import { useGetCreditcardById } from '../../cartao-credito/_hooks/use-get-credit
 
 type FormStepThreeProps = {
   formData: Partial<expenseType>
-  onNext: (data: Partial<expenseType>) => void
+  onNext: () => void
   setStep: React.Dispatch<React.SetStateAction<number>>
   isPending: boolean
 }
@@ -30,14 +30,10 @@ export const FormStepResume = ({
   setStep,
   isPending
 }: FormStepThreeProps) => {
-  const { handleSubmit } = useForm<expenseType>({
-    resolver: zodResolver(expenseSchema)
-  })
-
   const { data } = useGetCreditcardById(formData.creditCardId)
 
   return (
-    <Form onSubmit={handleSubmit(onNext)}>
+    <div>
       <CardHeader>
         <CardTitle>Resumo</CardTitle>
         <CardDescription>
@@ -122,17 +118,16 @@ export const FormStepResume = ({
           <ArrowLeft />
           Anterior
         </Button>
-        <FormSubmit asChild>
-          <Button
-            type='submit'
-            disabled={isPending}
-            variant={isPending ? 'loading' : 'default'}
-          >
-            {isPending ? 'Cadastrando...' : 'Cadastrar'}
-            <Send />
-          </Button>
-        </FormSubmit>
+        <Button
+          type='submit'
+          disabled={isPending}
+          variant={isPending ? 'loading' : 'default'}
+          onClick={onNext}
+        >
+          {isPending ? 'Cadastrando...' : 'Cadastrar'}
+          <Send />
+        </Button>
       </div>
-    </Form>
+    </div>
   )
 }

@@ -21,11 +21,11 @@ import { FormStepResume } from '../_components/FormStepResume'
 export default function Atualização() {
   const { updateId }: { updateId: string } = useParams()
 
-  const { isPending, handleUpdateExpense } = usePutExpense()
-  const { data } = useGetExpenseById(updateId)
-
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<Partial<expenseType>>({})
+
+  const { data } = useGetExpenseById(updateId)
+  const { isPending, handleUpdateExpense } = usePutExpense()
 
   useEffect(() => {
     if (data) {
@@ -34,7 +34,7 @@ export default function Atualização() {
 
       const cleaned = {
         ...typedData,
-        paymentMethod: payment?.method ?? undefined,
+        paymentMethod: payment?.method ?? 'PIX',
         installments: payment?.installments ?? undefined,
         creditCardId: payment?.creditCard?.id ?? undefined,
         dueDate: typedData.dueDate || new Date()
@@ -45,12 +45,11 @@ export default function Atualização() {
 
   const handleNextStep = (data: Partial<expenseType>) => {
     setFormData(prev => ({ ...prev, ...data }))
-
     setStep(prev => prev + 1)
   }
 
-  const handleFinish = (data: Partial<expenseType>) => {
-    const result = expenseSchema.safeParse({ ...formData, ...data })
+  const handleFinish = () => {
+    const result = expenseSchema.safeParse(formData)
     if (result.success) {
       handleUpdateExpense(result.data)
     } else {

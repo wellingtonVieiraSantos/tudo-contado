@@ -1,6 +1,7 @@
 import { queryClient } from '@/lib/query-client'
 import { expenseType } from '@/types/expense-data-props'
 import { useMutation } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 
 const fetchExpense = async (data: expenseType) => {
   const res = await fetch('/api/expense/', {
@@ -13,10 +14,13 @@ const fetchExpense = async (data: expenseType) => {
 }
 
 export const usePutExpense = () => {
+  const router = useRouter()
+
   const { mutate, isPending } = useMutation({
     mutationFn: fetchExpense,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] })
+      router.replace('/despesas')
     }
   })
 
