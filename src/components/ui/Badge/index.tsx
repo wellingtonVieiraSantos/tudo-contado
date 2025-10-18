@@ -2,7 +2,7 @@ import { forwardRef, HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 const variantClasses = {
-  default: 'bg-badge text-badge-foreground',
+  default: 'bg-badge/30 border-badge text-badge-foreground',
   outline: 'border',
   info: 'bg-info/30 border-info text-info-foreground',
   success: 'bg-success/20 border-success text-success-foreground',
@@ -21,8 +21,8 @@ const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     return (
       <div
         className={twMerge(
-          `min-w-6 h-6 w-fit px-2 text-sm flex justify-center items-center gap-1 border
-          rounded-md pointer-events-none`,
+          `min-w-5 h-5 w-fit px-2 text-sm flex justify-center items-center gap-1 border
+        rounded-md pointer-events-none`,
           variantClasses[variant],
           className
         )}

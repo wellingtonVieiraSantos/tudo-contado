@@ -10,6 +10,7 @@ import { categoryFormatter } from '@/lib/categoryFormatter'
 import { chartsTooltipClasses } from '@mui/x-charts/ChartsTooltip'
 import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart'
 import { CategoryType } from '@prisma/client'
+import { useState } from 'react'
 
 export const ChartPie = ({
   pieChartData
@@ -21,6 +22,7 @@ export const ChartPie = ({
       }[]
     | undefined
 }) => {
+  const [highlightedItem, setHighlightedItem] = useState<number | null>(null)
   if (!pieChartData) return
 
   const chartData = pieChartData.map((item, i) => ({
@@ -46,7 +48,11 @@ export const ChartPie = ({
           }}
           series={[
             {
-              arcLabel: item => `${((item.value * 100) / total).toFixed(1)}%`,
+              arcLabel: item => {
+                return item.id === highlightedItem
+                  ? `${((item.value * 100) / total).toFixed(2)}%`
+                  : ''
+              },
               data: chartData,
               highlightScope: { fade: 'global', highlight: 'item' },
               faded: {
@@ -65,6 +71,9 @@ export const ChartPie = ({
           ]}
           width={200}
           height={200}
+          onHighlightChange={highlightedItem => {
+            setHighlightedItem(highlightedItem?.dataIndex ?? null)
+          }}
           sx={{
             '& .MuiChartsLegend-root': {
               color: 'oklch(0.99 0.0146 98.28)',

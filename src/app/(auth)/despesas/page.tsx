@@ -37,8 +37,10 @@ import { categoryFormatter } from '@/lib/categoryFormatter'
 import Loading from './loading'
 import { useGetExpenses } from './_hooks/use-get-expenses'
 import { useDelExpense } from './_hooks/use-del-expense'
-import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import Link from 'next/link'
+import { ptBR } from 'date-fns/locale'
+import { categories } from './_components/FormStepOne'
+import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 
 export default function Expense() {
   const {
@@ -110,7 +112,9 @@ export default function Expense() {
             <Card key={expense.id} className=' w-full py-3'>
               <CardHeader>
                 <CardTitle>
-                  {format(expense.expenseDate, 'dd-MM-yyyy')}
+                  {format(expense.expenseDate, "dd 'de' MMMM, yyy", {
+                    locale: ptBR
+                  })}
                 </CardTitle>
                 <CardDescription>
                   {categoryFormatter(expense.category)}
@@ -118,26 +122,49 @@ export default function Expense() {
                 <Divider />
               </CardHeader>
               <CardContent className='gap-2'>
-                <div className='flex flex-col gap-1'>
-                  <p className='text-xl font-montserrat tracking-wide flex items-center gap-2'>
-                    <TrendingDown className='text-destructive' />
-                    {formatedCurrency(expense.value)}
-                  </p>
-                  <p className='text-foreground-secondary'>
-                    {expense.description}
-                  </p>
+                <div className='flex items-center gap-3'>
+                  <div className='size-20 shrink-0 grid place-items-center rounded-xl bg-hover border border-disabled'>
+                    {(() => {
+                      const category = categories.find(
+                        c => c.type === expense.category
+                      )
+                      const Icon = category?.icon
+                      return Icon ? (
+                        <Icon
+                          className='text-destructive/80'
+                          size={35}
+                          strokeWidth={1.5}
+                        />
+                      ) : null
+                    })()}
+                  </div>
+                  <div className='grid gap-2 w-full'>
+                    <p className='text-2xl font-montserrat tracking-wider'>
+                      {formatedCurrency(expense.value)}
+                    </p>
+                    <p className='text-foreground-secondary line-clamp-1'>
+                      {expense.description}
+                    </p>
+                    <Badge variant='outline'>
+                      {paymentMethodFormatter(expense.payments[0].method)}
+                    </Badge>
+                  </div>
                 </div>
                 <Badge
                   variant={
-                    paymentStatusFormatter(expense.status) === 'Pago'
+                    expense.status === 'PAID'
                       ? 'success'
+                      : expense.status === 'PENDING'
+                      ? 'warning'
                       : 'error'
                   }
-                  className='absolute top-3 right-3 px-4'
+                  className='absolute top-3 right-3'
                 >
-                  {paymentStatusFormatter(expense.status) === 'Pago'
+                  {expense.status === 'PAID'
                     ? 'Pago'
-                    : 'À pagar'}
+                    : expense.status === 'PENDING'
+                    ? 'À pagar'
+                    : 'Vencido'}
                 </Badge>
               </CardContent>
               <CardFooter>
@@ -155,7 +182,7 @@ export default function Expense() {
                   onClick={() => openDeleteModal(expense)}
                   className='self-end bg-destructive/40 md:px-4'
                 >
-                  <X />
+                  <Trash />
                   <span className='hidden md:inline-block'>Deletar</span>
                 </Button>
               </CardFooter>

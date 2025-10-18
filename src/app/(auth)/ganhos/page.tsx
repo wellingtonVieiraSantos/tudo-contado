@@ -19,8 +19,7 @@ import {
   RefreshCw,
   Trash,
   TrendingUp,
-  TriangleAlert,
-  X
+  TriangleAlert
 } from 'lucide-react'
 
 import formatedCurrency from '@/lib/valueFormatter'
@@ -42,6 +41,7 @@ import { Divider } from '@/components/ui/Divider'
 import Loading from './loading'
 import { usePutIncome } from './_hooks/use-put-income'
 import { usePostIncome } from './_hooks/use-post-income'
+import { ptBR } from 'date-fns/locale'
 
 export default function Income() {
   const { isLoading, filteredIncomes, months, totals, filters, updateFilters } =
@@ -123,21 +123,33 @@ export default function Income() {
           filteredIncomes?.map((income, i) => (
             <Card key={i} className=' w-full py-3'>
               <CardHeader>
-                <CardTitle>{format(income.date, 'dd-MM-yyyy')}</CardTitle>
+                <CardTitle>
+                  {format(income.date, "dd 'de' MMMM, yyy", {
+                    locale: ptBR
+                  })}
+                </CardTitle>
                 <CardDescription>Entrada de rendimento</CardDescription>
                 <Divider />
               </CardHeader>
               <CardContent className='gap-2'>
-                <div className='flex flex-col gap-1'>
-                  <p className='text-xl font-montserrat tracking-wide flex items-center gap-2'>
-                    <TrendingUp className='text-success' />
-                    {formatedCurrency(income.value)}
-                  </p>
-                  <p className='text-foreground-secondary'>
-                    {income.description}
-                  </p>
+                <div className='flex items-center gap-3'>
+                  <div className='size-20 shrink-0 grid place-items-center rounded-xl bg-hover border border-disabled'>
+                    <BanknoteArrowUp
+                      className='text-success '
+                      size={35}
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                  <div className='grid gap-2'>
+                    <p className='text-2xl font-montserrat tracking-wider'>
+                      {formatedCurrency(income.value)}
+                    </p>
+                    <p className='text-foreground-secondary line-clamp-1'>
+                      {income.description}
+                    </p>
+                  </div>
                 </div>
-                <Badge variant='info' className='absolute top-3 right-3 px-4'>
+                <Badge variant='info' className='absolute top-3 right-3'>
                   {income.type === 'FIXED' ? 'Fixo' : 'Variável'}
                 </Badge>
               </CardContent>
@@ -146,7 +158,7 @@ export default function Income() {
                   variant='border'
                   onClick={() => openUpdateModal(income)}
                   disabled={isOpenPut}
-                  className='self-end bg-info/40 px-4'
+                  className='self-end bg-info/40 md:px-4'
                 >
                   <RefreshCw />
                   <span className='hidden md:inline-block'>Atualizar</span>
@@ -154,9 +166,9 @@ export default function Income() {
                 <Button
                   variant='border'
                   onClick={() => openDeleteModal(income)}
-                  className='self-end bg-destructive/40 px-4'
+                  className='self-end bg-destructive/40 md:px-4'
                 >
-                  <X />
+                  <Trash />
                   <span className='hidden md:inline-block'>Deletar</span>
                 </Button>
               </CardFooter>
