@@ -126,10 +126,7 @@ export const useGetDashboard = () => {
   }, [responseCard?.data])
 
   const recentTransactions = useMemo(() => {
-    const rawData = responseTransactions?.data
-    return rawData?.map(data => {
-      return { ...data, date: data.date.split('T')[0] }
-    })
+    return responseTransactions?.data
   }, [responseTransactions?.data])
 
   return {

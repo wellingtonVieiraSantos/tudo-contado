@@ -73,8 +73,6 @@ export default function Income() {
 
   if (isLoading) return <Loading />
 
-  console.log(filteredIncomes)
-
   return (
     <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 lg:pb-0'>
       <UserBarSettings title='Renda' />
