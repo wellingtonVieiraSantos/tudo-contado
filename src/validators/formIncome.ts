@@ -1,3 +1,4 @@
+import { isValid, parseISO } from 'date-fns'
 import z from 'zod'
 
 export const incomeSchema = z.object({
@@ -10,9 +11,8 @@ export const incomeSchema = z.object({
     }),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
   type: z.enum(['FIXED', 'VARIABLE']),
-  date: z.coerce.date({
-    errorMap: (issue, { defaultError }) => ({
-      message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-    })
-  })
+  date: z
+    .string()
+    .regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Formato inválido')
+    .refine(value => isValid(parseISO(value)), 'Data inválida')
 })

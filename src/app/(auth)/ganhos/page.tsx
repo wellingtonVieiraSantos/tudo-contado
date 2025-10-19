@@ -1,6 +1,6 @@
 'use client'
 
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import {
   Card,
   CardContent,
@@ -73,6 +73,8 @@ export default function Income() {
 
   if (isLoading) return <Loading />
 
+  console.log(filteredIncomes)
+
   return (
     <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 lg:pb-0'>
       <UserBarSettings title='Renda' />
@@ -124,9 +126,11 @@ export default function Income() {
             <Card key={i} className=' w-full py-3'>
               <CardHeader>
                 <CardTitle>
-                  {format(income.date, "dd 'de' MMMM, yyy", {
-                    locale: ptBR
-                  })}
+                  {format(
+                    parse(income.date, 'yyyy-MM-dd', new Date()),
+                    "dd 'de' MMMM 'de' yyyy",
+                    { locale: ptBR }
+                  )}
                 </CardTitle>
                 <CardDescription>Entrada de rendimento</CardDescription>
                 <Divider />

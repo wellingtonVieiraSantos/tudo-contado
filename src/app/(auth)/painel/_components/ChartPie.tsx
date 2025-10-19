@@ -57,10 +57,10 @@ export const ChartPie = ({
               highlightScope: { fade: 'global', highlight: 'item' },
               faded: {
                 innerRadius: 30,
-                additionalRadius: -30,
+                additionalRadius: -10,
                 color: 'gray'
               },
-              cornerRadius: 5,
+              cornerRadius: 3,
               valueFormatter: item => {
                 return new Intl.NumberFormat('pt-BR', {
                   style: 'currency',
@@ -77,7 +77,7 @@ export const ChartPie = ({
           sx={{
             '& .MuiChartsLegend-root': {
               color: 'oklch(0.99 0.0146 98.28)',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: 'bold'
             },
             '& .MuiChartsNoDataOverlay-root': {
@@ -100,11 +100,16 @@ export const ChartPie = ({
                   },
                 [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.valueCell}`]:
                   {
-                    color: 'oklch(0.99 0.0146 98.28)'
+                    color: 'oklch(0.99 .0146 98.28)'
+                  },
+                [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.markContainer}`]:
+                  {
+                    display: 'none'
                   },
                 [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.labelCell}`]:
                   {
-                    color: 'oklch(0.99 0.0146 98.28)'
+                    color: 'oklch(0.99 0.0146 98.28)',
+                    fontSize: '12px'
                   }
               }
             },

@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { expenseType } from '@/types/expense-data-props'
+import { expensesWithPaymentType } from '@/types/expense-data-props'
 import { ApiResponse } from '@/types/api-response'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 
@@ -12,7 +12,7 @@ const fetchExpenses = async () => {
   if (!response.ok) {
     throw new Error('Falha ao buscar despesas')
   }
-  return response.json() as Promise<ApiResponse<expenseType[]>>
+  return response.json() as Promise<ApiResponse<expensesWithPaymentType[]>>
 }
 
 export const useGetExpenses = () => {
@@ -51,10 +51,19 @@ export const useGetExpenses = () => {
     const data = response?.data ?? []
     if (!data.length) return []
 
+    const normalizedData = data.map(dt => {
+      return {
+        ...dt,
+        expenseDate: dt.expenseDate.split('T')[0],
+        dueDate: dt.dueDate?.split('T')[0],
+        paidAt: dt.paidAt?.split('T')[0]
+      }
+    })
+
     const isMonthActive = filters.month !== 'default'
     const isStatusActive = filters.status !== 'all'
 
-    return data.filter(expense => {
+    return normalizedData.filter(expense => {
       const matchesMonth =
         !isMonthActive ||
         format(expense.expenseDate, "MMMM 'de' yyyy", { locale: ptBR }) ===

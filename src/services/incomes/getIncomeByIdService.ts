@@ -10,7 +10,8 @@ export const getIncomeByIdService = async (incomeId: string) => {
   //normalize value  to show in component, get in centavos, return in reais
   const income = {
     ...rawIncome,
-    value: rawIncome.value / 100
+    value: rawIncome.value / 100,
+    date: rawIncome.date.toISOString().split('T')[0]
   }
   return income
 }

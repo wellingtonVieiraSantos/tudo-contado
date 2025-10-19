@@ -10,7 +10,6 @@ import {
 import { expenseFormStepThree, expenseType } from '@/types/expense-data-props'
 import { step3Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
 import { ArrowLeft, ArrowRight, Send } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { Stepper } from './Stepper'
@@ -50,7 +49,8 @@ export const FormStepThree = ({
               type='date'
               className='text-foreground-secondary border p-1 px-2 w-fit'
               {...field}
-              value={format(field.value, 'yyyy-MM-dd')}
+              value={field.value}
+              onChange={e => field.onChange(e.target.value)}
             />
           )}
         />
@@ -70,7 +70,8 @@ export const FormStepThree = ({
               type='date'
               className='text-foreground-secondary border p-1 px-2 w-fit'
               {...field}
-              value={format(field.value!, 'yyyy-MM-dd')}
+              value={field.value}
+              onChange={e => field.onChange(e.target.value)}
             />
           )}
         />

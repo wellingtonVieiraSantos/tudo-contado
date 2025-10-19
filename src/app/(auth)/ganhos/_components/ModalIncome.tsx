@@ -31,7 +31,6 @@ import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { incomeType } from '@/types/income-data-props'
 import { useEffect } from 'react'
-import { format } from 'date-fns'
 
 type ModalIncomeProps = {
   isOpen: boolean
@@ -57,10 +56,7 @@ export const ModalIncome = ({
     reset,
     formState: { errors }
   } = useForm<incomeType>({
-    resolver: zodResolver(incomeSchema),
-    defaultValues: {
-      date: new Date()
-    }
+    resolver: zodResolver(incomeSchema)
   })
 
   useEffect(() => {
@@ -147,7 +143,8 @@ export const ModalIncome = ({
                   type='date'
                   className='text-foreground-secondary border p-1 px-2 w-fit'
                   {...field}
-                  value={format(field.value, 'yyyy-MM-dd')}
+                  value={field.value || new Date().toISOString().split('T')[0]}
+                  onChange={e => field.onChange(e.target.value)}
                 />
               )}
             />

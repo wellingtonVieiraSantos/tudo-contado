@@ -7,7 +7,8 @@ export const updateIncomeByIdService = async (rawData: incomeType) => {
 
   const data = {
     ...rawData,
-    value: rawData.value * 100
+    value: rawData.value * 100,
+    date: new Date(`${rawData.date}T00:00:00.000Z`)
   }
 
   const income = await updateIncomeById(data.id!, data)

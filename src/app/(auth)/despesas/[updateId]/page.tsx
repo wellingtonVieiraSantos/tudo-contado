@@ -3,8 +3,8 @@ import { Card, CardContent } from '@/components/ui/Card'
 import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
 import {
-  expenseType,
-  expenseWithPaymentsType
+  expensesWithPaymentType,
+  expenseType
 } from '@/types/expense-data-props'
 import { expenseSchema } from '@/validators/formExpense'
 import { FormStepOne } from '../_components/FormStepOne'
@@ -29,7 +29,7 @@ export default function Atualização() {
 
   useEffect(() => {
     if (data) {
-      const typedData = data as expenseWithPaymentsType
+      const typedData = data as expensesWithPaymentType
       const payment = typedData.payments?.[0]
 
       const cleaned = {
@@ -37,7 +37,7 @@ export default function Atualização() {
         paymentMethod: payment?.method ?? 'PIX',
         installments: payment?.installments ?? undefined,
         creditCardId: payment?.creditCard?.id ?? undefined,
-        dueDate: typedData.dueDate || new Date()
+        dueDate: typedData.dueDate || new Date().toISOString().split('T')[0]
       }
       setFormData(cleaned)
     }

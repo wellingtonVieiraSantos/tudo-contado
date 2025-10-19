@@ -1,6 +1,6 @@
 'use client'
 
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import {
   Card,
   CardContent,
@@ -19,8 +19,7 @@ import {
   RefreshCw,
   Trash,
   TrendingDown,
-  TriangleAlert,
-  X
+  TriangleAlert
 } from 'lucide-react'
 import { FilterExpenses } from './_components/FilterExpenses'
 import Image from 'next/image'
@@ -112,9 +111,11 @@ export default function Expense() {
             <Card key={expense.id} className=' w-full py-3'>
               <CardHeader>
                 <CardTitle>
-                  {format(expense.expenseDate, "dd 'de' MMMM, yyy", {
-                    locale: ptBR
-                  })}
+                  {format(
+                    parse(expense.expenseDate, 'yyyy-MM-dd', new Date()),
+                    "dd 'de' MMMM 'de' yyyy",
+                    { locale: ptBR }
+                  )}
                 </CardTitle>
                 <CardDescription>
                   {categoryFormatter(expense.category)}
@@ -146,7 +147,7 @@ export default function Expense() {
                       {expense.description}
                     </p>
                     <Badge variant='outline'>
-                      {paymentMethodFormatter(expense.payments[0].method)}
+                      {paymentMethodFormatter(expense.payments![0].method)}
                     </Badge>
                   </div>
                 </div>

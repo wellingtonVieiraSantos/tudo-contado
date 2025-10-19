@@ -11,18 +11,13 @@ export const expenseSchemaInitial = z.object({
     }),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
   category: z.nativeEnum(CategoryType),
-  dueDate: z.coerce
-    .date({
-      errorMap: (issue, { defaultError }) => ({
-        message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-      })
-    })
+  dueDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido')
     .optional(),
-  expenseDate: z.coerce.date({
-    errorMap: (issue, { defaultError }) => ({
-      message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-    })
-  }),
+  expenseDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
   status: z.nativeEnum(StatusType),
   amount: z.coerce
     .number({ message: 'Campo obrigatório' })
@@ -42,12 +37,9 @@ export const expenseSchemaInitial = z.object({
     .min(1, { message: 'Parcelas devem ser entre 1 e 36' })
     .max(36)
     .optional(),
-  paidAt: z.coerce
-    .date({
-      errorMap: (issue, { defaultError }) => ({
-        message: issue.code === 'invalid_date' ? 'Data inválida' : defaultError
-      })
-    })
+  paidAt: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido')
     .optional()
 })
 

@@ -11,7 +11,7 @@ import valueFormatter from '@/lib/valueFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
@@ -98,17 +98,21 @@ export const FormStepResume = ({
             <span className='block text-sm text-foreground-secondary'>
               Data de compra:
             </span>
-            {format(formData.expenseDate!, "dd 'de' MMMM 'de' yyy", {
-              locale: ptBR
-            })}
+            {format(
+              parse(formData.expenseDate!, 'yyyy-MM-dd', new Date()),
+              "dd 'de' MMMM 'de' yyyy",
+              { locale: ptBR }
+            )}
           </p>
           <p className='mt-1'>
             <span className='block text-sm text-foreground-secondary'>
               Data de Pagamento:
             </span>
-            {format(formData.expenseDate!, "dd 'de' MMMM 'de' yyy", {
-              locale: ptBR
-            })}
+            {format(
+              parse(formData.expenseDate!, 'yyyy-MM-dd', new Date()),
+              "dd 'de' MMMM 'de' yyyy",
+              { locale: ptBR }
+            )}
           </p>
         </div>
       </div>

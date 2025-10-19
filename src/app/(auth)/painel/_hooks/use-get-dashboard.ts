@@ -57,7 +57,7 @@ const fetchLastTransactions = async () => {
         id: string
         value: number
         description: string
-        date: Date
+        date: string
         category: CategoryType
         status: StatusType
         type: 'income' | 'expense'
@@ -126,7 +126,10 @@ export const useGetDashboard = () => {
   }, [responseCard?.data])
 
   const recentTransactions = useMemo(() => {
-    return responseTransactions?.data
+    const rawData = responseTransactions?.data
+    return rawData?.map(data => {
+      return { ...data, date: data.date.split('T')[0] }
+    })
   }, [responseTransactions?.data])
 
   return {

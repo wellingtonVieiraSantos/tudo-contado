@@ -24,8 +24,8 @@ export default function Cadastro() {
     paymentMethod: 'PIX',
     creditCardId: undefined,
     installments: undefined,
-    expenseDate: new Date(),
-    dueDate: new Date(),
+    expenseDate: new Date().toISOString().split('T')[0],
+    dueDate: new Date().toISOString().split('T')[0],
     status: 'PAID'
   })
 

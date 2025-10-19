@@ -19,14 +19,13 @@ export type expenseFormStepThree = z.infer<typeof step3Schema>
 /* put */
 export type ExpenseUpdateProps = expenseType & { id: string }
 
-export type expensesGetType = {
-  value: number
+export type expensesWithPaymentType = expenseType & {
   payments:
     | {
         amount: number
         id: string
         installments: number | null
-        paidAt: Date
+        paidAt: string | null
         creditCard: {
           id: string
           lastNumber: string
@@ -34,14 +33,4 @@ export type expensesGetType = {
         method: PaymentMethodType
       }[]
     | null
-  id: string
-  status: StatusType
-  description: string
-  category: CategoryType
-  dueDate: Date | null
-  expenseDate: Date
-}
-
-export type expenseWithPaymentsType = expenseType & {
-  payments?: expensesGetType['payments']
 }

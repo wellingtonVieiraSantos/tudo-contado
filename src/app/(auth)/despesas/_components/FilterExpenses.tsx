@@ -5,13 +5,13 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/Select'
-import { expenseType } from '@/types/expense-data-props'
+import { expensesWithPaymentType } from '@/types/expense-data-props'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 type FilterExpensesProps = {
   months: string[]
-  filteredExpenses: expenseType[]
+  filteredExpenses: expensesWithPaymentType[]
   filters: {
     month: string
     status: 'all' | 'Pago' | 'Pendente' | 'Atrasado'

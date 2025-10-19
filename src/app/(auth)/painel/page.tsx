@@ -44,7 +44,7 @@ import {
 
 import { Badge } from '@/components/ui/Badge'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { categories } from '../despesas/_components/FormStepOne'
 
@@ -275,9 +275,11 @@ export default function Dashboard() {
                         {trans.description}
                       </h3>
                       <p className='text-[12px] text-foreground-secondary'>
-                        {format(trans.date, "dd 'de' MMM, yyy", {
-                          locale: ptBR
-                        })}
+                        {format(
+                          parse(trans.date, 'yyyy-MM-dd', new Date()),
+                          "dd 'de' MMMM 'de' yyyy",
+                          { locale: ptBR }
+                        )}
                       </p>
                     </div>
                   </div>
