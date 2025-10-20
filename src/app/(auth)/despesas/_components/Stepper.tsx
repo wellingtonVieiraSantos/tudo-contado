@@ -1,5 +1,3 @@
-const stepStage = ['Geral', 'Pagamento', 'Datas', 'Status']
-
 export const Stepper = ({ step }: { step: number }) => {
   return (
     <div className='w-full h-5 flex items-center my-3 space-x-1'>

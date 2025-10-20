@@ -12,7 +12,14 @@ export const updateExpenseByIdService = async (rawData: expenseType) => {
 
   const data = {
     ...rawData,
-    value: rawData.value * 100
+    value: rawData.value * 100,
+    expenseDate: new Date(`${rawData.expenseDate}T00:00:00.000Z`),
+    dueDate: rawData.dueDate
+      ? new Date(`${rawData.dueDate}T00:00:00.000Z`)
+      : undefined,
+    paidAt: rawData.paidAt
+      ? new Date(`${rawData.paidAt}T00:00:00.000Z`)
+      : undefined
   }
 
   const expense = await updateExpenseById(data.id!, data)

@@ -25,14 +25,7 @@ export const useGetExpenseById = (id: string) => {
   })
 
   const data = useMemo(() => {
-    const rawData = response?.data
-
-    return {
-      ...rawData,
-      expenseDate: rawData?.expenseDate.split('T')[0],
-      dueDate: rawData?.dueDate?.split('T')[0],
-      paidAt: rawData?.paidAt?.split('T')[0]
-    }
+    return response?.data
   }, [response?.data])
 
   return {

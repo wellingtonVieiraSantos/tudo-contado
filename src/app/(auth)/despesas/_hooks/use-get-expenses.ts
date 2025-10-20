@@ -51,19 +51,10 @@ export const useGetExpenses = () => {
     const data = response?.data ?? []
     if (!data.length) return []
 
-    const normalizedData = data.map(dt => {
-      return {
-        ...dt,
-        expenseDate: dt.expenseDate.split('T')[0],
-        dueDate: dt.dueDate?.split('T')[0],
-        paidAt: dt.paidAt?.split('T')[0]
-      }
-    })
-
     const isMonthActive = filters.month !== 'default'
     const isStatusActive = filters.status !== 'all'
 
-    return normalizedData.filter(expense => {
+    return data.filter(expense => {
       const matchesMonth =
         !isMonthActive ||
         format(expense.expenseDate, "MMMM 'de' yyyy", { locale: ptBR }) ===
