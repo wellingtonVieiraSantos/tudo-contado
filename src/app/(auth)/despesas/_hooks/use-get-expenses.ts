@@ -62,7 +62,7 @@ export const useGetExpenses = () => {
 
       const matchesMethod =
         !isStatusActive ||
-        paymentMethodFormatter(expense.paymentMethod) === filters.method
+        paymentMethodFormatter(expense.method) === filters.method
 
       return matchesMonth && matchesMethod
     })
@@ -74,11 +74,11 @@ export const useGetExpenses = () => {
       0
     )
     const credit = filteredExpenses
-      .filter(expense => expense.paymentMethod === 'CREDIT')
+      .filter(expense => expense.method === 'CREDIT')
       .reduce((acc, expense) => acc + Number(expense.value), 0)
 
     const debit = filteredExpenses
-      .filter(expense => expense.paymentMethod === 'DEBIT')
+      .filter(expense => expense.method === 'DEBIT')
       .reduce((acc, expense) => acc + Number(expense.value), 0)
 
     return { total, credit, debit }
