@@ -1,6 +1,6 @@
 import { ApiResponse } from '@/types/api-response'
 import { CreditCardWithIdProps } from '@/types/creditcard-data-props'
-import { CategoryType, PaymentMethodType } from '@prisma/client'
+import { CategoryType, IncomeType, PaymentMethodType } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
@@ -74,9 +74,10 @@ const fetchLastTransactions = async () => {
         value: number
         description: string
         date: string
+        type: IncomeType
         category: CategoryType
         method: PaymentMethodType
-        type: 'income' | 'expense'
+        transationKind: 'income' | 'expense'
       }[]
     >
   >

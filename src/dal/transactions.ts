@@ -12,13 +12,13 @@ export const findLastTransactions = async (userId: string) => {
       type: 'income' | 'expense'
     }[]
   >`
-    SELECT id, value, description, date, NULL AS category, NULL as method, 'income' AS type
+    SELECT id, value, description, date, NULL AS category, NULL as method, type, 'income' AS transationKind
     FROM "Income"
     WHERE "userId" = ${userId}
 
     UNION ALL
 
-    SELECT id, value, description, date, category, method, 'expense' AS type
+    SELECT id, value, description, date, category, method, NULL as type, 'expense' AS transationKind
     FROM "Expense"
     WHERE "userId" = ${userId}
 

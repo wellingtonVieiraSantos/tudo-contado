@@ -43,10 +43,11 @@ import {
 } from '@/components/ui/Carousel'
 
 import { Badge } from '@/components/ui/Badge'
-import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { categories } from '../despesas/_components/FormStepTwo'
+import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
+import { incomeTypeFormatter } from '@/lib/paymentTypeFormatter'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },
@@ -256,7 +257,7 @@ export default function Dashboard() {
                 >
                   <div className='flex gap-2'>
                     <div className='size-15 shrink-0 grid place-items-center rounded-xl bg-hover'>
-                      {trans.type === 'income' ? (
+                      {trans.transationKind === 'income' ? (
                         <BanknoteArrowUp className='text-success' size={30} />
                       ) : (
                         (() => {
@@ -284,14 +285,14 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className='text-right flex flex-col items-end justify-center gap-2 sm:pr-4'>
-                    {trans.type === 'expense' && (
+                    {trans.transationKind === 'expense' && (
                       <Badge className='gap-1 text-[10px] px-1 h-5'>
-                        {paymentStatusFormatter(trans.method)}
+                        {paymentMethodFormatter(trans.method)}
                       </Badge>
                     )}
-                    {trans.type === 'income' && (
+                    {trans.transationKind === 'income' && (
                       <Badge className='gap-1 text-[10px] px-1 h-5'>
-                        {paymentStatusFormatter(trans.type)}
+                        {incomeTypeFormatter(trans.type)}
                       </Badge>
                     )}
                     <p className='font-montserrat text-sm sm:text-lg line-clamp-1'>
