@@ -17,12 +17,12 @@ export const postExpenseService = async (rawData: ExpenseProps) => {
     date: data.expenseDate,
     description: data.description,
     category: data.category,
-    method: data.paymentMethod,
+    method: data.method,
     installments: data.installments,
     user: {
       connect: { id: user.id }
     },
-    ...(data.paymentMethod === 'CREDIT' && data.creditCardId
+    ...(data.method === 'CREDIT' && data.creditCardId
       ? { creditCard: { connect: { id: data.creditCardId } } }
       : {})
   }
