@@ -21,7 +21,7 @@ export default function Cadastro() {
     value: undefined,
     description: '',
     category: 'OTHER',
-    paymentMethod: 'DEBIT',
+    method: 'DEBIT',
     creditCardId: undefined,
     installments: undefined,
     date: new Date().toISOString().split('T')[0]
