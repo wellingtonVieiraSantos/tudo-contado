@@ -71,7 +71,7 @@ export const FormStepResume = ({
             <span className='block text-sm text-foreground-secondary'>
               Metodo de pagamento
             </span>
-            {paymentMethodFormatter(formData.paymentMethod!)}
+            {paymentMethodFormatter(formData.method!)}
           </p>
           {data && (
             <p className='font-mono'>

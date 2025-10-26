@@ -39,6 +39,7 @@ import { useDelExpense } from './_hooks/use-del-expense'
 import Link from 'next/link'
 import { ptBR } from 'date-fns/locale'
 import { categories } from './_components/FormStepTwo'
+import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 
 export default function Expense() {
   const {
@@ -110,7 +111,7 @@ export default function Expense() {
             <Card
               key={expense.id}
               className={`w-full py-3 ${
-                expense.paymentMethod === 'CREDIT'
+                expense.method === 'CREDIT'
                   ? 'border-warning/50'
                   : 'border-success/50'
               }`}
@@ -155,7 +156,7 @@ export default function Expense() {
                   </div>
                 </div>
                 <Badge className='absolute top-3 right-3'>
-                  {expense.paymentMethod}
+                  {paymentMethodFormatter(expense.method)}
                 </Badge>
               </CardContent>
               <CardFooter>

@@ -26,16 +26,16 @@ export const FormStepZero = ({ onNext, typed }: FormStepZeroProps) => {
         abaixo.
       </p>
       <Divider className='mt-2' />
-      <div className='flex items-center gap-20 justify-between py-10'>
+      <div className='flex items-center gap-20 justify-between py-5 lg:py-10'>
         <Image
           src='/manage-money.svg'
           alt='desenho de varias representações financeiras.'
           width={1234}
           height={945}
-          className='size-80 grayscale-50'
+          className='hidden lg:block size-80 grayscale-50'
         />
-        <div className='relative h-80 grid text-balance'>
-          <div className='absolute -left-6 top-1/2 -translate-y-1/2 h-[80%] w-[1px] bg-foreground-secondary'>
+        <div className='ml-8 lg:ml-0 relative gap-5 lg:h-80 grid text-balance'>
+          <div className='absolute -left-6 top-1/2 -translate-y-1/2 h-[90%] w-[1px] bg-foreground-secondary'>
             <div className='absolute inset-0 -translate-x-1/2 size-3 bg-foreground rounded-full' />
             <div className='absolute inset-1/3 -translate-y-1/3 -translate-x-1/2 size-3 bg-foreground rounded-full' />
             <div className='absolute top-2/3 -translate-y-2/3 -translate-x-1/2 size-3 bg-foreground rounded-full' />

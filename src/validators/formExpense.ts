@@ -16,7 +16,7 @@ export const expenseSchemaInitial = z.object({
     .string()
     .regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Formato inválido')
     .refine(value => isValid(parseISO(value)), 'Data inválida'),
-  paymentMethod: z.nativeEnum(PaymentMethodType),
+  method: z.nativeEnum(PaymentMethodType),
   creditCardId: z
     .string({
       message: 'Para pagamento com crédito é necessário vincular um cartão.'
@@ -31,7 +31,7 @@ export const expenseSchemaInitial = z.object({
 
 export const expenseSchema = expenseSchemaInitial.refine(
   data => {
-    if (data.paymentMethod === 'CREDIT') return !!data.creditCardId
+    if (data.method === 'CREDIT') return !!data.creditCardId
     return true
   },
   {
@@ -52,13 +52,13 @@ export const step2Schema = expenseSchemaInitial.pick({
 
 export const step3Schema = expenseSchemaInitial
   .pick({
-    paymentMethod: true,
+    method: true,
     creditCardId: true,
     installments: true
   })
   .refine(
     data => {
-      if (data.paymentMethod === 'CREDIT') return !!data.creditCardId
+      if (data.method === 'CREDIT') return !!data.creditCardId
       return true
     },
     {

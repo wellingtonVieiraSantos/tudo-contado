@@ -65,7 +65,7 @@ export const FormStepThree = ({
     defaultValues: formData
   })
 
-  const paymentMethodWatch = watch('paymentMethod')
+  const paymentMethodWatch = watch('method')
 
   useEffect(() => {
     if (paymentMethodWatch !== 'CREDIT') {
@@ -74,17 +74,19 @@ export const FormStepThree = ({
     }
   }, [paymentMethodWatch, setValue])
 
+  /* Na atualização nao esta começando com os dados de credito, mesmo sendo credito, verificar... */
+
   return (
     <Form onSubmit={handleSubmit(onNext)}>
       <h2 className='py-3 text-center font-poppins'>
         Informações de pagamento
       </h2>
       <Divider />
-      <FormField name='paymentMethod' className='pt-10'>
+      <FormField name='method' className='pt-10'>
         <FormLabel>Forma de pagamento*</FormLabel>
         <FormControl asChild>
           <Controller
-            name='paymentMethod'
+            name='method'
             control={control}
             defaultValue='DEBIT'
             render={({ field }) => (
@@ -115,13 +117,13 @@ export const FormStepThree = ({
             )}
           />
         </FormControl>
-        {errors.paymentMethod && (
+        {errors.method && (
           <FormMessage className='text-destructive'>
-            {errors.paymentMethod?.message}
+            {errors.method?.message}
           </FormMessage>
         )}
       </FormField>
-      {watch('paymentMethod') === 'CREDIT' && creditCards && (
+      {watch('method') === 'CREDIT' && creditCards && (
         <>
           <FormField name='creditCardId' className='w-fit'>
             <FormLabel>Número do Cartão *</FormLabel>

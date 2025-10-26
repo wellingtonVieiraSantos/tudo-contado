@@ -244,7 +244,7 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent className='h-max'>
           {recentTransactions?.length === 0 && (
-            <p className='mt-20 text-foreground-secondary text-center'>
+            <p className='lg:mt-20 text-foreground-secondary text-center'>
               Nenhuma transação recente...
             </p>
           )}
