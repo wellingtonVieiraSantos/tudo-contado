@@ -1,9 +1,9 @@
 import { createIncome } from '@/dal/incomes'
 import { requireUser } from '@/lib/require-user'
-import { incomeType } from '@/types/income-data-props'
+import { IncomeProps } from '@/types/income-data-props'
 import { Prisma } from '@prisma/client'
 
-export const postIncomeService = async (rawData: incomeType) => {
+export const postIncomeService = async (rawData: IncomeProps) => {
   const user = await requireUser()
 
   const data = {

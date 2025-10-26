@@ -1,6 +1,6 @@
 import { ApiResponse } from '@/types/api-response'
-import { creditCardTypeDashboard } from '@/types/creditcard-data-props'
-import { CategoryType, StatusType } from '@prisma/client'
+import { CreditCardWithIdProps } from '@/types/creditcard-data-props'
+import { CategoryType, PaymentMethodType } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
@@ -39,13 +39,29 @@ const fetchSumExpensesByCategory = async () => {
   >
 }
 
+const fetchSumExpensesByCreditCard = async () => {
+  const response = await fetch(`api/expense/by-creditcard`)
+  if (!response.ok) {
+    throw new Error('Falha ao buscar soma dos gastos por cartão de crédito.')
+  }
+  return response.json() as Promise<
+    ApiResponse<
+      {
+        _sum: number
+        creditCardId: string | null
+      }[]
+    >
+  >
+}
+
 const fetchCreditCard = async () => {
   const response = await fetch('/api/credit-card')
   if (!response.ok) {
     throw new Error('Falha ao buscar cartões')
   }
-  return response.json() as Promise<ApiResponse<creditCardTypeDashboard[]>>
+  return response.json() as Promise<ApiResponse<CreditCardWithIdProps[]>>
 }
+
 const fetchLastTransactions = async () => {
   const response = await fetch('/api/transactions')
   if (!response.ok) {
@@ -59,7 +75,7 @@ const fetchLastTransactions = async () => {
         description: string
         date: string
         category: CategoryType
-        status: StatusType
+        method: PaymentMethodType
         type: 'income' | 'expense'
       }[]
     >
@@ -75,6 +91,11 @@ export const useGetDashboard = () => {
   const { data: responseExpensebyCategory } = useQuery({
     queryKey: ['sumExpensesByCategory'],
     queryFn: fetchSumExpensesByCategory
+  })
+
+  const { data: responseExpensebyCreditCard } = useQuery({
+    queryKey: ['sumExpensesByCreditCard'],
+    queryFn: fetchSumExpensesByCreditCard
   })
 
   const { data: responseIncome } = useQuery({
@@ -115,15 +136,15 @@ export const useGetDashboard = () => {
 
   const CreditCardData = useMemo(() => {
     return responseCard?.data.map(card => {
+      const matched = responseExpensebyCreditCard?.data.find(
+        res => res.creditCardId === card.id
+      )
       return {
         ...card,
-        amount: card.payment.reduce(
-          (acc, current) => acc + current.amount,
-          0
-        ) as number
+        spending: matched?._sum ?? 0
       }
     })
-  }, [responseCard?.data])
+  }, [responseCard?.data, responseExpensebyCreditCard?.data])
 
   const recentTransactions = useMemo(() => {
     return responseTransactions?.data

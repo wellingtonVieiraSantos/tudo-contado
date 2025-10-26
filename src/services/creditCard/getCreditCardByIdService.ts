@@ -11,9 +11,10 @@ export const getCreditCardByIdService = async (id: string) => {
   const creditCard = {
     ...rawCreditCard,
     creditLimit: rawCreditCard.creditLimit / 100,
-    payments: rawCreditCard.payment.map(pay => ({
-      ...pay,
-      amount: pay.amount / 100
+    expense: rawCreditCard.expense.map(exp => ({
+      ...exp,
+      value: exp.value / 100,
+      date: exp.date.toISOString().split('T')[0]
     }))
   }
   return creditCard

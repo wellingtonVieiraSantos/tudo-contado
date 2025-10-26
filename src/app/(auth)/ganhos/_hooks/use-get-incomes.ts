@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/types/api-response'
-import { IncomeDataProps } from '@/types/income-data-props'
+import { IncomeProps } from '@/types/income-data-props'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -10,7 +10,7 @@ const fetchIncomes = async () => {
   if (!response.ok) {
     throw new Error('Falha ao buscar Rendimentos')
   }
-  return response.json() as Promise<ApiResponse<IncomeDataProps[]>>
+  return response.json() as Promise<ApiResponse<IncomeProps[]>>
 }
 
 export const useGetIncomes = () => {

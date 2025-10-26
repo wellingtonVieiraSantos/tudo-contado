@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/Select'
-import { IncomeDataProps } from '@/types/income-data-props'
+import { IncomeProps } from '@/types/income-data-props'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -14,7 +14,7 @@ type FilterIncomesProps = {
   filters: {
     month: string
   }
-  filteredIncomes: IncomeDataProps[]
+  filteredIncomes: IncomeProps[]
   updateFilters: (
     newFilters: Partial<{
       month: string

@@ -11,14 +11,7 @@ export const getExpenseByIdService = async (expenseId: string) => {
   const expenses = {
     ...rawExpenses,
     value: rawExpenses.value / 100,
-    expenseDate: rawExpenses.expenseDate.toISOString().split('T')[0],
-    dueDate:
-      rawExpenses.dueDate && rawExpenses.dueDate.toISOString().split('T')[0],
-    payments: rawExpenses.payments.map(pay => ({
-      ...pay,
-      amount: pay.amount / 100,
-      paidAt: pay.paidAt.toISOString().split('T')[0]
-    }))
+    date: rawExpenses.date.toISOString().split('T')[0]
   }
   return expenses
 }

@@ -1,24 +1,19 @@
 'use client'
 import { Button } from '@/components/ui/Button'
-import { Form, FormSubmit } from '@/components/ui/Form'
-import { expenseType } from '@/types/expense-data-props'
-import { expenseSchema } from '@/validators/formExpense'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft, Send } from 'lucide-react'
-import { useForm } from 'react-hook-form'
 import { Stepper } from './Stepper'
 import valueFormatter from '@/lib/valueFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { useGetCreditcardById } from '../../cartao-credito/_hooks/use-get-creditcard-by-id'
+import { ExpenseProps } from '@/types/expense-data-props'
 
 type FormStepThreeProps = {
-  formData: Partial<expenseType>
+  formData: Partial<ExpenseProps>
   onNext: () => void
   setStep: React.Dispatch<React.SetStateAction<number>>
   isPending: boolean
@@ -41,14 +36,6 @@ export const FormStepResume = ({
         </CardDescription>
       </CardHeader>
       <div className='flex flex-col gap-2 lg:px-4'>
-        <div className='border rounded py-2 px-3 '>
-          <span className='block text-sm text-foreground-secondary'>
-            Status de pagamento
-          </span>
-          <Badge variant='success' className='mt-1'>
-            {paymentStatusFormatter(formData.status!)}
-          </Badge>
-        </div>
         <div className='relative border rounded py-2 px-3 gap-2 grid'>
           <p className='text-xl mt-1'>
             <span className='block text-sm text-foreground-secondary'>
@@ -62,12 +49,22 @@ export const FormStepResume = ({
             </span>
             {formData.description}
           </p>
-          <Badge
-            variant='info'
-            className='text-right absolute bottom-1/2 translate-y-1/2 right-4'
-          >
-            {categoryFormatter(formData.category!)}
-          </Badge>
+          <p className='mt-1'>
+            <span className='block text-sm text-foreground-secondary'>
+              Data da compra
+            </span>
+            {format(
+              parse(formData.date!, 'yyyy-MM-dd', new Date()),
+              "dd 'de' MMMM 'de' yyyy",
+              { locale: ptBR }
+            )}
+          </p>
+        </div>
+        <div className='border rounded py-2 px-3 gap-2 grid'>
+          <span className='block text-sm text-foreground-secondary'>
+            Categoria
+          </span>
+          <Badge variant='info'>{categoryFormatter(formData.category!)}</Badge>
         </div>
         <div className=' border rounded py-2 px-3 gap-2 grid'>
           <p className='mt-1'>
@@ -92,28 +89,6 @@ export const FormStepResume = ({
               {formData.installments}x
             </p>
           )}
-        </div>
-        <div className='border rounded py-2 px-3 gap-2 grid'>
-          <p className='mt-1'>
-            <span className='block text-sm text-foreground-secondary'>
-              Data de compra:
-            </span>
-            {format(
-              parse(formData.expenseDate!, 'yyyy-MM-dd', new Date()),
-              "dd 'de' MMMM 'de' yyyy",
-              { locale: ptBR }
-            )}
-          </p>
-          <p className='mt-1'>
-            <span className='block text-sm text-foreground-secondary'>
-              Data de Pagamento:
-            </span>
-            {format(
-              parse(formData.expenseDate!, 'yyyy-MM-dd', new Date()),
-              "dd 'de' MMMM 'de' yyyy",
-              { locale: ptBR }
-            )}
-          </p>
         </div>
       </div>
       <Stepper step={5} />

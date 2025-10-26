@@ -1,5 +1,6 @@
 import { queryClient } from '@/lib/query-client'
-import { expenseType } from '@/types/expense-data-props'
+import { ApiResponse } from '@/types/api-response'
+import { ExpenseProps } from '@/types/expense-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -9,12 +10,12 @@ const fetchExpense = async (id: string) => {
     headers: { 'Content-Type': 'application/json' }
   })
   if (!res.ok) throw new Error('Falha ao deletar despesa')
-  return res.json()
+  return res.json() as Promise<ApiResponse<ExpenseProps>>
 }
 
 export const useDelExpense = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedExpense, setSelectedExpense] = useState<null | expenseType>(
+  const [selectedExpense, setSelectedExpense] = useState<null | ExpenseProps>(
     null
   )
 
@@ -30,7 +31,7 @@ export const useDelExpense = () => {
     setIsOpen(false)
   }
 
-  const openDeleteModal = (expense: expenseType) => {
+  const openDeleteModal = (expense: ExpenseProps) => {
     setSelectedExpense(expense)
     setIsOpen(true)
   }

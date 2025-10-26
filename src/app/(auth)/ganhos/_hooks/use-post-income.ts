@@ -1,9 +1,9 @@
 import { queryClient } from '@/lib/query-client'
-import { incomeType } from '@/types/income-data-props'
+import { IncomeProps } from '@/types/income-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
-const fetchIncome = async (data: incomeType) => {
+const fetchIncome = async (data: IncomeProps) => {
   const res = await fetch('api/income', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -23,7 +23,7 @@ export const usePostIncome = () => {
     }
   })
 
-  const onSubmit = async (data: incomeType) => {
+  const onSubmit = async (data: IncomeProps) => {
     mutate(data)
     setIsOpen(false)
   }

@@ -21,11 +21,11 @@ import { CreditCard, User, Send, DollarSign, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { creditCardSchema } from '@/validators/formCreditCard'
-import { creditCardType } from '@/types/creditcard-data-props'
 import { CardBrand } from '@prisma/client'
 import { cardBrandFormatter } from '@/lib/cardBrandFormatter'
 import { usePostCreditCard } from '../_hooks/use-post-creditcard'
 import { Dispatch, SetStateAction } from 'react'
+import { CreditCardProps } from '@/types/creditcard-data-props'
 
 export const FormPostCreditCard = ({
   setStep
@@ -37,7 +37,7 @@ export const FormPostCreditCard = ({
     handleSubmit,
     control,
     formState: { errors }
-  } = useForm<creditCardType>({ resolver: zodResolver(creditCardSchema) })
+  } = useForm<CreditCardProps>({ resolver: zodResolver(creditCardSchema) })
 
   const { isPending, onSubmit } = usePostCreditCard(setStep)
 
@@ -185,7 +185,7 @@ export const FormPostCreditCard = ({
           type='button'
           variant='border'
           className='w-full'
-          onClick={() => setStep(3)}
+          onClick={() => setStep(4)}
         >
           <X />
           Cancelar

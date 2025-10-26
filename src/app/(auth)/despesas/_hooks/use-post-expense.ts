@@ -1,16 +1,17 @@
 import { queryClient } from '@/lib/query-client'
-import { expenseType } from '@/types/expense-data-props'
+import { ApiResponse } from '@/types/api-response'
+import { ExpenseProps } from '@/types/expense-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
-const fetchExpense = async (data: expenseType) => {
+const fetchExpense = async (data: ExpenseProps) => {
   const res = await fetch('/api/expense', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' }
   })
   if (!res.ok) throw new Error('Falha ao cadastrar despesa')
-  return res.json()
+  return res.json() as Promise<ApiResponse<ExpenseProps>>
 }
 
 export const usePostExpense = () => {
@@ -24,7 +25,7 @@ export const usePostExpense = () => {
     }
   })
 
-  const onSubmit = async (data: expenseType) => {
+  const onSubmit = async (data: ExpenseProps) => {
     mutate(data)
   }
 

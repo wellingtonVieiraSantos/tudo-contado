@@ -1,9 +1,9 @@
 import { createCreditCard } from '@/dal/creditCard'
 import { requireUser } from '@/lib/require-user'
-import { creditCardType } from '@/types/creditcard-data-props'
+import { CreditCardProps } from '@/types/creditcard-data-props'
 import { Prisma } from '@prisma/client'
 
-export const postCreditCardService = async (rawData: creditCardType) => {
+export const postCreditCardService = async (rawData: CreditCardProps) => {
   const user = await requireUser()
 
   const data = {

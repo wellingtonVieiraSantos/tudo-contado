@@ -152,10 +152,18 @@ export default function Income() {
                   </div>
                 </div>
                 <Badge variant='info' className='absolute top-3 right-3'>
-                  {income.type === 'FIXED' ? 'Fixo' : 'Variável'}
+                  {income.type}
                 </Badge>
               </CardContent>
               <CardFooter>
+                <Button
+                  variant='border'
+                  onClick={() => openDeleteModal(income)}
+                  className='self-end bg-destructive/40 md:px-4'
+                >
+                  <Trash />
+                  <span className='hidden md:inline-block'>Deletar</span>
+                </Button>
                 <Button
                   variant='border'
                   onClick={() => openUpdateModal(income)}
@@ -164,14 +172,6 @@ export default function Income() {
                 >
                   <RefreshCw />
                   <span className='hidden md:inline-block'>Atualizar</span>
-                </Button>
-                <Button
-                  variant='border'
-                  onClick={() => openDeleteModal(income)}
-                  className='self-end bg-destructive/40 md:px-4'
-                >
-                  <Trash />
-                  <span className='hidden md:inline-block'>Deletar</span>
                 </Button>
               </CardFooter>
             </Card>
@@ -194,7 +194,7 @@ export default function Income() {
             </ModalDescription>
           </ModalHeader>
           <Badge variant='warning' className='justify-self-center gap-4 my-4'>
-            <TriangleAlert size={20} />
+            <TriangleAlert size={18} strokeWidth={1.5} />
             {selectedIncome?.description} -{' '}
             {formatedCurrency(selectedIncome?.value || 0)}
           </Badge>
@@ -208,10 +208,10 @@ export default function Income() {
             </Button>
             <Button
               onClick={() => {
-                if (selectedIncome) handleDeleteIncome(selectedIncome.id)
+                if (selectedIncome) handleDeleteIncome(selectedIncome.id!)
                 setIsOpen(false)
               }}
-              className='w-full lg:flex-1 bg-destructive hover:bg-destructive/50'
+              className='w-full lg:flex-1 bg-destructive/70 hover:bg-destructive/40'
             >
               <Trash />
               Apagar rendimento

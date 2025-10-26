@@ -2,3 +2,156 @@ status despesa como step3, caso seja pago, ai sim ir para pagamento, caso seja p
 
 + criar um get inicial para incomes e expenses com take 10 e desc, e filtrar por get de mes.
 + no dashboard get dos incomes e expenses dos ultimos 6 meses
+
++ mudar de status de pago e nao pago, para pagamento no debito ou no credito, deixando assim o app mais simples, esta muito complexo.
+
+
+ - modelo prisma do db de promotion app -
+model Product {
+  id              String           @id @default(cuid())
+  name            String
+  createdAt       DateTime         @default(now())
+  category        ProductCategory
+  normalized_name String           @unique
+  variants        ProductVariant[]
+}
+
+model Brand {
+  id              String           @id @default(cuid())
+  creditCardId    String?
+  name            String
+  createdAt       DateTime         @default(now())
+  normalized_name String           @unique
+  variants        ProductVariant[]
+}
+
+model ProductVariant {
+  id              String            @id @default(cuid())
+  productId       String
+  description     String?
+  brandId         String?
+  brandOrigin     BrandOriginType   @default(BRANDED)
+  comments        Comment[]
+  productLifetime ProductLifetime[]
+  productPrice    ProductPrice[]
+  brand           Brand?            @relation(fields: [brandId], references: [id])
+  product         Product           @relation(fields: [productId], references: [id])
+  ratings         Rating[]
+
+  @@unique([productId, brandId])
+}
+
+model ProductPrice {
+  id               String         @id @default(cuid())
+  productVariantId String
+  userId           String
+  value            Int
+  location         String
+  date             DateTime 
+  createdAt        DateTime       @default(now())
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  user             User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, productVariantId, location, date])
+}
+
+model Comment {
+  id               String         @id @default(cuid())
+  productVariantId String
+  userId           String
+  content          String
+  createdAt        DateTime       @default(now())
+  updateAt         DateTime       @updatedAt
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  user             User           @relation(fields: [userId], references: [id])
+
+  @@unique([productVariantId, userId])
+}
+
+model Rating {
+  id               String         @id @default(cuid())
+  productVariantId String
+  userId           String
+  value            RatingType
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  user             User           @relation(fields: [userId], references: [id])
+
+  @@unique([productVariantId, userId])
+}
+
+model ProductLifetime {
+  id               String         @id @default(cuid())
+  productVariantId String
+  userId           String
+  purchaseDate     DateTime
+  endDate          DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  user             User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, productVariantId])
+}
+
+enum RatingType {
+  ONE_STAR
+  TWO_STAR
+  THREE_STAR
+  FOUR_STAR
+  FIVE_STAR
+}
+
+enum UnitType {
+  UNIT
+  KG
+  L
+  M
+}
+
+enum BrandOriginType {
+  BRANDED
+  UNBRANDED
+}
+
+enum ProductCategory {
+  HORTIFRUTI
+  CARNES_PEIXES
+  FRIOS_LATICINIOS
+  PADARIA_CONFEITARIA
+  BEBIDAS
+  MERCEARIA
+  ENLATADOS_CONSERVAS
+  SNACKS_DOCES
+  CONGELADOS
+  TEMPEROS_CONDIMENTOS
+  MASSAS_MOLHOS
+  PRODUTOS_NATURAIS
+  HIGIENE_PESSOAL
+  CUIDADOS_CABELO
+  DESODORANTES
+  CUIDADOS_PELE
+  BARBEARIA
+  HIGIENE_BUCAL
+  ABSORVENTES_FRALDAS
+  LIMPEZA_GERAL
+  UTENSILIOS_LIMPEZA
+  INSETICIDAS
+  INFANTIL_FRALDAS
+  INFANTIL_PAPINHAS
+  INFANTIL_HIGIENE
+  COSTURA
+  ARTESANATO
+  TECIDOS
+  ESCOLAR
+  PAPELARIA
+  DESCARTAVEIS
+  UTENSILIOS_COZINHA
+  ELETRICOS_BASICOS
+  LIMPEZA_CASA
+  TEXTIL_CASA
+  PET_RACAO
+  PET_HIGIENE
+  PET_ACESSORIOS
+}

@@ -1,7 +1,0 @@
--- CreateEnum
-CREATE TYPE "ExpenseKind" AS ENUM ('IMMEDIATE', 'SCHEDULED');
-
--- AlterTable
-ALTER TABLE "Expense" ADD COLUMN     "kind" "ExpenseKind" NOT NULL DEFAULT 'IMMEDIATE',
-ALTER COLUMN "type" SET DEFAULT 'FIXED',
-ALTER COLUMN "paymentMethod" DROP NOT NULL;

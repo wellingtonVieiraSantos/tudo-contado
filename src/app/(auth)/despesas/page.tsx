@@ -38,8 +38,7 @@ import { useGetExpenses } from './_hooks/use-get-expenses'
 import { useDelExpense } from './_hooks/use-del-expense'
 import Link from 'next/link'
 import { ptBR } from 'date-fns/locale'
-import { categories } from './_components/FormStepOne'
-import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
+import { categories } from './_components/FormStepTwo'
 
 export default function Expense() {
   const {
@@ -83,7 +82,7 @@ export default function Expense() {
                 <span className='text-sm font-poppins'>
                   Total ainda à pagar:
                 </span>{' '}
-                {formatedCurrency(totals.pending)}
+                {formatedCurrency(totals.credit)}
               </p>
               <Link href='/despesas/cadastro'>
                 <Button className='bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-105 hover:bg-button-foreground font-poppins'>
@@ -108,11 +107,18 @@ export default function Expense() {
       <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
         {filteredExpenses?.length !== 0 &&
           filteredExpenses?.map(expense => (
-            <Card key={expense.id} className=' w-full py-3'>
+            <Card
+              key={expense.id}
+              className={`w-full py-3 ${
+                expense.paymentMethod === 'CREDIT'
+                  ? 'border-warning/50'
+                  : 'border-success/50'
+              }`}
+            >
               <CardHeader>
                 <CardTitle>
                   {format(
-                    parse(expense.expenseDate, 'yyyy-MM-dd', new Date()),
+                    parse(expense.date, 'yyyy-MM-dd', new Date()),
                     "dd 'de' MMMM 'de' yyyy",
                     { locale: ptBR }
                   )}
@@ -146,29 +152,22 @@ export default function Expense() {
                     <p className='text-foreground-secondary line-clamp-1'>
                       {expense.description}
                     </p>
-                    <Badge variant='outline'>
-                      {paymentMethodFormatter(expense.payments![0].method)}
-                    </Badge>
                   </div>
                 </div>
-                <Badge
-                  variant={
-                    expense.status === 'PAID'
-                      ? 'success'
-                      : expense.status === 'PENDING'
-                      ? 'warning'
-                      : 'error'
-                  }
-                  className='absolute top-3 right-3'
-                >
-                  {expense.status === 'PAID'
-                    ? 'Pago'
-                    : expense.status === 'PENDING'
-                    ? 'À pagar'
-                    : 'Vencido'}
+                <Badge className='absolute top-3 right-3'>
+                  {expense.paymentMethod}
                 </Badge>
               </CardContent>
               <CardFooter>
+                <Button
+                  variant='border'
+                  onClick={() => openDeleteModal(expense)}
+                  className='self-end bg-destructive/40 md:px-4'
+                >
+                  <Trash />
+                  <span className='hidden md:inline-block'>Deletar</span>
+                </Button>
+
                 <Link href={`/despesas/${expense.id}`}>
                   <Button
                     variant='border'
@@ -178,14 +177,6 @@ export default function Expense() {
                     <span className='hidden md:inline-block'>Atualizar</span>
                   </Button>
                 </Link>
-                <Button
-                  variant='border'
-                  onClick={() => openDeleteModal(expense)}
-                  className='self-end bg-destructive/40 md:px-4'
-                >
-                  <Trash />
-                  <span className='hidden md:inline-block'>Deletar</span>
-                </Button>
               </CardFooter>
             </Card>
           ))}
@@ -202,7 +193,7 @@ export default function Expense() {
           </ModalHeader>
 
           <Badge variant='warning' className='justify-self-center gap-4 my-4'>
-            <TriangleAlert size={20} />
+            <TriangleAlert size={18} strokeWidth={1.5} />
             {selectedExpense?.description} -{' '}
             {formatedCurrency(selectedExpense?.value || 0)}
           </Badge>

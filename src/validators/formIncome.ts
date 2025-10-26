@@ -1,3 +1,4 @@
+import { IncomeType } from '@prisma/client'
 import { isValid, parseISO } from 'date-fns'
 import z from 'zod'
 
@@ -10,7 +11,7 @@ export const incomeSchema = z.object({
       message: 'Máximo 2 casas decimais'
     }),
   description: z.string().trim().min(1, { message: 'Campo obrigatório' }),
-  type: z.enum(['FIXED', 'VARIABLE']),
+  type: z.nativeEnum(IncomeType),
   date: z
     .string()
     .regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Formato inválido')

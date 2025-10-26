@@ -2,13 +2,6 @@
 import { Textarea } from '@/components/ui/Textarea'
 import { Controller, useForm } from 'react-hook-form'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/Select'
-import {
   Form,
   FormControl,
   FormField,
@@ -26,19 +19,27 @@ import {
   ModalTrigger
 } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
-import { Send, Wallet } from 'lucide-react'
+import {
+  Send,
+  Wallet,
+  Briefcase,
+  Coins,
+  Hammer,
+  TrendingUp
+} from 'lucide-react'
 import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { incomeType } from '@/types/income-data-props'
+import { IncomeProps } from '@/types/income-data-props'
 import { useEffect } from 'react'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
 
 type ModalIncomeProps = {
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onSubmit: (data: incomeType) => Promise<void>
+  onSubmit: (data: IncomeProps) => Promise<void>
   isPending: boolean
   children?: React.ReactNode
-  selectedIncomeUpdate?: incomeType
+  selectedIncomeUpdate?: IncomeProps
 }
 
 export const ModalIncome = ({
@@ -55,7 +56,7 @@ export const ModalIncome = ({
     control,
     reset,
     formState: { errors }
-  } = useForm<incomeType>({
+  } = useForm<IncomeProps>({
     resolver: zodResolver(incomeSchema)
   })
 
@@ -80,7 +81,7 @@ export const ModalIncome = ({
             Formulario para cadastro/atualizações de ganhos
           </ModalDescription>
         </ModalHeader>
-        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-3'>
+        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-1'>
           <FormField name='value'>
             <FormLabel>Valor</FormLabel>
             <FormControl asChild>
@@ -115,21 +116,47 @@ export const ModalIncome = ({
             )}
           </FormField>
           <FormField name='type'>
-            <FormLabel>Tipo de ganho</FormLabel>
+            <FormLabel>Tipo de Renda</FormLabel>
             <Controller
               name='type'
               control={control}
-              defaultValue='VARIABLE'
+              defaultValue='ACTIVE'
               render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value='FIXED'>Ganho fixo</SelectItem>
-                    <SelectItem value='VARIABLE'>Ganho variável</SelectItem>
-                  </SelectContent>
-                </Select>
+                <ToggleGroup
+                  type='single'
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  className='grid-cols-2 sm:grid-cols-4'
+                >
+                  <ToggleGroupItem
+                    value='ACTIVE'
+                    className='text-[12px] flex-col'
+                  >
+                    <Briefcase strokeWidth={1.5} size={20} />
+                    Ativa
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value='PASSIVE'
+                    className='text-[12px] flex-col'
+                  >
+                    <Coins strokeWidth={1.5} size={20} />
+                    Passiva
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value='EXTRA'
+                    className='text-[12px] flex-col'
+                  >
+                    <Hammer strokeWidth={1.5} size={20} />
+                    Extra
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value='CAPITAL_GAIN'
+                    className='text-[12px] flex-col'
+                  >
+                    <TrendingUp strokeWidth={1.5} size={20} />
+                    Ganho de capital
+                  </ToggleGroupItem>
+                </ToggleGroup>
               )}
             />
           </FormField>
@@ -154,10 +181,7 @@ export const ModalIncome = ({
               </FormMessage>
             )}
           </FormField>
-          <FormSubmit
-            asChild
-            className='w-full lg:w-fit mt-5 lg:justify-self-end'
-          >
+          <FormSubmit asChild className='w-full mt-5'>
             <Button
               disabled={isPending}
               variant={isPending ? 'loading' : 'default'}

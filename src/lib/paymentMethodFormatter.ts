@@ -1,10 +1,8 @@
 import { PaymentMethodType } from '@prisma/client'
 
 export const PaymentMethodTypeRenamed = {
-  PIX: 'Pix',
-  MONEY: 'Dinheiro',
-  CREDIT_CARD: 'Crédito',
-  DEBIT_CARD: 'Débito'
+  CREDIT: 'Crédito',
+  DEBIT: 'Débito'
 }
 
 export const paymentMethodFormatter = (

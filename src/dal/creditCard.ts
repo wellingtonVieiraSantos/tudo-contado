@@ -13,14 +13,7 @@ export const findCreditCard = async (userId: string) => {
       expMonth: true,
       expYear: true,
       cardBrand: true,
-      creditLimit: true,
-      payment: {
-        select: {
-          id: true,
-          amount: true,
-          paidAt: true
-        }
-      }
+      creditLimit: true
     },
     orderBy: {
       expYear: 'desc'
@@ -40,14 +33,17 @@ export const findCreditCardById = async (id: string) => {
       expYear: true,
       billingDay: true,
       cardBrand: true,
-      payment: {
+      expense: {
         select: {
           id: true,
-          paidAt: true,
-          amount: true
+          value: true,
+          date: true,
+          installments: true,
+          category: true,
+          description: true
         },
         orderBy: {
-          paidAt: 'desc'
+          date: 'desc'
         }
       }
     }

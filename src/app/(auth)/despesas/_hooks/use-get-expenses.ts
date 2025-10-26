@@ -3,25 +3,25 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { expensesWithPaymentType } from '@/types/expense-data-props'
+import { ExpenseProps } from '@/types/expense-data-props'
 import { ApiResponse } from '@/types/api-response'
-import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
+import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 
 const fetchExpenses = async () => {
   const response = await fetch('/api/expense')
   if (!response.ok) {
     throw new Error('Falha ao buscar despesas')
   }
-  return response.json() as Promise<ApiResponse<expensesWithPaymentType[]>>
+  return response.json() as Promise<ApiResponse<ExpenseProps[]>>
 }
 
 export const useGetExpenses = () => {
   const [filters, setFilters] = useState<{
     month: string
-    status: 'all' | 'Pago' | 'Pendente' | 'Atrasado'
+    method: 'all' | 'Crédito' | 'Débito'
   }>({
     month: format(new Date(), "MMMM 'de' yyyy", { locale: ptBR }),
-    status: 'all'
+    method: 'all'
   })
 
   const {
@@ -41,7 +41,7 @@ export const useGetExpenses = () => {
     return [
       ...new Set(
         data.map(expense =>
-          format(expense.expenseDate, "MMMM 'de' yyyy", { locale: ptBR })
+          format(expense.date, "MMMM 'de' yyyy", { locale: ptBR })
         )
       )
     ]
@@ -52,19 +52,19 @@ export const useGetExpenses = () => {
     if (!data.length) return []
 
     const isMonthActive = filters.month !== 'default'
-    const isStatusActive = filters.status !== 'all'
+    const isStatusActive = filters.method !== 'all'
 
     return data.filter(expense => {
       const matchesMonth =
         !isMonthActive ||
-        format(expense.expenseDate, "MMMM 'de' yyyy", { locale: ptBR }) ===
+        format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) ===
           filters.month
 
-      const matchesStatus =
+      const matchesMethod =
         !isStatusActive ||
-        paymentStatusFormatter(expense.status) === filters.status
+        paymentMethodFormatter(expense.paymentMethod) === filters.method
 
-      return matchesMonth && matchesStatus
+      return matchesMonth && matchesMethod
     })
   }, [response?.data, filters])
 
@@ -73,15 +73,15 @@ export const useGetExpenses = () => {
       (acc, expense) => acc + Number(expense.value),
       0
     )
-    const pending = filteredExpenses
-      .filter(expense => expense.status === 'PENDING')
+    const credit = filteredExpenses
+      .filter(expense => expense.paymentMethod === 'CREDIT')
       .reduce((acc, expense) => acc + Number(expense.value), 0)
 
-    const overdue = filteredExpenses
-      .filter(expense => expense.status === 'OVERDUE')
+    const debit = filteredExpenses
+      .filter(expense => expense.paymentMethod === 'DEBIT')
       .reduce((acc, expense) => acc + Number(expense.value), 0)
 
-    return { total, pending, overdue }
+    return { total, credit, debit }
   }, [filteredExpenses])
 
   const updateFilters = (newFilters: Partial<typeof filters>) => {

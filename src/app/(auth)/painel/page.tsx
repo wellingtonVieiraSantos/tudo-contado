@@ -46,7 +46,7 @@ import { Badge } from '@/components/ui/Badge'
 import { paymentStatusFormatter } from '@/lib/paymentStatusFormatter'
 import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { categories } from '../despesas/_components/FormStepOne'
+import { categories } from '../despesas/_components/FormStepTwo'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },
@@ -198,7 +198,7 @@ export default function Dashboard() {
                     </div>
                     <div className='w-full max-w-75'>
                       <ProgressBar
-                        value={(card.amount / card.creditLimit) * 100}
+                        value={(card.spending / card.creditLimit) * 100}
                       />
                       <div className='flex justify-between items-center pt-1'>
                         <div className='flex flex-col text-sm'>
@@ -206,7 +206,7 @@ export default function Dashboard() {
                             Utilizado
                           </span>
                           <span className='text-base'>
-                            {valueFormatter(card.amount)}
+                            {valueFormatter(card.spending)}
                           </span>
                         </div>
                         <div className='flex flex-col text-sm'>
@@ -242,8 +242,8 @@ export default function Dashboard() {
           <Divider />
         </CardHeader>
         <CardContent className='h-max'>
-          {!recentTransactions && (
-            <p className='text-foreground-secondary text-center'>
+          {recentTransactions?.length === 0 && (
+            <p className='mt-20 text-foreground-secondary text-center'>
               Nenhuma transação recente...
             </p>
           )}
@@ -285,24 +285,13 @@ export default function Dashboard() {
                   </div>
                   <div className='text-right flex flex-col items-end justify-center gap-2 sm:pr-4'>
                     {trans.type === 'expense' && (
-                      <Badge
-                        variant={
-                          trans.status === 'PAID'
-                            ? 'success'
-                            : trans.status === 'PENDING'
-                            ? 'warning'
-                            : 'error'
-                        }
-                        className='gap-1 text-[10px] px-1 h-5'
-                      >
-                        {trans.status === 'PAID' ? (
-                          <Check size={15} strokeWidth={1.4} />
-                        ) : trans.status === 'PENDING' ? (
-                          <TriangleAlert size={15} strokeWidth={1.4} />
-                        ) : (
-                          <Ban size={15} strokeWidth={1.4} />
-                        )}
-                        {paymentStatusFormatter(trans.status)}
+                      <Badge className='gap-1 text-[10px] px-1 h-5'>
+                        {paymentStatusFormatter(trans.method)}
+                      </Badge>
+                    )}
+                    {trans.type === 'income' && (
+                      <Badge className='gap-1 text-[10px] px-1 h-5'>
+                        {paymentStatusFormatter(trans.type)}
                       </Badge>
                     )}
                     <p className='font-montserrat text-sm sm:text-lg line-clamp-1'>

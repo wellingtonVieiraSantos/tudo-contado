@@ -8,11 +8,7 @@ export const getAllCreditCardService = async () => {
   //normalize value and amount to show in component, get in centavos, return in reais
   const creditCard = rawCreditCard.map(cc => ({
     ...cc,
-    creditLimit: cc.creditLimit / 100,
-    payment: cc.payment.map(pay => ({
-      ...pay,
-      amount: pay.amount / 100
-    }))
+    creditLimit: cc.creditLimit / 100
   }))
   return creditCard
 }

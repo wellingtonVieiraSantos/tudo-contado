@@ -11,27 +11,12 @@ export const findExpenses = async (userId: string) => {
       value: true,
       description: true,
       category: true,
-      expenseDate: true,
-      dueDate: true,
-      status: true,
-      payments: {
-        select: {
-          id: true,
-          amount: true,
-          method: true,
-          installments: true,
-          paidAt: true,
-          creditCard: {
-            select: {
-              id: true,
-              lastNumber: true
-            }
-          }
-        }
-      }
+      date: true,
+      method: true,
+      installments: true
     },
     orderBy: {
-      expenseDate: 'desc'
+      date: 'desc'
     }
   })
 }
@@ -44,23 +29,27 @@ export const findExpenseById = async (expenseId: string) => {
       value: true,
       description: true,
       category: true,
-      expenseDate: true,
-      dueDate: true,
-      status: true,
-      payments: {
-        select: {
-          id: true,
-          amount: true,
-          method: true,
-          installments: true,
-          paidAt: true,
-          creditCard: {
-            select: {
-              id: true,
-              lastNumber: true
-            }
-          }
-        }
+      date: true,
+      method: true,
+      installments: true
+    }
+  })
+}
+
+export const findActualMonthCreditCardExpenseSum = async (
+  userId: string,
+  startOfMonth: Date,
+  endOfMonth: Date
+) => {
+  return await prisma.expense.groupBy({
+    by: ['creditCardId'],
+    _sum: { value: true },
+    where: {
+      userId,
+      creditCardId: { not: null },
+      date: {
+        gte: startOfMonth,
+        lte: endOfMonth
       }
     }
   })
@@ -76,7 +65,7 @@ export const findActualMonthExpensesByCategory = async (
     _sum: { value: true },
     where: {
       userId,
-      expenseDate: {
+      date: {
         gte: startOfMonth,
         lte: endOfMonth
       }
@@ -94,7 +83,7 @@ export const findExpensesByMonthRange = async (userId: string) => {
       interval '1 month'
     ) AS gs(month)
     LEFT JOIN "Expense" e
-      ON DATE_TRUNC('month', e."expenseDate") = gs.month
+      ON DATE_TRUNC('month', e."date") = gs.month
      AND e."userId" = ${userId}
     GROUP BY gs.month
     ORDER BY gs.month ASC;

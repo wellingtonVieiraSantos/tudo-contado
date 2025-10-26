@@ -1,7 +1,7 @@
 'use client'
 import { Card, CardContent } from '@/components/ui/Card'
 import { useState } from 'react'
-import { expenseType } from '@/types/expense-data-props'
+import { ExpenseProps } from '@/types/expense-data-props'
 import { expenseSchema } from '@/validators/formExpense'
 import { FormStepOne } from '../_components/FormStepOne'
 import { FormStepTwo } from '../_components/FormStepTwo'
@@ -16,22 +16,20 @@ import { FormStepResume } from '../_components/FormStepResume'
 export default function Cadastro() {
   const [step, setStep] = useState(1)
   const [formDataCadastro, setFormDataCadastro] = useState<
-    Partial<expenseType>
+    Partial<ExpenseProps>
   >({
     value: undefined,
     description: '',
     category: 'OTHER',
-    paymentMethod: 'PIX',
+    paymentMethod: 'DEBIT',
     creditCardId: undefined,
     installments: undefined,
-    expenseDate: new Date().toISOString().split('T')[0],
-    dueDate: new Date().toISOString().split('T')[0],
-    status: 'PAID'
+    date: new Date().toISOString().split('T')[0]
   })
 
   const { onSubmit, isPending } = usePostExpense()
 
-  const handleNextStep = (data: Partial<expenseType>) => {
+  const handleNextStep = (data: Partial<ExpenseProps>) => {
     setFormDataCadastro(prev => ({ ...prev, ...data }))
     setStep(prev => prev + 1)
   }
@@ -48,9 +46,7 @@ export default function Cadastro() {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return (
-          <FormStepZero formData={formDataCadastro} onNext={handleNextStep} />
-        )
+        return <FormStepZero onNext={setStep} typed='ao cadastro' />
       case 2:
         return (
           <FormStepOne

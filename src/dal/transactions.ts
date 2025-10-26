@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { CategoryType, StatusType } from '@prisma/client'
+import { CategoryType } from '@prisma/client'
 
 export const findLastTransactions = async (userId: string) => {
   return await prisma.$queryRaw<
@@ -9,17 +9,16 @@ export const findLastTransactions = async (userId: string) => {
       description: string
       date: Date
       category: CategoryType
-      status: StatusType
       type: 'income' | 'expense'
     }[]
   >`
-    SELECT id, value, description, "date", NULL AS category, NULL AS status, 'income' AS type
+    SELECT id, value, description, date, NULL AS category, NULL as method, 'income' AS type
     FROM "Income"
     WHERE "userId" = ${userId}
 
     UNION ALL
 
-    SELECT id, value, description, "expenseDate" AS date, category, status, 'expense' AS type
+    SELECT id, value, description, date, category, method, 'expense' AS type
     FROM "Expense"
     WHERE "userId" = ${userId}
 

@@ -9,24 +9,20 @@ datasource db {
 }
 
 model User {
-  id              String            @id @default(cuid())
-  name            String?
-  email           String            @unique
-  emailVerified   DateTime?
-  password        String?
-  image           String?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  accounts        Account[]
-  Authenticator   Authenticator[]
-  comments        Comment[]
-  expense         Expense[]
-  income          Income[]
-  creditCard      CreditCard[]
-  productLifetime ProductLifetime[]
-  productPrice    ProductPrice[]
-  ratings         Rating[]
-  sessions        Session[]
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  accounts      Account[]
+  Authenticator Authenticator[]
+  expense       Expense[]
+  income        Income[]
+  creditCard    CreditCard[]
+  sessions      Session[]
 }
 
 model Account {
@@ -80,7 +76,7 @@ model Authenticator {
 }
 
 model CreditCard {
-  id          String      @id @default(cuid())
+  id          String    @id @default(cuid())
   userId      String
   lastNumber  String
   creditLimit Int
@@ -88,161 +84,51 @@ model CreditCard {
   expYear     String
   billingDay  String
   holder      String
-  cardBrand   CardBrand   @default(OTHER)
-  payment     Payment[]
-  user        User        @relation(fields: [userId], references: [id])
+  cardBrand   CardBrand @default(OTHER)
+  expense     Expense[]
+  user        User      @relation(fields: [userId], references: [id])
 
   @@unique([userId, lastNumber, expMonth, expYear, cardBrand])
 }
 
 model Income {
-  id           String      @id @default(cuid())
-  userId       String
-  type         IncomeType  @default(VARIABLE)
-  value        Int
-  date         DateTime    @db.Date
-  description  String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  user         User        @relation(fields: [userId], references: [id])
+  id          String     @id @default(cuid())
+  userId      String
+  type        IncomeType @default(ACTIVE)
+  value       Int
+  date        DateTime   @db.Date
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id])
 }
 
 model Expense {
-  id          String    @id @default(cuid())
-  userId      String
-  description String
-  category    CategoryType @default(OTHER)
-  value       Int
-  expenseDate DateTime     @db.Date
-  dueDate     DateTime?    @db.Date
-  status      StatusType   @default(PENDING)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  user        User         @relation(fields: [userId], references: [id])
-  payments    Payment[]
-}
-
-model Payment {
-  id            String            @id @default(cuid())
-  expenseId     String
-  paidAt        DateTime          @default(now())
-  amount        Int
-  method        PaymentMethodType
-  creditCardId  String?
-  installments  Int? 
-  expense       Expense           @relation(fields: [expenseId], references: [id])
-  creditCard    CreditCard?       @relation(fields: [creditCardId], references: [id])
-}
-
-model Product {
-  id              String           @id @default(cuid())
-  name            String
-  createdAt       DateTime         @default(now())
-  category        ProductCategory
-  normalized_name String           @unique
-  variants        ProductVariant[]
-}
-
-model Brand {
-  id              String           @id @default(cuid())
-  creditCardId    String?
-  name            String
-  createdAt       DateTime         @default(now())
-  normalized_name String           @unique
-  variants        ProductVariant[]
-}
-
-model ProductVariant {
-  id              String            @id @default(cuid())
-  productId       String
-  description     String?
-  brandId         String?
-  brandOrigin     BrandOriginType   @default(BRANDED)
-  comments        Comment[]
-  productLifetime ProductLifetime[]
-  productPrice    ProductPrice[]
-  brand           Brand?            @relation(fields: [brandId], references: [id])
-  product         Product           @relation(fields: [productId], references: [id])
-  ratings         Rating[]
-
-  @@unique([productId, brandId])
-}
-
-model ProductPrice {
-  id               String         @id @default(cuid())
-  productVariantId String
-  userId           String
-  value            Int
-  location         String
-  date             DateTime 
-  createdAt        DateTime       @default(now())
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  user             User           @relation(fields: [userId], references: [id])
-
-  @@unique([userId, productVariantId, location, date])
-}
-
-model Comment {
-  id               String         @id @default(cuid())
-  productVariantId String
-  userId           String
-  content          String
-  createdAt        DateTime       @default(now())
-  updateAt         DateTime       @updatedAt
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  user             User           @relation(fields: [userId], references: [id])
-
-  @@unique([productVariantId, userId])
-}
-
-model Rating {
-  id               String         @id @default(cuid())
-  productVariantId String
-  userId           String
-  value            RatingType
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  user             User           @relation(fields: [userId], references: [id])
-
-  @@unique([productVariantId, userId])
-}
-
-model ProductLifetime {
-  id               String         @id @default(cuid())
-  productVariantId String
-  userId           String
-  purchaseDate     DateTime
-  endDate          DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  user             User           @relation(fields: [userId], references: [id])
-
-  @@unique([userId, productVariantId])
+  id           String            @id @default(cuid())
+  userId       String
+  description  String
+  category     CategoryType      @default(OTHER)
+  value        Int
+  date         DateTime          @db.Date 
+  method       PaymentMethodType @default(DEBIT)
+  creditCardId String?
+  installments Int?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  user         User              @relation(fields: [userId], references: [id])
+  creditCard   CreditCard?       @relation(fields: [creditCardId], references: [id])
 }
 
 enum IncomeType {
-  FIXED
-  VARIABLE
-}
-
-enum ExpenseType {
-  FIXED
-  VARIABLE
-}
-
-enum StatusType {
-  PAID
-  PENDING
-  OVERDUE
+  ACTIVE
+  PASSIVE
+  EXTRA
+  CAPITAL_GAIN
 }
 
 enum PaymentMethodType {
-  PIX
-  MONEY
-  CREDIT_CARD
-  DEBIT_CARD
+  CREDIT
+  DEBIT
 }
 
 enum CardBrand {
@@ -252,21 +138,6 @@ enum CardBrand {
   HIPERCARD
   AMEX
   OTHER
-}
-
-enum RatingType {
-  ONE_STAR
-  TWO_STAR
-  THREE_STAR
-  FOUR_STAR
-  FIVE_STAR
-}
-
-enum UnitType {
-  UNIT
-  KG
-  L
-  M
 }
 
 enum CategoryType {
@@ -282,50 +153,4 @@ enum CategoryType {
   PETS
   FINANCIAL
   OTHER
-}
-
-enum BrandOriginType {
-  BRANDED
-  UNBRANDED
-}
-
-enum ProductCategory {
-  HORTIFRUTI
-  CARNES_PEIXES
-  FRIOS_LATICINIOS
-  PADARIA_CONFEITARIA
-  BEBIDAS
-  MERCEARIA
-  ENLATADOS_CONSERVAS
-  SNACKS_DOCES
-  CONGELADOS
-  TEMPEROS_CONDIMENTOS
-  MASSAS_MOLHOS
-  PRODUTOS_NATURAIS
-  HIGIENE_PESSOAL
-  CUIDADOS_CABELO
-  DESODORANTES
-  CUIDADOS_PELE
-  BARBEARIA
-  HIGIENE_BUCAL
-  ABSORVENTES_FRALDAS
-  LIMPEZA_GERAL
-  UTENSILIOS_LIMPEZA
-  INSETICIDAS
-  INFANTIL_FRALDAS
-  INFANTIL_PAPINHAS
-  INFANTIL_HIGIENE
-  COSTURA
-  ARTESANATO
-  TECIDOS
-  ESCOLAR
-  PAPELARIA
-  DESCARTAVEIS
-  UTENSILIOS_COZINHA
-  ELETRICOS_BASICOS
-  LIMPEZA_CASA
-  TEXTIL_CASA
-  PET_RACAO
-  PET_HIGIENE
-  PET_ACESSORIOS
 }

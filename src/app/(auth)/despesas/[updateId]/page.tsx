@@ -2,10 +2,7 @@
 import { Card, CardContent } from '@/components/ui/Card'
 import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
-import {
-  expensesWithPaymentType,
-  expenseType
-} from '@/types/expense-data-props'
+import { ExpenseProps } from '@/types/expense-data-props'
 import { expenseSchema } from '@/validators/formExpense'
 import { FormStepOne } from '../_components/FormStepOne'
 import { FormStepTwo } from '../_components/FormStepTwo'
@@ -22,28 +19,23 @@ export default function Atualização() {
   const { updateId }: { updateId: string } = useParams()
 
   const [step, setStep] = useState(1)
-  const [formData, setFormData] = useState<Partial<expenseType>>({})
+  const [formData, setFormData] = useState<Partial<ExpenseProps>>({})
 
   const { data } = useGetExpenseById(updateId)
   const { isPending, handleUpdateExpense } = usePutExpense()
 
   useEffect(() => {
     if (data) {
-      const typedData = data as expensesWithPaymentType
-      const payment = typedData.payments?.[0]
-
       const cleaned = {
-        ...typedData,
-        paymentMethod: payment?.method ?? 'PIX',
-        installments: payment?.installments ?? undefined,
-        creditCardId: payment?.creditCard?.id ?? undefined,
-        dueDate: typedData.dueDate || new Date().toISOString().split('T')[0]
+        ...data,
+        installments: data.installments ?? undefined,
+        creditCardId: data.creditCardId ?? undefined
       }
       setFormData(cleaned)
     }
   }, [data])
 
-  const handleNextStep = (data: Partial<expenseType>) => {
+  const handleNextStep = (data: Partial<ExpenseProps>) => {
     setFormData(prev => ({ ...prev, ...data }))
     setStep(prev => prev + 1)
   }
@@ -60,7 +52,7 @@ export default function Atualização() {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <FormStepZero formData={formData} onNext={handleNextStep} />
+        return <FormStepZero onNext={setStep} typed='a atualização' />
       case 2:
         return (
           <FormStepOne

@@ -10,58 +10,20 @@ import {
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
-import { categoryFormatter } from '@/lib/categoryFormatter'
-import { expenseFormStepOne, expenseType } from '@/types/expense-data-props'
+import { ExpenseFormStepOne, ExpenseProps } from '@/types/expense-data-props'
 import { step1Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CategoryType } from '@prisma/client'
-import {
-  ArrowLeft,
-  ArrowRight,
-  BadgeDollarSign,
-  Bus,
-  Cpu,
-  Cross,
-  Drama,
-  Ellipsis,
-  GraduationCap,
-  Heart,
-  House,
-  PawPrint,
-  Refrigerator,
-  Shirt,
-  Wallet
-} from 'lucide-react'
+import { ArrowLeft, ArrowRight, Wallet } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { Stepper } from './Stepper'
 import { Divider } from '@/components/ui/Divider'
+import { useEffect } from 'react'
 
 type FormStepOneProps = {
-  formData: Partial<expenseType>
-  onNext: (data: expenseFormStepOne) => void
+  formData: Partial<ExpenseProps>
+  onNext: (data: ExpenseFormStepOne) => void
   setStep: React.Dispatch<React.SetStateAction<number>>
 }
-
-const categoryICon = [
-  House,
-  Refrigerator,
-  Bus,
-  GraduationCap,
-  Cross,
-  Shirt,
-  Cpu,
-  Heart,
-  Drama,
-  PawPrint,
-  BadgeDollarSign,
-  Ellipsis
-]
-
-export const categories = Object.keys(CategoryType).map((key, i) => ({
-  type: key as CategoryType,
-  icon: categoryICon[i]
-}))
 
 export const FormStepOne = ({
   formData,
@@ -72,15 +34,20 @@ export const FormStepOne = ({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors }
-  } = useForm<expenseFormStepOne>({
+  } = useForm<ExpenseFormStepOne>({
     resolver: zodResolver(step1Schema),
     defaultValues: formData
   })
 
+  useEffect(() => {
+    reset(formData)
+  }, [formData, reset])
+
   return (
     <Form onSubmit={handleSubmit(onNext)}>
-      <h2 className='py-3 text-center font-poppins'>Informações básicas</h2>
+      <h2 className='py-3 text-center font-poppins'>Informações gerais</h2>
       <Divider />
       <FormField name='value'>
         <FormLabel>Valor *</FormLabel>
@@ -115,31 +82,26 @@ export const FormStepOne = ({
           </FormMessage>
         )}
       </FormField>
-      <FormField name='category'>
-        <FormLabel>Categoria *</FormLabel>
+      <FormField name='date'>
+        <FormLabel>Data de compra *</FormLabel>
         <Controller
-          name='category'
+          name='date'
           control={control}
           render={({ field }) => (
-            <ToggleGroup
-              type='single'
-              onValueChange={field.onChange}
+            <input
+              type='date'
+              className='text-foreground-secondary border p-1 px-2 w-fit'
+              {...field}
               value={field.value}
-              className='grid-cols-2 sm:grid-cols-4'
-            >
-              {categories.map(category => (
-                <ToggleGroupItem
-                  key={category.type}
-                  value={category.type}
-                  className='text-sm flex-col'
-                >
-                  <category.icon strokeWidth={1.3} className='size-5' />
-                  {categoryFormatter(category.type)}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
+              onChange={e => field.onChange(e.target.value)}
+            />
           )}
         />
+        {errors.date && (
+          <FormMessage className='text-destructive'>
+            {errors.date?.message}
+          </FormMessage>
+        )}
       </FormField>
       <Stepper step={2} />
       <div className='flex gap-3 justify-between mt-3'>

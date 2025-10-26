@@ -5,22 +5,22 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/Select'
-import { expensesWithPaymentType } from '@/types/expense-data-props'
+import { ExpenseProps } from '@/types/expense-data-props'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 type FilterExpensesProps = {
   months: string[]
-  filteredExpenses: expensesWithPaymentType[]
+  filteredExpenses: ExpenseProps[]
   filters: {
     month: string
-    status: 'all' | 'Pago' | 'Pendente' | 'Atrasado'
+    method: 'all' | 'Crédito' | 'Débito'
   }
 
   updateFilters: (
     newFilters: Partial<{
       month: string
-      status: 'all' | 'Pago' | 'Pendente' | 'Atrasado'
+      method: 'all' | 'Crédito' | 'Débito'
     }>
   ) => void
 }
@@ -36,9 +36,7 @@ export const FilterExpenses = ({
     updateFilters(newFilter)
   }
 
-  const handleStatusFilter = (
-    value: 'all' | 'Pago' | 'Pendente' | 'Atrasado'
-  ) => {
+  const handleStatusFilter = (value: 'all' | 'Crédito' | 'Débito') => {
     const newFilter = { ...filters, status: value }
     updateFilters(newFilter)
   }
@@ -72,13 +70,12 @@ export const FilterExpenses = ({
         </Select>
         <Select onValueChange={handleStatusFilter}>
           <SelectTrigger>
-            <SelectValue placeholder='status' />
+            <SelectValue placeholder='Pagamento' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='all'>Sem filtro</SelectItem>
-            <SelectItem value='Pago'>Pago</SelectItem>
-            <SelectItem value='Pendente'>Pendente</SelectItem>
-            <SelectItem value='Atrasado'>Atrasado</SelectItem>
+            <SelectItem value='CREDIT'>Crédito</SelectItem>
+            <SelectItem value='DEBIT'>Débito</SelectItem>
           </SelectContent>
         </Select>
       </div>

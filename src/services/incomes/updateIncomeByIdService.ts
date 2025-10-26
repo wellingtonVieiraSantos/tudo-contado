@@ -1,8 +1,8 @@
 import { updateIncomeById } from '@/dal/incomes'
 import { requireUser } from '@/lib/require-user'
-import { incomeType } from '@/types/income-data-props'
+import { IncomeProps } from '@/types/income-data-props'
 
-export const updateIncomeByIdService = async (rawData: incomeType) => {
+export const updateIncomeByIdService = async (rawData: IncomeProps) => {
   await requireUser()
 
   const data = {

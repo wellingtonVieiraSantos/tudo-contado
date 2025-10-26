@@ -1,5 +1,5 @@
 import { queryClient } from '@/lib/query-client'
-import { IncomeDataProps } from '@/types/income-data-props'
+import { IncomeProps } from '@/types/income-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -14,9 +14,7 @@ const fetchIncome = async (id: string) => {
 
 export const useDelIncome = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedIncome, setSelectedIncome] = useState<null | IncomeDataProps>(
-    null
-  )
+  const [selectedIncome, setSelectedIncome] = useState<null | IncomeProps>(null)
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchIncome,
@@ -30,7 +28,7 @@ export const useDelIncome = () => {
     setIsOpen(false)
   }
 
-  const openDeleteModal = (income: IncomeDataProps) => {
+  const openDeleteModal = (income: IncomeProps) => {
     setSelectedIncome(income)
     setIsOpen(true)
   }

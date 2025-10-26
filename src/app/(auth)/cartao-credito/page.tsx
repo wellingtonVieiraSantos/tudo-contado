@@ -3,7 +3,6 @@ import { UserBarSettings } from '@/components/UserBarSettings'
 import { useGetCreditCard } from './_hooks/use-get-creditcards'
 import Image from 'next/image'
 import { ProgressBar } from '@/components/ui/ProgressBar'
-import valueFormatter from '@/lib/valueFormatter'
 import {
   Card,
   CardContent,
@@ -11,7 +10,6 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
-import { Badge } from '@/components/ui/Badge'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },

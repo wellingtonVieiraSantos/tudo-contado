@@ -1,8 +1,8 @@
 import { updateCreditCardById } from '@/dal/creditCard'
 import { requireUser } from '@/lib/require-user'
-import { creditCardType } from '@/types/creditcard-data-props'
+import { CreditCardProps } from '@/types/creditcard-data-props'
 
-export const updateCreditCardByIdService = async (rawData: creditCardType) => {
+export const updateCreditCardByIdService = async (rawData: CreditCardProps) => {
   await requireUser()
 
   const data = {
