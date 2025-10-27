@@ -42,6 +42,7 @@ import Loading from './loading'
 import { usePutIncome } from './_hooks/use-put-income'
 import { usePostIncome } from './_hooks/use-post-income'
 import { ptBR } from 'date-fns/locale'
+import { incomeTypeFormatter } from '@/lib/paymentTypeFormatter'
 
 export default function Income() {
   const { isLoading, filteredIncomes, months, totals, filters, updateFilters } =
@@ -152,7 +153,7 @@ export default function Income() {
                   </div>
                 </div>
                 <Badge variant='info' className='absolute top-3 right-3'>
-                  {income.type}
+                  {incomeTypeFormatter(income.type)}
                 </Badge>
               </CardContent>
               <CardFooter>
