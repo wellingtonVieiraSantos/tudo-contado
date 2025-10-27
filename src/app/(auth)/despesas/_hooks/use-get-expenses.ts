@@ -18,7 +18,7 @@ const fetchExpenses = async () => {
 export const useGetExpenses = () => {
   const [filters, setFilters] = useState<{
     month: string
-    method: 'all' | 'Crédito' | 'Débito'
+    method: 'all' | 'CREDIT' | 'DEBIT'
   }>({
     month: format(new Date(), "MMMM 'de' yyyy", { locale: ptBR }),
     method: 'all'
@@ -52,7 +52,7 @@ export const useGetExpenses = () => {
     if (!data.length) return []
 
     const isMonthActive = filters.month !== 'default'
-    const isStatusActive = filters.method !== 'all'
+    const isMethodActive = filters.method !== 'all'
 
     return data.filter(expense => {
       const matchesMonth =
@@ -60,9 +60,7 @@ export const useGetExpenses = () => {
         format(expense.date, "MMMM 'de' yyyy", { locale: ptBR }) ===
           filters.month
 
-      const matchesMethod =
-        !isStatusActive ||
-        paymentMethodFormatter(expense.method) === filters.method
+      const matchesMethod = !isMethodActive || expense.method === filters.method
 
       return matchesMonth && matchesMethod
     })

@@ -62,7 +62,7 @@ export default function Expense() {
   if (isLoading) return <Loading />
 
   return (
-    <div className='flex flex-col flex-wrap p-3 gap-3 pb-22'>
+    <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 lg:pb-0'>
       <UserBarSettings title='Despesas' />
       {filteredExpenses?.length !== 0 && (
         <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
@@ -73,18 +73,12 @@ export default function Expense() {
                 Total de Despesas
               </CardTitle>
               <CardDescription className='hidden lg:flex'>
-                Resumo das despesas totais e saldo devedor
+                Somátorio de todas as despesas
               </CardDescription>
               <Divider className='hidden lg:flex' />
             </CardHeader>
-            <CardContent className='py-3 flex flex-col gap-4 text-4xl font-montserrat'>
-              <p className='text-center'> {formatedCurrency(totals.total)}</p>
-              <p className='text-lg'>
-                <span className='text-sm font-poppins'>
-                  Total ainda à pagar:
-                </span>{' '}
-                {formatedCurrency(totals.credit)}
-              </p>
+            <CardContent className='py-3 text-center text-4xl font-montserrat'>
+              {formatedCurrency(totals.total)}
               <Link href='/despesas/cadastro'>
                 <Button className='bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-105 hover:bg-button-foreground font-poppins'>
                   <Plus />

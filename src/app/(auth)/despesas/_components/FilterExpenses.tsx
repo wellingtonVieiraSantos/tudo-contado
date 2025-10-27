@@ -14,13 +14,13 @@ type FilterExpensesProps = {
   filteredExpenses: ExpenseProps[]
   filters: {
     month: string
-    method: 'all' | 'Crédito' | 'Débito'
+    method: 'all' | 'CREDIT' | 'DEBIT'
   }
 
   updateFilters: (
     newFilters: Partial<{
       month: string
-      method: 'all' | 'Crédito' | 'Débito'
+      method: 'all' | 'CREDIT' | 'DEBIT'
     }>
   ) => void
 }
@@ -36,8 +36,8 @@ export const FilterExpenses = ({
     updateFilters(newFilter)
   }
 
-  const handleStatusFilter = (value: 'all' | 'Crédito' | 'Débito') => {
-    const newFilter = { ...filters, status: value }
+  const handleStatusFilter = (value: 'all' | 'CREDIT' | 'DEBIT') => {
+    const newFilter = { ...filters, method: value }
     updateFilters(newFilter)
   }
   return (
