@@ -57,13 +57,7 @@ export const ModalIncome = ({
     reset,
     formState: { errors }
   } = useForm<IncomeProps>({
-    resolver: zodResolver(incomeSchema),
-    defaultValues: {
-      value: undefined,
-      description: undefined,
-      type: 'ACTIVE',
-      date: new Date().toISOString().split('T')[0]
-    }
+    resolver: zodResolver(incomeSchema)
   })
 
   useEffect(() => {
@@ -176,7 +170,7 @@ export const ModalIncome = ({
                   type='date'
                   className='text-foreground-secondary border p-1 px-2 w-fit'
                   {...field}
-                  value={field.value}
+                  value={field.value || new Date().toISOString().split('T')[0]}
                   onChange={e => field.onChange(e.target.value)}
                 />
               )}
