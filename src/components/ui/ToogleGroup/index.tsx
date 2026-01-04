@@ -29,7 +29,7 @@ const ToggleGroupItem = forwardRef<
       ref={ref}
       {...props}
       className={twMerge(
-        `inline-flex flex-wrap items-center justify-center gap-3 rounded p-3 border
+        `inline-flex flex-wrap items-center justify-center gap-3 rounded py-1 px-3 border
         border-disabled data-[state=off]:bg-button-ghost/10 data-[state=on]:bg-button/10 data-[state=on]:border-button
         hover:bg-hover cursor-pointer transition duration-300 disabled:cursor-not-allowed
         disabled:bg-disabled disabled:text-foreground-secondary`,

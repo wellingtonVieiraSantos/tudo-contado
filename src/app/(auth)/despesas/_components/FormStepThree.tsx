@@ -8,7 +8,6 @@ import {
   FormMessage,
   FormSubmit
 } from '@/components/ui/Form'
-import { step3Schema } from '@/validators/formExpense'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   ArrowLeft,
@@ -22,7 +21,6 @@ import { Controller, useForm } from 'react-hook-form'
 import { Stepper } from './Stepper'
 import { Divider } from '@/components/ui/Divider'
 import { PaymentMethodType } from '@prisma/client'
-import { ExpenseFormStepThree, ExpenseProps } from '@/types/expense-data-props'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
 import { useEffect } from 'react'
 import { useGetCreditCard } from '../../cartao-credito/_hooks/use-get-creditcards'
@@ -34,6 +32,11 @@ import {
   SelectValue
 } from '@/components/ui/Select'
 import { Input } from '@/components/ui/Input'
+import {
+  ExpenseFormStepThree,
+  ExpenseProps
+} from '@/modules/expenses/expenses.types'
+import { step3Schema } from '@/modules/expenses/expenses.schema'
 
 type FormStepThreeProps = {
   formData: Partial<ExpenseProps>

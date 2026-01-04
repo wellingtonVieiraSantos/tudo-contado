@@ -1,0 +1,171 @@
+import { ExpensesRepository } from './expenses.repository'
+import { requireUser } from '@/lib/require-user'
+import { Prisma } from '@prisma/client'
+import { endOfMonth, startOfMonth } from 'date-fns'
+import { ExpenseProps, ListExpensesQuery } from './expenses.types'
+
+const expensesRepository = new ExpensesRepository()
+
+/* GET */
+export const getAllExpensesService = async (params: ListExpensesQuery) => {
+  const { id } = await requireUser()
+
+  const where: {
+    date?: { gte: Date; lt: Date }
+    category?: ListExpensesQuery['category']
+    method?: ListExpensesQuery['method']
+    user: { id: string }
+  } = {
+    user: { id: id! }
+  }
+
+  const { month, year, category, method, page } = params
+
+  if (month && year) {
+    const start = new Date(Date.UTC(year, month - 1, 1))
+    const end = new Date(Date.UTC(year, month, 1))
+
+    where.date = { gte: start, lt: end }
+  }
+
+  if (category) where.category = category
+
+  if (method) where.method = method
+
+  /*   console.log(JSON.stringify(where, null, 2)) */
+
+  const rawExpenses = await expensesRepository.getAll(where, page)
+
+  //normalize value and amount to show in component, get in centavos, return in reais
+  const expenses = rawExpenses.data.map(expense => ({
+    ...expense,
+    value: expense.value / 100,
+    date: expense.date.toISOString().split('T')[0]
+  }))
+  return { qtd: rawExpenses.qtd, expenses }
+}
+
+export const getExpenseByIdService = async (expenseId: string) => {
+  await requireUser()
+  const rawExpenses = await expensesRepository.getById(expenseId)
+
+  if (!rawExpenses) return
+
+  //normalize value  to show in component, get in centavos, return in reais
+  const expenses = {
+    ...rawExpenses,
+    value: rawExpenses.value / 100,
+    date: rawExpenses.date.toISOString().split('T')[0]
+  }
+  return expenses
+}
+
+export const getSumExpensesValuesByMonthRangeService = async () => {
+  const { id } = await requireUser()
+
+  const expense = await expensesRepository.getByMonthRange(id!)
+
+  const normalizedExpense = expense.map(exp => ({
+    ...exp,
+    total: exp.total ? exp.total / 100 : 0
+  }))
+
+  return normalizedExpense
+}
+
+export const getActualMonthExpensesByCategoryService = async () => {
+  const { id } = await requireUser()
+
+  const today = new Date()
+
+  const start = startOfMonth(today)
+  const end = endOfMonth(today)
+
+  const expense = await expensesRepository.getByActualMonthExpensesByCategory(
+    id!,
+    start,
+    end
+  )
+
+  const normalizedExpense = expense.map(exp => ({
+    ...exp,
+    _sum: exp._sum.value ? exp._sum.value / 100 : 0
+  }))
+
+  return normalizedExpense
+}
+
+export const getActualMonthCreditCardExpenseSumService = async () => {
+  const { id } = await requireUser()
+
+  const today = new Date()
+
+  const start = startOfMonth(today)
+  const end = endOfMonth(today)
+
+  const creditCard =
+    await expensesRepository.getByActualMonthCreditCardExpenseSum(
+      id!,
+      start,
+      end
+    )
+
+  const normalizedExpense = creditCard.map(exp => ({
+    ...exp,
+    _sum: exp._sum.value ? exp._sum.value / 100 : 0
+  }))
+
+  return normalizedExpense
+}
+
+/* POST */
+export const postExpenseService = async (rawData: ExpenseProps) => {
+  const { id } = await requireUser()
+
+  const data = {
+    ...rawData,
+    value: rawData.value * 100,
+    expenseDate: new Date(`${rawData.date}T00:00:00.000Z`)
+  }
+
+  const expenseData: Prisma.ExpenseCreateInput = {
+    value: data.value,
+    date: data.expenseDate,
+    description: data.description,
+    category: data.category,
+    method: data.method,
+    installments: data.installments,
+    user: {
+      connect: { id: id! }
+    },
+    ...(data.method === 'CREDIT' && data.creditCardId
+      ? { creditCard: { connect: { id: data.creditCardId } } }
+      : {})
+  }
+
+  const expense = await expensesRepository.create(expenseData)
+
+  return expense
+}
+
+/* UPDATE */
+export const updateExpenseByIdService = async (rawData: ExpenseProps) => {
+  await requireUser()
+
+  const data = {
+    ...rawData,
+    value: rawData.value * 100,
+    expenseDate: new Date(`${rawData.date}T00:00:00.000Z`)
+  }
+
+  const expense = await expensesRepository.update(data.id!, data)
+
+  return expense
+}
+
+/* DELETE */
+export const deleteExpenseByIdService = async (expenseId: string) => {
+  await requireUser()
+
+  return await expensesRepository.delete(expenseId)
+}

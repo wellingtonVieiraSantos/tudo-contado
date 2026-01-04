@@ -1,4 +1,4 @@
-import { getExpenseByIdService } from '@/services/expenses/getExpenseByIdService'
+import { getExpenseByIdService } from '@/modules/expenses/expenses.service'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(

@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { creditCardSchema } from '@/validators/formCreditCard'
 import { Prisma } from '@prisma/client'
-import { getAllCreditCardService } from '@/services/creditCard/getAllCreditCardService'
-import { postCreditCardService } from '@/services/creditCard/postCreditCardService'
-import { updateCreditCardByIdService } from '@/services/creditCard/updateCreditCardByIdService'
-import { deleteCreditCardByIdService } from '@/services/creditCard/deleteCreditCardByIdService'
+import { creditCardSchema } from '@/modules/creditCard/creditCard.schema'
+import {
+  getAllCreditCardService,
+  postCreditCardService,
+  updateCreditCardByIdService,
+  deleteCreditCardByIdService
+} from '@/modules/creditCard/creditCard.service'
 
 export async function GET() {
   try {

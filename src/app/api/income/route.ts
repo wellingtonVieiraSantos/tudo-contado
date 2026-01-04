@@ -1,8 +1,10 @@
-import { deleteIncomeByIdService } from '@/services/incomes/deleteIncomeByIdService'
-import { getAllIncomesService } from '@/services/incomes/getAllIncomesService'
-import { postIncomeService } from '@/services/incomes/postIncomeService'
-import { updateIncomeByIdService } from '@/services/incomes/updateIncomeByIdService'
-import { incomeSchema } from '@/validators/formIncome'
+import { incomeSchema } from '@/modules/incomes/incomes.schema'
+import {
+  getAllIncomesService,
+  postIncomeService,
+  updateIncomeByIdService,
+  deleteIncomeByIdService
+} from '@/modules/incomes/incomes.service'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {

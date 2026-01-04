@@ -1,4 +1,4 @@
-import { getCreditCardByIdService } from '@/services/creditCard/getCreditCardByIdService'
+import { getCreditCardByIdService } from '@/modules/creditCard/creditCard.service'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(

@@ -2,8 +2,7 @@
 import { Card, CardContent } from '@/components/ui/Card'
 import { Undo2 } from 'lucide-react'
 import Link from 'next/link'
-import { ExpenseProps } from '@/types/expense-data-props'
-import { expenseSchema } from '@/validators/formExpense'
+
 import { FormStepOne } from '../_components/FormStepOne'
 import { FormStepTwo } from '../_components/FormStepTwo'
 import { FormStepThree } from '../_components/FormStepThree'
@@ -14,6 +13,8 @@ import { useGetExpenseById } from '../_hooks/use-get-expense-by-id'
 import { useParams } from 'next/navigation'
 import { FormStepZero } from '../_components/FormStepZero'
 import { FormStepResume } from '../_components/FormStepResume'
+import { ExpenseProps } from '@/modules/expenses/expenses.types'
+import { expenseSchema } from '@/modules/expenses/expenses.schema'
 
 export default function Atualização() {
   const { updateId }: { updateId: string } = useParams()

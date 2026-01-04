@@ -20,12 +20,12 @@ import {
 import { CreditCard, User, Send, DollarSign, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { creditCardSchema } from '@/validators/formCreditCard'
 import { CardBrand } from '@prisma/client'
 import { cardBrandFormatter } from '@/lib/cardBrandFormatter'
 import { usePostCreditCard } from '../_hooks/use-post-creditcard'
 import { Dispatch, SetStateAction } from 'react'
-import { CreditCardProps } from '@/types/creditcard-data-props'
+import { CreditCardProps } from '@/modules/creditCard/creditCard.types'
+import { creditCardSchema } from '@/modules/creditCard/creditCard.schema'
 
 export const FormPostCreditCard = ({
   setStep

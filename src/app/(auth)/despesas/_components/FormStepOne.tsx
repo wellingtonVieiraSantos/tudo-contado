@@ -10,14 +10,18 @@ import {
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { ExpenseFormStepOne, ExpenseProps } from '@/types/expense-data-props'
-import { step1Schema } from '@/validators/formExpense'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft, ArrowRight, Wallet } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { Stepper } from './Stepper'
 import { Divider } from '@/components/ui/Divider'
 import { useEffect } from 'react'
+import { step1Schema } from '@/modules/expenses/expenses.schema'
+import {
+  ExpenseFormStepOne,
+  ExpenseProps
+} from '@/modules/expenses/expenses.types'
 
 type FormStepOneProps = {
   formData: Partial<ExpenseProps>

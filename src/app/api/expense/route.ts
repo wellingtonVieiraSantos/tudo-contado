@@ -1,13 +1,29 @@
+import { expenseSchema } from '@/modules/expenses/expenses.schema'
+import {
+  getAllExpensesService,
+  postExpenseService,
+  updateExpenseByIdService,
+  deleteExpenseByIdService
+} from '@/modules/expenses/expenses.service'
+import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
 import { NextRequest, NextResponse } from 'next/server'
-import { expenseSchema } from '@/validators/formExpense'
-import { postExpenseService } from '@/services/expenses/postExpenseService'
-import { getAllExpensesService } from '@/services/expenses/getAllExpensesService'
-import { deleteExpenseByIdService } from '@/services/expenses/deleteExpenseByIdService'
-import { updateExpenseByIdService } from '@/services/expenses/updateExpenseByIdService'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams
+
+  const params = {
+    page: Number(searchParams.get('page')) || 1,
+    month: Number(searchParams.get('month')) || undefined,
+    year: Number(searchParams.get('year')) || undefined,
+    method:
+      (searchParams.get('method') as ListExpensesQuery['method']) || undefined,
+    category:
+      (searchParams.get('category') as ListExpensesQuery['category']) ||
+      undefined
+  }
+
   try {
-    const expenses = await getAllExpensesService()
+    const expenses = await getAllExpensesService(params)
 
     return NextResponse.json({ data: expenses, success: true }, { status: 200 })
   } catch (e) {

@@ -1,8 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/Button'
 import { Form, FormField, FormLabel, FormSubmit } from '@/components/ui/Form'
-import { ExpenseFormStepTwo, ExpenseProps } from '@/types/expense-data-props'
-import { step2Schema } from '@/validators/formExpense'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   ArrowLeft,
@@ -27,6 +26,11 @@ import { Divider } from '@/components/ui/Divider'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import { CategoryType } from '@prisma/client'
+import {
+  ExpenseFormStepTwo,
+  ExpenseProps
+} from '@/modules/expenses/expenses.types'
+import { step2Schema } from '@/modules/expenses/expenses.schema'
 
 type FormStepTwoProps = {
   formData: Partial<ExpenseProps>

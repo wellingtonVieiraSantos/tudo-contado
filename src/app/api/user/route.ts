@@ -1,4 +1,7 @@
-import { checkEmailExists, registerNewUser } from '@/dal/user'
+import {
+  checkEmailExists,
+  registerNewUser
+} from '@/modules/user/user.repository'
 import bcrypt from 'bcryptjs'
 import { NextRequest, NextResponse } from 'next/server'
 

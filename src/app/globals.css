@@ -95,9 +95,34 @@
   --font-poppins: var(--font-poppins);
   --font-montserrat: var(--font-montserrat);
 
+  --animate-slideUp: slideUp 0.3s ease-in-out;
+  --animate-slideDown: slideDown 0.3s ease-in-out;
+
   --animate-skeletonShimmer: SkeletonShimmer 1.5s linear infinite;
   --animate-typing: typing 2.4s steps(13) 0.2s forwards,
     blink 0.9s step-end infinite;
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   @keyframes SkeletonShimmer {
     from {
@@ -107,6 +132,7 @@
       transform: translateX(110%);
     }
   }
+
   @keyframes typing {
     to {
       width: 13ch;

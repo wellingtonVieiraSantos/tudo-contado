@@ -27,11 +27,11 @@ import {
   Hammer,
   TrendingUp
 } from 'lucide-react'
-import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IncomeProps } from '@/types/income-data-props'
 import { useEffect } from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
+import { IncomeProps } from '@/modules/incomes/incomes.types'
+import { incomeSchema } from '@/modules/incomes/incomes.schema'
 
 type ModalIncomeProps = {
   isOpen: boolean
