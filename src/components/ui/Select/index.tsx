@@ -14,7 +14,7 @@ const SelectTrigger = forwardRef<
   return (
     <SelectRadix.Trigger
       className={twMerge(
-        `border flex justify-between gap-2 items-center w-full h-8 px-2 rounded
+        `border flex justify-between gap-2 items-center w-full min-h-8 px-2 rounded
          data-placeholder:text-foreground-secondary data-[state=open]:[&>svg]:rotate-180 [&>span]:line-clamp-1
          data-disabled:cursor-not-allowed data-disabled:bg-disabled`,
         className
@@ -38,10 +38,7 @@ const SelectScrollUpButton = forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <SelectRadix.ScrollUpButton
-      className={twMerge(
-        `h-8 flex justify-center items-center py-1`,
-        className
-      )}
+      className={twMerge(`flex justify-center items-center py-1`, className)}
       ref={ref}
       {...props}
     >
@@ -58,10 +55,7 @@ const SelectScrollDownButton = forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <SelectRadix.ScrollDownButton
-      className={twMerge(
-        `h-8 flex justify-center items-center py-1`,
-        className
-      )}
+      className={twMerge(`flex justify-center items-center py-1`, className)}
       ref={ref}
       {...props}
     >
@@ -121,7 +115,7 @@ const SelectItem = forwardRef<
   return (
     <SelectRadix.SelectItem
       className={twMerge(
-        `relative h-8 p-1.5 pl-2 pr-8 flex w-full cursor-default select-none items-center
+        `relative p-1.5 pl-2 pr-8 flex w-full cursor-default select-none items-center
          hover:bg-hover rounded-none data-[state=checked]:bg-button data-[state=checked]:text-button-foreground
          data-disabled:cursor-not-allowed data-disabled:text-disabled`,
         className

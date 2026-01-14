@@ -68,8 +68,7 @@ export const step3Schema = expenseSchemaInitial
   )
 
 export const listExpensesSchema = z.object({
-  month: z.number().min(1).max(12).optional(),
-  year: z.number().min(2000).optional(),
+  date: z.string().optional(),
   method: z
     .nativeEnum(PaymentMethodType)
     .optional()

@@ -34,7 +34,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={twMerge(
-          `w-max relative flex items-center justify-center rounded-full lg:rounded cursor-pointer transition-color duration-300
+          `w-max relative flex items-center justify-center rounded cursor-pointer transition-color duration-300
            disabled:bg-disabled disabled:cursor-not-allowed`,
           sizeClasses[size],
           variantClasses[variant],

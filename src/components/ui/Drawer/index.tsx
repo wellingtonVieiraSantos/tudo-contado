@@ -75,7 +75,7 @@ const DrawerContent = forwardRef<
         ref={ref}
         {...props}
         className={twMerge(
-          `fixed size-auto bg-card p-6 pb-10 rounded z-20 border`,
+          `fixed size-auto bg-card p-6 rounded z-20 border`,
           orientationClasses[finalOrientation],
           className
         )}

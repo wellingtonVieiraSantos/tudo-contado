@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
@@ -15,6 +14,7 @@ import { UserBarSettings } from '@/components/UserBarSettings'
 import { Button } from '@/components/ui/Button'
 import {
   BanknoteArrowUp,
+  ChevronsUpDown,
   Plus,
   RefreshCw,
   Trash,
@@ -41,9 +41,26 @@ import Link from 'next/link'
 import { ptBR } from 'date-fns/locale'
 import { categories } from './_components/FormStepTwo'
 import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
 import { useExpenseQuery } from './_hooks/use-query-expense'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/Table'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationElipse,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrev
+} from '@/components/ui/Pagination'
 
 export default function Expense() {
   const searchParams = useSearchParams()
@@ -61,7 +78,8 @@ export default function Expense() {
 
   const { expenses, isLoading } = useGetExpenses(filters)
 
-  const { setFilters } = useExpenseQuery()
+  const { setPage } = useExpenseQuery()
+  const pathname = usePathname()
 
   const {
     handleDeleteExpense,
@@ -94,57 +112,33 @@ export default function Expense() {
           </Link>
         </CardContent>
       </Card>
-      <div className='flex flex-col md:flex-row gap-3'>
-        <FilterExpenses filters={filters} />
-        <div className='flex gap-2 text-sm'>
-          {filters.method && (
-            <div className='border-success flex items-center gap-3 border px-2 md:px-4 rounded'>
-              {paymentMethodFormatter(filters.method)}
-              <X
-                size={18}
-                strokeWidth={1.3}
-                className='cursor-pointer'
-                onClick={() => setFilters({ method: undefined })}
-              />
-            </div>
-          )}
-          {filters.category && (
-            <div className='border-success flex items-center gap-3 border px-2 md:px-4 rounded'>
-              {categoryFormatter(filters.category)}
-              <X
-                size={18}
-                strokeWidth={1.3}
-                className='cursor-pointer'
-                onClick={() => setFilters({ category: undefined })}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-      <h2>Gastos</h2>
-      <p className='text-foreground-secondary text-sm -mt-2'>
+      <FilterExpenses filters={filters} />
+      <h2 className='pl-2'>Gastos</h2>
+      <p className='text-foreground-secondary text-sm -mt-2 pl-2 mb-2'>
         Acompanhamento de gastos detalhadamente
       </p>
-      <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
-        {expenses.data?.length !== 0 &&
-          expenses.data?.map(expense => (
-            <Card key={expense.id} className={`w-full py-3 `}>
-              <CardHeader>
-                <CardTitle>
-                  {format(
-                    parse(expense.date, 'yyyy-MM-dd', new Date()),
-                    "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR }
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  {categoryFormatter(expense.category)}
-                </CardDescription>
-                <Divider />
-              </CardHeader>
-              <CardContent className='gap-2'>
-                <div className='flex items-center gap-3'>
-                  <div className='size-16 md:size-20 shrink-0 grid place-items-center rounded-xl bg-background border border-disabled'>
+      {expenses.data.length !== 0 && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead />
+              <TableHead className='flex items-center gap-2'>
+                Valor <ChevronsUpDown size={20} strokeWidth={1.3} />
+              </TableHead>
+              <TableHead>Descrição</TableHead>
+              <TableHead className='flex items-center gap-2'>
+                Data <ChevronsUpDown size={20} strokeWidth={1.3} />
+              </TableHead>
+              <TableHead>Categoria</TableHead>
+              <TableHead>Pagamento</TableHead>
+              <TableHead className='flex justify-center'>Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {expenses.data?.length !== 0 &&
+              expenses.data?.map(expense => (
+                <TableRow key={expense.id}>
+                  <TableCell>
                     {(() => {
                       const category = categories.find(
                         c => c.type === expense.category
@@ -158,44 +152,76 @@ export default function Expense() {
                         />
                       ) : null
                     })()}
-                  </div>
-                  <div className='grid gap-2 w-full'>
-                    <p className='text-2xl font-montserrat tracking-wider'>
-                      {formatedCurrency(expense.value)}
-                    </p>
-                    <p className='text-foreground-secondary line-clamp-1'>
-                      {expense.description}
-                    </p>
-                  </div>
-                </div>
-                <Badge className='absolute top-3 right-3'>
-                  {paymentMethodFormatter(expense.method)}
-                </Badge>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  variant='border'
-                  onClick={() => openDeleteModal(expense)}
-                  className='self-end hover:bg-destructive/40 rounded-lg'
+                  </TableCell>
+                  <TableCell>{formatedCurrency(expense.value)}</TableCell>
+                  <TableCell>{expense.description}</TableCell>
+                  <TableCell>
+                    {format(
+                      parse(expense.date, 'yyyy-MM-dd', new Date()),
+                      'dd-MM-yyyy',
+                      { locale: ptBR }
+                    )}
+                  </TableCell>
+                  <TableCell>{categoryFormatter(expense.category)}</TableCell>
+                  <TableCell>
+                    {paymentMethodFormatter(expense.method)}
+                  </TableCell>
+                  <TableCell className='flex gap-3 justify-center'>
+                    <Button
+                      variant='border'
+                      onClick={() => openDeleteModal(expense)}
+                      className='self-end hover:bg-destructive/40 rounded-lg'
+                    >
+                      <Trash />
+                      <span className='hidden md:inline-block'>Deletar</span>
+                    </Button>
+
+                    <Link href={`/despesas/${expense.id}`}>
+                      <Button
+                        variant='border'
+                        className='self-end bg-foreground text-background md:px-4 rounded-lg'
+                      >
+                        <RefreshCw />
+                        <span className='hidden md:inline-block'>
+                          Atualizar
+                        </span>
+                      </Button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      )}
+      {expenses.data.length !== 0 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationPrev
+              disabled={expenses.meta.page === 1}
+              href={`${pathname}?page=${filters.page - 1}`}
+            />
+            {Array.from({ length: expenses.meta.totalPages }).map(
+              (_, index) => (
+                <PaginationLink
+                  href={`${pathname}?page=${index + 1}`}
+                  isActive={filters.page === index + 1}
+                  data-disabled={filters.page === index + 1 ? '' : undefined}
+                  onClick={() => {
+                    setPage(index + 1)
+                  }}
+                  className='data-[disabled]:pointer-events-none'
                 >
-                  <Trash />
-                  <span className='hidden md:inline-block'>Deletar</span>
-                </Button>
-
-                <Link href={`/despesas/${expense.id}`}>
-                  <Button
-                    variant='border'
-                    className='self-end bg-foreground text-background md:px-4 rounded-lg'
-                  >
-                    <RefreshCw />
-                    <span className='hidden md:inline-block'>Atualizar</span>
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
-          ))}
-      </div>
-
+                  <PaginationItem>{index + 1}</PaginationItem>
+                </PaginationLink>
+              )
+            )}
+            <PaginationNext
+              disabled={expenses.meta.page === expenses.meta.totalPages}
+              href={`${pathname}?page=${filters.page + 1}`}
+            />
+          </PaginationContent>
+        </Pagination>
+      )}
       <Modal open={isOpen} onOpenChange={setIsOpen}>
         <ModalContent>
           <ModalHeader>

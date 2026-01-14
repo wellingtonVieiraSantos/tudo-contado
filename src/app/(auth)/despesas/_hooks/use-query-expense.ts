@@ -1,4 +1,4 @@
-import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
+import { ListExpensesQueryDTO } from '@/modules/expenses/expenses.types'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export function useExpenseQuery() {
@@ -6,7 +6,7 @@ export function useExpenseQuery() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const setFilters = (filters: ListExpensesQuery) => {
+  const setFilters = (filters: ListExpensesQueryDTO) => {
     const params = new URLSearchParams(searchParams.toString())
 
     Object.entries(filters).forEach(([key, value]) => {

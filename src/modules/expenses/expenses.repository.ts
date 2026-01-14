@@ -26,14 +26,15 @@ export class ExpensesRepository {
     },
     page: number
   ) {
-    const [qtd, data] = await Promise.all([
+    const limit = 10
+    const [total_items, data] = await Promise.all([
       prisma.expense.count({
         where
       }),
       prisma.expense.findMany({
         where,
-        skip: (page - 1) * 10,
-        take: 10,
+        skip: (page - 1) * limit,
+        take: limit,
         select: {
           id: true,
           value: true,
@@ -49,7 +50,15 @@ export class ExpensesRepository {
       })
     ])
 
-    return { qtd, data }
+    return {
+      meta: {
+        total_items,
+        page,
+        limit,
+        total_pages: Math.ceil(total_items / limit)
+      },
+      data
+    }
   }
   async getById(expenseId: string) {
     return await prisma.expense.findUnique({

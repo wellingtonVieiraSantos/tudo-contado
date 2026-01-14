@@ -5,10 +5,10 @@ import { useQuery } from '@tanstack/react-query'
 import { ApiResponse } from '@/types/api-response'
 import {
   ExpenseProps,
-  ListExpensesQuery
+  ListExpensesQueryDTO
 } from '@/modules/expenses/expenses.types'
 
-const fetchExpenses = async (filters: ListExpensesQuery) => {
+const fetchExpenses = async (filters: ListExpensesQueryDTO) => {
   const params = new URLSearchParams()
 
   Object.entries(filters).forEach(([key, value]) => {
@@ -22,11 +22,19 @@ const fetchExpenses = async (filters: ListExpensesQuery) => {
   }
 
   return response.json() as Promise<
-    ApiResponse<{ expenses: ExpenseProps[]; qtd: number }>
+    ApiResponse<{
+      expenses: ExpenseProps[]
+      meta: {
+        total_items: number
+        page: number
+        limit: number
+        totalPages: number
+      }
+    }>
   >
 }
 
-export const useGetExpenses = (filters: ListExpensesQuery) => {
+export const useGetExpenses = (filters: ListExpensesQueryDTO) => {
   const {
     data: response,
     isLoading,
@@ -39,12 +47,15 @@ export const useGetExpenses = (filters: ListExpensesQuery) => {
   })
 
   const expenses = useMemo(() => {
-    const qtd = response?.data.qtd || 0
+    const totalPages = response?.data.meta.totalPages ?? 1
 
-    if (response?.success && qtd > 0)
-      return { data: response.data.expenses, qtd }
+    if (response?.success && response.data.meta.total_items > 0)
+      return {
+        data: response.data.expenses,
+        meta: { ...response?.data.meta, totalPages }
+      }
 
-    return { data: [], qtd }
+    return { data: [], meta: { ...response?.data.meta, totalPages } }
   }, [response])
 
   return {

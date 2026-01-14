@@ -2,12 +2,16 @@ import { ExpensesRepository } from './expenses.repository'
 import { requireUser } from '@/lib/require-user'
 import { Prisma } from '@prisma/client'
 import { endOfMonth, startOfMonth } from 'date-fns'
-import { ExpenseProps, ListExpensesQuery } from './expenses.types'
+import {
+  ExpenseProps,
+  ListExpensesQuery,
+  ListExpensesQueryDTO
+} from './expenses.types'
 
 const expensesRepository = new ExpensesRepository()
 
 /* GET */
-export const getAllExpensesService = async (params: ListExpensesQuery) => {
+export const getAllExpensesService = async (params: ListExpensesQueryDTO) => {
   const { id } = await requireUser()
 
   const where: {
@@ -22,8 +26,9 @@ export const getAllExpensesService = async (params: ListExpensesQuery) => {
   const { month, year, category, method, page } = params
 
   if (month && year) {
-    const start = new Date(Date.UTC(year, month - 1, 1))
-    const end = new Date(Date.UTC(year, month, 1))
+    const completeYear = 2000 + year
+    const start = new Date(Date.UTC(completeYear, month - 1, 1))
+    const end = new Date(Date.UTC(completeYear, month, 1))
 
     where.date = { gte: start, lt: end }
   }
@@ -34,7 +39,7 @@ export const getAllExpensesService = async (params: ListExpensesQuery) => {
 
   /*   console.log(JSON.stringify(where, null, 2)) */
 
-  const rawExpenses = await expensesRepository.getAll(where, page)
+  const rawExpenses = await expensesRepository.getAll(where, page!)
 
   //normalize value and amount to show in component, get in centavos, return in reais
   const expenses = rawExpenses.data.map(expense => ({
@@ -42,7 +47,7 @@ export const getAllExpensesService = async (params: ListExpensesQuery) => {
     value: expense.value / 100,
     date: expense.date.toISOString().split('T')[0]
   }))
-  return { qtd: rawExpenses.qtd, expenses }
+  return { meta: rawExpenses.meta, expenses }
 }
 
 export const getExpenseByIdService = async (expenseId: string) => {

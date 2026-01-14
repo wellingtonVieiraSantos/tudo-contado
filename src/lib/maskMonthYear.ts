@@ -1,14 +1,16 @@
 export const maskMonthYear = (value: string) => {
-  const numbers = value.replace(/\D/g, '').slice(0, 6)
+  const actualYear = new Date().getFullYear().toString().slice(-2)
+  const numbers = value.replace(/\D/g, '').slice(0, 4)
 
-  const month = numbers.slice(0, 2)
-  const year = numbers.slice(2)
-  let m = month
+  let month = numbers.slice(0, 2)
+  let year = numbers.slice(2)
+
   if (month.length === 2) {
-    const n = Number(month)
-
-    if (n === 0) m = '01'
-    else if (n > 12) m = '12'
+    if (+month === 0) month = '01'
+    else if (+month > 12) month = '12'
   }
-  return year ? `${m}/${year}` : m
+
+  if (+year > +actualYear) year = actualYear
+
+  return year ? `${month}/${year}` : month
 }

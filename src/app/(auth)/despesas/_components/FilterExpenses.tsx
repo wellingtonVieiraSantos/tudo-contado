@@ -1,24 +1,30 @@
 'use client'
-import { Button } from '@/components/ui/Button'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
 import { categories } from './FormStepTwo'
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import { Filter } from '@/components/Filter'
-import { Form, FormField, FormLabel, FormSubmit } from '@/components/ui/Form'
+import { Form, FormField, FormLabel } from '@/components/ui/Form'
 import { Controller, useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/Input'
 import { maskMonthYear } from '@/lib/maskMonthYear'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { listExpensesSchema } from '@/modules/expenses/expenses.schema'
-import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { useExpenseQuery } from '../_hooks/use-query-expense'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/Select'
+import { useDebounce } from '@/hooks/useDebouce'
+import { Search } from 'lucide-react'
 
 export const FilterExpenses = ({
   filters
 }: {
   filters: {
-    page: number
+    page: number | undefined
     month: number | undefined
     year: number | undefined
     method: 'CREDIT' | 'DEBIT' | undefined
@@ -38,111 +44,147 @@ export const FilterExpenses = ({
       | undefined
   }
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const normalizeMethod = (
+    value: '' | 'ALL' | 'CREDIT' | 'DEBIT' | undefined
+  ): 'CREDIT' | 'DEBIT' | undefined => {
+    if (!value || value === 'ALL') return undefined
+    return value
+  }
+  const normalizeCategory = (
+    value:
+      | ''
+      | 'ALL'
+      | 'HOUSE'
+      | 'FOOD'
+      | 'TRANSPORT'
+      | 'EDUCATION'
+      | 'HEALTH'
+      | 'CLOTHING'
+      | 'TECH'
+      | 'PERSONAL_CARE'
+      | 'ENTERTAINMENT'
+      | 'PETS'
+      | 'FINANCIAL'
+      | 'OTHER'
+      | undefined
+  ):
+    | 'HOUSE'
+    | 'FOOD'
+    | 'TRANSPORT'
+    | 'EDUCATION'
+    | 'HEALTH'
+    | 'CLOTHING'
+    | 'TECH'
+    | 'PERSONAL_CARE'
+    | 'ENTERTAINMENT'
+    | 'PETS'
+    | 'FINANCIAL'
+    | 'OTHER'
+    | undefined => {
+    if (!value || value === 'ALL') return undefined
+    return value
+  }
 
-  const { control, handleSubmit, reset } = useForm({
+  const { control, watch } = useForm({
     resolver: zodResolver(listExpensesSchema),
     defaultValues: {
       method: filters.method || undefined,
       category: filters.category || undefined,
-      month: filters.month
+      date:
+        filters.month && filters.year
+          ? filters.month?.toString() + '/' + filters.year?.toString()
+          : undefined
     }
   })
 
+  const { method, category, date } = watch()
+
+  const debouncedDate = useDebounce(date, 400)
+
   const { setFilters } = useExpenseQuery()
 
-  const onSubmit = (values: ListExpensesQuery) => {
-    setFilters(values)
-    setIsOpen(false)
-  }
+  useEffect(() => {
+    if (debouncedDate && debouncedDate.length < 5) return
+    const [month, year] = debouncedDate?.split('/') || []
+
+    setFilters({
+      method: normalizeMethod(method),
+      category: normalizeCategory(category),
+      month: month ? Number(month) : undefined,
+      year: year ? Number(year) : undefined,
+      page: 1
+    })
+  }, [method, category, debouncedDate])
 
   return (
-    <Filter open={isOpen} onOpenChange={setIsOpen}>
-      <Form
-        onSubmit={handleSubmit(onSubmit, errors =>
-          console.log('ERROS DE VALIDAÇÃO:', errors)
-        )}
-      >
+    <div className='w-full flex items-center justify-between pl-2 pr-5 py-2 bg-card rounded-lg border'>
+      <h1>Filtros</h1>
+      <Form className='flex gap-6'>
         <FormField name='method'>
-          <h2>Metodo de pagamento</h2>
           <Controller
             name='method'
             control={control}
             render={({ field }) => (
-              <ToggleGroup
-                type='single'
-                className='w-fit'
-                value={field.value}
-                onValueChange={field.onChange}
-              >
-                <ToggleGroupItem value='DEBIT'>Débito</ToggleGroupItem>
-                <ToggleGroupItem value='CREDIT'>Crédito</ToggleGroupItem>
-              </ToggleGroup>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder='Pagamento' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='ALL' className='text-foreground-secondary'>
+                    Sem filtro
+                  </SelectItem>
+                  <SelectSeparator />
+                  <SelectItem value='DEBIT'>Débito</SelectItem>
+                  <SelectItem value='CREDIT'>Crédito</SelectItem>
+                </SelectContent>
+              </Select>
             )}
           />
         </FormField>
         <FormField name='category'>
-          <h2>Categoria</h2>
           <Controller
             name='category'
             control={control}
             render={({ field }) => (
-              <ToggleGroup
-                type='single'
-                className='w-fit flex flex-wrap'
-                value={field.value}
-                onValueChange={field.onChange}
-              >
-                {categories.map(category => (
-                  <ToggleGroupItem
-                    key={category.type}
-                    value={category.type}
-                    className='text-sm flex'
-                  >
-                    <category.icon strokeWidth={1.3} className='size-5' />
-                    {categoryFormatter(category.type)}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder='Categoria' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='ALL' className='text-foreground-secondary'>
+                    Sem filtro
+                  </SelectItem>
+                  <SelectSeparator />
+                  {categories.map(category => (
+                    <SelectItem
+                      key={category.type}
+                      value={category.type}
+                      className=''
+                    >
+                      {categoryFormatter(category.type)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             )}
           />
         </FormField>
-        {/* <FormField name='month'>
-          <FormLabel>Mês</FormLabel>
+        <FormField name='date' className='flex-row items-center'>
           <Controller
-            name='month'
+            name='date'
             control={control}
             render={({ field }) => (
               <Input
+                icon={Search}
                 {...field}
-                placeholder='MM/AAAA'
-                className='border p-1 w-fit'
+                placeholder='Busque mês ex: MM/AA'
+                className='border'
                 onChange={e => field.onChange(maskMonthYear(e.target.value))}
               />
             )}
           />
-        </FormField> */}
-        <div className='flex justify-between pt-3'>
-          <Button
-            type='button'
-            onClick={() => {
-              setFilters({ method: undefined, category: undefined })
-              setIsOpen(false)
-              reset({ method: '', category: '' })
-            }}
-            variant='ghost'
-            className='text-destructive/80'
-          >
-            Limpar todos os filtros
-          </Button>
-          <div className='flex gap-4'>
-            <Button onClick={() => setIsOpen(false)} variant='border'>
-              Cancelar
-            </Button>
-            <Button type='submit'>Aplicar filtros</Button>
-          </div>
-        </div>
+        </FormField>
       </Form>
-    </Filter>
+    </div>
   )
 }
