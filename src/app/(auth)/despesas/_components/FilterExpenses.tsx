@@ -1,12 +1,12 @@
 'use client'
 import { categories } from './FormStepTwo'
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import { Form, FormField, FormLabel } from '@/components/ui/Form'
+import { Form, FormField } from '@/components/ui/Form'
 import { Controller, useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/Input'
 import { maskMonthYear } from '@/lib/maskMonthYear'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { listExpensesSchema } from '@/modules/expenses/expenses.schema'
+import { filterExpensesSchema } from '@/modules/expenses/expenses.schema'
 import { useEffect } from 'react'
 import { useExpenseQuery } from '../_hooks/use-query-expense'
 import {
@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/Select'
 import { useDebounce } from '@/hooks/useDebouce'
 import { Search } from 'lucide-react'
+import { CategoryType } from '@prisma/client'
 
 export const FilterExpenses = ({
   filters
@@ -28,20 +29,7 @@ export const FilterExpenses = ({
     month: number | undefined
     year: number | undefined
     method: 'CREDIT' | 'DEBIT' | undefined
-    category:
-      | 'HOUSE'
-      | 'FOOD'
-      | 'TRANSPORT'
-      | 'EDUCATION'
-      | 'HEALTH'
-      | 'CLOTHING'
-      | 'TECH'
-      | 'PERSONAL_CARE'
-      | 'ENTERTAINMENT'
-      | 'PETS'
-      | 'FINANCIAL'
-      | 'OTHER'
-      | undefined
+    category: CategoryType | undefined
   }
 }) => {
   const normalizeMethod = (
@@ -67,26 +55,13 @@ export const FilterExpenses = ({
       | 'FINANCIAL'
       | 'OTHER'
       | undefined
-  ):
-    | 'HOUSE'
-    | 'FOOD'
-    | 'TRANSPORT'
-    | 'EDUCATION'
-    | 'HEALTH'
-    | 'CLOTHING'
-    | 'TECH'
-    | 'PERSONAL_CARE'
-    | 'ENTERTAINMENT'
-    | 'PETS'
-    | 'FINANCIAL'
-    | 'OTHER'
-    | undefined => {
+  ): CategoryType | undefined => {
     if (!value || value === 'ALL') return undefined
     return value
   }
 
   const { control, watch } = useForm({
-    resolver: zodResolver(listExpensesSchema),
+    resolver: zodResolver(filterExpensesSchema),
     defaultValues: {
       method: filters.method || undefined,
       category: filters.category || undefined,

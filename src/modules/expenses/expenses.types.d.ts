@@ -1,6 +1,6 @@
 import {
   expenseSchema,
-  listExpensesSchema,
+  filterExpensesSchema,
   step1Schema,
   step2Schema,
   step3Schema
@@ -8,7 +8,7 @@ import {
 import { PaymentMethodType, StatusType, CategoryType } from '@prisma/client'
 import { z } from 'zod'
 
-export type ListExpensesQuery = z.infer<typeof listExpensesSchema>
+export type ListExpensesQuery = z.infer<typeof filterExpensesSchema>
 export type ListExpensesQueryDTO = Omit<ListExpensesQuery, 'date'> &
   Partial<{
     month: number

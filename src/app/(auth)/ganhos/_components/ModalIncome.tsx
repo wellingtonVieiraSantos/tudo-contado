@@ -22,8 +22,8 @@ import { Button } from '@/components/ui/Button'
 import {
   Send,
   Wallet,
-  Briefcase,
-  Coins,
+  BriefcaseBusiness,
+  Percent,
   Hammer,
   TrendingUp
 } from 'lucide-react'
@@ -132,14 +132,14 @@ export const ModalIncome = ({
                     value='ACTIVE'
                     className='text-[12px] flex-col'
                   >
-                    <Briefcase strokeWidth={1.5} size={20} />
+                    <BriefcaseBusiness strokeWidth={1.5} size={20} />
                     Ativa
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value='PASSIVE'
                     className='text-[12px] flex-col'
                   >
-                    <Coins strokeWidth={1.5} size={20} />
+                    <Percent strokeWidth={1.5} size={20} />
                     Passiva
                   </ToggleGroupItem>
                   <ToggleGroupItem

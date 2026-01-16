@@ -17,3 +17,12 @@ export const incomeSchema = z.object({
     .regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Formato inválido')
     .refine(value => isValid(parseISO(value)), 'Data inválida')
 })
+
+export const filterIncomeSchema = z.object({
+  date: z.string().optional(),
+  type: z
+    .nativeEnum(IncomeType)
+    .optional()
+    .or(z.literal(''))
+    .transform(val => (val === '' ? undefined : val))
+})

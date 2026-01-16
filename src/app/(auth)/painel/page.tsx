@@ -47,7 +47,7 @@ import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { categories } from '../despesas/_components/FormStepTwo'
 import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
-import { incomeTypeFormatter } from '@/lib/paymentTypeFormatter'
+import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
 
 const cardBrand = [
   { title: 'VISA', url: '/visa.png' },

@@ -5,11 +5,21 @@ import {
   updateIncomeByIdService,
   deleteIncomeByIdService
 } from '@/modules/incomes/incomes.service'
+import { ListIncomeQuery } from '@/modules/incomes/incomes.types'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams
+
+  const params = {
+    page: Number(searchParams.get('page')) || 1,
+    month: Number(searchParams.get('month')) || undefined,
+    year: Number(searchParams.get('year')) || undefined,
+    type: (searchParams.get('type') as ListIncomeQuery['type']) || undefined
+  }
+
   try {
-    const income = await getAllIncomesService()
+    const income = await getAllIncomesService(params)
 
     return NextResponse.json({ data: income, success: true }, { status: 200 })
   } catch (e) {

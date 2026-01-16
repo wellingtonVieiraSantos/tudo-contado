@@ -134,12 +134,7 @@ export const postExpenseService = async (rawData: ExpenseProps) => {
   }
 
   const expenseData: Prisma.ExpenseCreateInput = {
-    value: data.value,
-    date: data.expenseDate,
-    description: data.description,
-    category: data.category,
-    method: data.method,
-    installments: data.installments,
+    ...data,
     user: {
       connect: { id: id! }
     },

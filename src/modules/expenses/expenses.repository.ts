@@ -35,15 +35,7 @@ export class ExpensesRepository {
         where,
         skip: (page - 1) * limit,
         take: limit,
-        select: {
-          id: true,
-          value: true,
-          description: true,
-          category: true,
-          date: true,
-          method: true,
-          installments: true
-        },
+        select: expenseSelect,
         orderBy: {
           date: 'desc'
         }

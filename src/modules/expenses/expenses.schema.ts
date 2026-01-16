@@ -67,7 +67,7 @@ export const step3Schema = expenseSchemaInitial
     }
   )
 
-export const listExpensesSchema = z.object({
+export const filterExpensesSchema = z.object({
   date: z.string().optional(),
   method: z
     .nativeEnum(PaymentMethodType)

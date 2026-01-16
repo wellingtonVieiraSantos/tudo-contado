@@ -1,22 +1,47 @@
 import { IncomesRepository } from './incomes.repository'
 import { requireUser } from '@/lib/require-user'
-import { IncomeProps } from './incomes.types'
+import {
+  IncomeProps,
+  ListIncomeQuery,
+  ListIncomeQueryDTO
+} from './incomes.types'
 import { Prisma } from '@prisma/client'
 
 const incomesRepository = new IncomesRepository()
 
 /* GET */
-export const getAllIncomesService = async () => {
-  const user = await requireUser()
-  const rawIncomes = await incomesRepository.getAll(user.id!)
+export const getAllIncomesService = async (params: ListIncomeQueryDTO) => {
+  const { id } = await requireUser()
+
+  const where: {
+    date?: { gte: Date; lt: Date }
+    type?: ListIncomeQuery['type']
+    user: { id: string }
+  } = {
+    user: { id: id! }
+  }
+
+  const { month, year, type, page } = params
+
+  if (month && year) {
+    const completeYear = 2000 + year
+    const start = new Date(Date.UTC(completeYear, month - 1, 1))
+    const end = new Date(Date.UTC(completeYear, month, 1))
+
+    where.date = { gte: start, lt: end }
+  }
+
+  if (type) where.type = type
+
+  const rawIncomes = await incomesRepository.getAll(where, page!)
 
   //normalize value and amount to show in component, get in centavos, return in reais
-  const incomes = rawIncomes.map(income => ({
+  const incomes = rawIncomes.data.map(income => ({
     ...income,
     value: income.value / 100,
     date: income.date.toISOString().split('T')[0]
   }))
-  return incomes
+  return { meta: rawIncomes.meta, incomes }
 }
 
 export const getIncomeByIdService = async (incomeId: string) => {

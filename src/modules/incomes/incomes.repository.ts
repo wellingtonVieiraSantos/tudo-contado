@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
+import { IncomeType, Prisma } from '@prisma/client'
 
 const incomeSelect = {
   id: true,
@@ -10,16 +10,44 @@ const incomeSelect = {
 }
 
 export class IncomesRepository {
-  async getAll(userId: string) {
-    return await prisma.income.findMany({
-      where: {
-        user: { id: userId }
-      },
-      select: incomeSelect,
-      orderBy: {
-        date: 'desc'
+  async getAll(
+    where: {
+      user: {
+        id: string
       }
-    })
+      date?: {
+        gte: Date
+        lt: Date
+      }
+      type?: IncomeType
+    },
+    page: number
+  ) {
+    const limit = 10
+    const [total_items, data] = await Promise.all([
+      prisma.income.count({
+        where
+      }),
+      prisma.income.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        select: incomeSelect,
+        orderBy: {
+          date: 'desc'
+        }
+      })
+    ])
+
+    return {
+      meta: {
+        total_items,
+        page,
+        limit,
+        total_pages: Math.ceil(total_items / limit)
+      },
+      data
+    }
   }
   async getById(incomeId: string) {
     return await prisma.income.findUnique({
