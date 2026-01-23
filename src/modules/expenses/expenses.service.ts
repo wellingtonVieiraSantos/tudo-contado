@@ -72,7 +72,8 @@ export const getSumExpensesValuesByMonthRangeService = async () => {
 
   const normalizedExpense = expense.map(exp => ({
     ...exp,
-    total: exp.total ? exp.total / 100 : 0
+    total: exp.total ? exp.total / 100 : 0,
+    month: exp.month.toISOString().split('T')[0]
   }))
 
   return normalizedExpense

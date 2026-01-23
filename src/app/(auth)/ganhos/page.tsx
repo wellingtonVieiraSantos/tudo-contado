@@ -64,6 +64,7 @@ import {
   PaginationNext,
   PaginationPrev
 } from '@/components/ui/Pagination'
+import { useGetIncomeSumByMonth } from '@/hooks/use-get-income-sum'
 
 export default function Income() {
   const searchParams = useSearchParams()
@@ -76,6 +77,9 @@ export default function Income() {
   }
 
   const { incomes, isLoading } = useGetIncomes(filters)
+  const { incomeSum } = useGetIncomeSumByMonth()
+
+  const incomeSumActual = incomeSum?.at(-1)?.total ?? null
 
   const { setPage } = useIncomeQuery()
   const pathname = usePathname()
@@ -119,7 +123,9 @@ export default function Income() {
           <Divider />
         </CardHeader>
         <CardContent className='py-3 flex flex-col text-4xl font-montserrat'>
-          <p className='text-center'> {formatedCurrency(100)}</p>
+          <p className='text-center tracking-widest'>
+            {formatedCurrency(incomeSumActual)}
+          </p>
           <ModalIncome
             isOpen={isOpenPost}
             setIsOpen={setIsOpenPost}

@@ -1,13 +1,16 @@
+'use client'
 import Link from 'next/link'
 import { Button } from '../ui/Button'
 import {
   BanknoteArrowUp,
   BanknoteArrowDown,
   HomeIcon,
-  CreditCard
+  CreditCard,
+  LogOut
 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
+import { signOut } from 'next-auth/react'
 
 const pages = [
   { name: 'Painel', icon: HomeIcon, url: '/painel' },
@@ -19,6 +22,7 @@ const pages = [
 
 const SideBar = () => {
   const pathName = usePathname()
+
   return (
     <>
       {/* desktop */}
@@ -52,6 +56,10 @@ const SideBar = () => {
             </Link>
           ))}
         </div>
+        <Button className='w-full' onClick={() => signOut()}>
+          <LogOut />
+          Sair
+        </Button>
       </div>
       {/* mobile */}
       <div className='flex items-center justify-center w-full h-20 z-10 fixed bottom-0 left-0 bg-card lg:hidden border-t'>

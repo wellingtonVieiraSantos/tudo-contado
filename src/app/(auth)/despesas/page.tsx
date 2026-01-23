@@ -61,6 +61,7 @@ import {
   PaginationNext,
   PaginationPrev
 } from '@/components/ui/Pagination'
+import { useGetExpenseSumByMonth } from '@/hooks/use-get-expense-sum'
 
 export default function Expense() {
   const searchParams = useSearchParams()
@@ -77,6 +78,9 @@ export default function Expense() {
   }
 
   const { expenses, isLoading } = useGetExpenses(filters)
+  const { expenseSum } = useGetExpenseSumByMonth()
+
+  const expenseSumActual = expenseSum?.at(-1)?.total ?? null
 
   const { setPage } = useExpenseQuery()
   const pathname = usePathname()
@@ -104,7 +108,9 @@ export default function Expense() {
           <Divider />
         </CardHeader>
         <CardContent className='py-2 flex flex-col text-4xl font-montserrat'>
-          <p className='text-center'> {formatedCurrency(100)}</p>
+          <p className='text-center tracking-widest'>
+            {formatedCurrency(expenseSumActual)}
+          </p>
           <Link href='/despesas/cadastro'>
             <Button className='bg-white rounded-lg text-background absolute right-2 top-2 lg:right-6 lg:top-4 hover:scale-105 hover:bg-button-foreground font-poppins'>
               <Plus />

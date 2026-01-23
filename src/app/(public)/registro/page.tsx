@@ -10,7 +10,7 @@ import { Divider } from '@/components/ui/Divider'
 import { Button } from '@/components/ui/Button'
 import { Form } from '@/components/ui/Form'
 import Image from 'next/image'
-import { signIn } from '../../../auth'
+import { signIn } from 'next-auth/react'
 
 export default function RegisterUser() {
   return (

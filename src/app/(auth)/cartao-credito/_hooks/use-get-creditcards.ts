@@ -1,8 +1,8 @@
 'use client'
-
 import { useQuery } from '@tanstack/react-query'
 import { ApiResponse } from '@/types/api-response'
-import { CreditCardProps } from '@/types/creditcard-data-props'
+import { CreditCardProps } from '@/modules/creditCard/creditCard.types'
+import { useMemo } from 'react'
 
 const fetchCreditCard = async () => {
   const response = await fetch('/api/credit-card')
@@ -13,15 +13,23 @@ const fetchCreditCard = async () => {
 }
 
 export const useGetCreditCard = () => {
-  const { data, isLoading, error } = useQuery({
+  const {
+    data: response,
+    isLoading,
+    error
+  } = useQuery({
     queryKey: ['creditCard'],
     queryFn: fetchCreditCard,
     staleTime: Infinity
   })
 
+  const creditCard = useMemo(() => {
+    return response?.data
+  }, [response?.data])
+
   return {
     isLoading,
-    data,
+    creditCard,
     error
   }
 }

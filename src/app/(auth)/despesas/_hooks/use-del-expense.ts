@@ -1,6 +1,6 @@
 import { queryClient } from '@/lib/query-client'
+import { ExpenseProps } from '@/modules/expenses/expenses.types'
 import { ApiResponse } from '@/types/api-response'
-import { ExpenseProps } from '@/types/expense-data-props'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 

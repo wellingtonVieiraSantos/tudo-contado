@@ -26,7 +26,7 @@ export class DashboardRepository {
     WHERE "userId" = ${userId}
 
     ORDER BY "date" DESC
-    LIMIT 10;
+    LIMIT 5;
   `
   }
 }

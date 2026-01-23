@@ -81,7 +81,7 @@ export const ModalIncome = ({
             Formulario para cadastro/atualizações de ganhos
           </ModalDescription>
         </ModalHeader>
-        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-1'>
+        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-2'>
           <FormField name='value'>
             <FormLabel>Valor</FormLabel>
             <FormControl asChild>

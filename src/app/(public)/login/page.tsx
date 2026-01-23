@@ -5,12 +5,12 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/Card'
-import { signIn } from '../../../auth'
 import FormLogin from './_components/FormLogin'
 import Form from 'next/form'
 import { Divider } from '@/components/ui/Divider'
 import { Button } from '@/components/ui/Button'
 import Image from 'next/image'
+import { signIn } from 'next-auth/react'
 
 export default async function Login() {
   return (

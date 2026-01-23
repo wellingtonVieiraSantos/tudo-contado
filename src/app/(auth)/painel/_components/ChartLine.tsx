@@ -1,3 +1,4 @@
+'use client'
 import {
   Card,
   CardContent,
@@ -6,6 +7,8 @@ import {
   CardTitle
 } from '@/components/ui/Card'
 import { Divider } from '@/components/ui/Divider'
+import { useGetExpenseSumByMonth } from '@/hooks/use-get-expense-sum'
+import { useGetIncomeSumByMonth } from '@/hooks/use-get-income-sum'
 import valueFormatter from '@/lib/valueFormatter'
 import { chartsTooltipClasses } from '@mui/x-charts/ChartsTooltip'
 import {
@@ -13,66 +16,63 @@ import {
   lineElementClasses,
   markElementClasses
 } from '@mui/x-charts/LineChart'
-import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import Loading from '../loading'
 
-export const ChartLine = ({
-  lineChartData
-}: {
-  lineChartData: {
-    incomeAmountPerMonth: number[] | undefined
-    expenseAmountPerMonth: number[] | undefined
-  }
-}) => {
-  if (
-    !lineChartData.expenseAmountPerMonth ||
-    !lineChartData.incomeAmountPerMonth
-  )
-    return
+export const ChartLine = () => {
+  const { expenseSum, isLoading: loadingExpense } = useGetExpenseSumByMonth()
+  const { incomeSum, isLoading: loadingIncome } = useGetIncomeSumByMonth()
+
+  if (loadingExpense || loadingIncome) return <Loading />
+
+  if (!expenseSum || !incomeSum) return
+
+  const expense = expenseSum.map(item => item.total)
+  const income = incomeSum.map(item => item.total)
+  const months = incomeSum.map(item => {
+    const [year, month] = item.month.split('-').map(Number)
+
+    const date = new Date(year, month - 1, 1)
+    return date.toLocaleString('pt-BR', { month: 'short' })
+  })
+
   return (
-    <Card className='flex flex-col p-2 lg:col-start-2 lg:col-end-3 lg:row-start-3 lg:row-end-4 xl:col-start-1 xl:col-end-3 xl:row-end-5'>
+    <Card className='overflow-hidden flex flex-col p-2 col-span-3 lg:col-span-2 row-start-3 row-span-2'>
       <CardHeader>
         <CardTitle>Controle mensal</CardTitle>
         <CardDescription>Dados dos ultimos 6 meses</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='size-full pt-3 max-h-100'>
+      <CardContent className='h-full'>
         <LineChart
-          className='min-w-85 h-full'
+          className=''
           localeText={{
             loading: 'Carregando dados...',
             noData: 'Nenhum dado encontrado.'
           }}
           series={[
             {
-              data: [...lineChartData.incomeAmountPerMonth.map(data => data)],
+              data: expense,
               label: 'Rendimentos',
               showMark: false,
               color: 'oklch(0.8729 0.1535 163.22)',
               valueFormatter
             },
             {
-              data: [...lineChartData.expenseAmountPerMonth.map(data => data)],
+              data: income,
               label: 'Despesas',
               showMark: false,
               color: 'oklch(0.7368 0.2078 25.33)',
               valueFormatter
             }
           ]}
+          height={250}
           colors={['blue', 'green']}
           xAxis={[
             {
-              data: Array.from({ length: 6 }, (_, i) => {
-                const date = new Date(
-                  new Date().getFullYear(),
-                  new Date().getMonth() - (5 - i),
-                  1
-                )
-                return format(date, 'MMM', { locale: ptBR })
-              }),
-
+              data: months,
               scaleType: 'band',
-              disableTicks: true
+              disableTicks: true,
+              tickPlacement: 'middle'
             }
           ]}
           yAxis={[{ disableTicks: true }]}

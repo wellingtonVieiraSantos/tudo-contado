@@ -66,7 +66,8 @@ export const getSumIncomesValuesByMonthRangeService = async () => {
 
   const normalizedIncome = incomes.map(inc => ({
     ...inc,
-    total: inc.total ? inc.total / 100 : 0
+    total: inc.total ? inc.total / 100 : 0,
+    month: inc.month.toISOString().split('T')[0]
   }))
 
   return normalizedIncome
