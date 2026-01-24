@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import formatedCurrency from '@/lib/valueFormatter'
-import { UserBarSettings } from '@/components/UserBarSettings'
+import UserBarSettings from '@/components/UserBarSettings'
 import { Button } from '@/components/ui/Button'
 import {
   BanknoteArrowUp,
@@ -19,8 +19,7 @@ import {
   RefreshCw,
   Trash,
   TrendingDown,
-  TriangleAlert,
-  X
+  TriangleAlert
 } from 'lucide-react'
 import { FilterExpenses } from './_components/FilterExpenses'
 import Image from 'next/image'

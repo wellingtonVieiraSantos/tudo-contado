@@ -16,13 +16,10 @@ import {
   lineElementClasses,
   markElementClasses
 } from '@mui/x-charts/LineChart'
-import Loading from '../loading'
 
-export const ChartLine = () => {
-  const { expenseSum, isLoading: loadingExpense } = useGetExpenseSumByMonth()
-  const { incomeSum, isLoading: loadingIncome } = useGetIncomeSumByMonth()
-
-  if (loadingExpense || loadingIncome) return <Loading />
+export default function ChartLine() {
+  const { expenseSum } = useGetExpenseSumByMonth()
+  const { incomeSum } = useGetIncomeSumByMonth()
 
   if (!expenseSum || !incomeSum) return
 

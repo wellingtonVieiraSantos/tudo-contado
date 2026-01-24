@@ -1,3 +1,4 @@
+'use client'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useGetExpenseSumByMonth } from '@/hooks/use-get-expense-sum'

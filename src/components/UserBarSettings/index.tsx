@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-export const UserBarSettings = ({ title }: { title: string }) => {
+export default function UserBarSettings({ title }: { title: string }) {
   const { data: session } = useSession()
 
   return (

@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 
 import formatedCurrency from '@/lib/valueFormatter'
-import { UserBarSettings } from '@/components/UserBarSettings'
+import UserBarSettings from '@/components/UserBarSettings'
 import { useGetIncomes } from './_hooks/use-get-incomes'
 import { ModalIncome } from './_components/ModalIncome'
 import { categories, FilterIncomes } from './_components/FilterIncomes'

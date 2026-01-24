@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/types/api-response'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 const fetchIncomeSum = async () => {
@@ -13,7 +13,7 @@ const fetchIncomeSum = async () => {
 }
 
 export const useGetIncomeSumByMonth = () => {
-  const { data: response, isLoading } = useQuery({
+  const { data: response, isLoading } = useSuspenseQuery({
     queryKey: ['incomesSum'],
     queryFn: fetchIncomeSum
   })

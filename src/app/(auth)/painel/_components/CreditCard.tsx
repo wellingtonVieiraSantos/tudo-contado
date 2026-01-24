@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/Card'
 import { Divider } from '@/components/ui/Divider'
 import { useGetCreditCard } from '../../cartao-credito/_hooks/use-get-creditcards'
-import Loading from '../loading'
 import valueFormatter from '@/lib/valueFormatter'
 import {
   Carousel,
@@ -32,7 +31,7 @@ const cardBrand = [
 ]
 
 export default function CreditCardDashboard() {
-  const { creditCard: CC, isLoading } = useGetCreditCard()
+  const { creditCard: CC } = useGetCreditCard()
   const { sumExpenseByCC } = useGetExpensesByCreditCard()
 
   const creditCard = CC?.map(card => {
@@ -43,7 +42,6 @@ export default function CreditCardDashboard() {
     }
   })
 
-  if (isLoading) return <Loading />
   return (
     <Card className='relative p-2 row-start-5 col-start-3 row-span-2'>
       <CardHeader>

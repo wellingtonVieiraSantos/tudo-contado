@@ -1,3 +1,4 @@
+'use client'
 import {
   Card,
   CardContent,
@@ -21,12 +22,9 @@ import {
   TableRow
 } from '@/components/ui/Table'
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import Loading from '../loading'
 
 export default function LastTransactions() {
-  const { isLoading, recentTransactions } = useGetLastTransactions()
-
-  if (isLoading) return <Loading />
+  const { recentTransactions } = useGetLastTransactions()
 
   return (
     <Card className='h-full overflow-hidden p-2 row-start-5 col-span-2 row-span-2'>

@@ -12,13 +12,10 @@ import { chartsTooltipClasses } from '@mui/x-charts/ChartsTooltip'
 import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart'
 import { useState } from 'react'
 import { useGetSumByCategory } from '../_hooks/use-get-sumByCategory'
-import Loading from '../loading'
 
-export const ChartPie = () => {
-  const { isLoading, pieChartData } = useGetSumByCategory()
+export default function ChartPie() {
+  const { pieChartData } = useGetSumByCategory()
   const [highlightedItem, setHighlightedItem] = useState<number | null>(null)
-
-  if (isLoading) return <Loading />
 
   if (!pieChartData) return
 

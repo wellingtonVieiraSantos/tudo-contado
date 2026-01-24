@@ -1,5 +1,5 @@
 'use client'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { ApiResponse } from '@/types/api-response'
 import { CreditCardProps } from '@/modules/creditCard/creditCard.types'
 import { useMemo } from 'react'
@@ -17,10 +17,9 @@ export const useGetCreditCard = () => {
     data: response,
     isLoading,
     error
-  } = useQuery({
+  } = useSuspenseQuery({
     queryKey: ['creditCard'],
-    queryFn: fetchCreditCard,
-    staleTime: Infinity
+    queryFn: fetchCreditCard
   })
 
   const creditCard = useMemo(() => {

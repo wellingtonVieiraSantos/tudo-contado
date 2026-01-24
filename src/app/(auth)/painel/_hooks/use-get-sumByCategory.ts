@@ -1,6 +1,6 @@
 import { ApiResponse } from '@/types/api-response'
 import { CategoryType } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 const fetchSumExpensesByCategory = async () => {
@@ -19,7 +19,7 @@ const fetchSumExpensesByCategory = async () => {
 }
 
 export const useGetSumByCategory = () => {
-  const { data: response, isLoading } = useQuery({
+  const { data: response, isLoading } = useSuspenseQuery({
     queryKey: ['expensesCategory'],
     queryFn: fetchSumExpensesByCategory
   })

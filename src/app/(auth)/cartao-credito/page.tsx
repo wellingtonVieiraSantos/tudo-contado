@@ -1,5 +1,5 @@
 'use client'
-import { UserBarSettings } from '@/components/UserBarSettings'
+import UserBarSettings from '@/components/UserBarSettings'
 import { useGetCreditCard } from './_hooks/use-get-creditcards'
 import Image from 'next/image'
 import { ProgressBar } from '@/components/ui/ProgressBar'
@@ -20,9 +20,9 @@ const cardBrand = [
 ]
 
 export default function CartaoCredito() {
-  const { data } = useGetCreditCard()
+  const { creditCard } = useGetCreditCard()
 
-  const card = data?.data[0]
+  const card = creditCard[0]
   return (
     <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 lg:pb-0'>
       <UserBarSettings title='Cartão de Crédito' />

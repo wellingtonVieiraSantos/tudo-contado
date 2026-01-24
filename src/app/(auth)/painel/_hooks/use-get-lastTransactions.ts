@@ -1,6 +1,6 @@
 import { ApiResponse } from '@/types/api-response'
 import { CategoryType, IncomeType, PaymentMethodType } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 const fetchLastTransactions = async () => {
@@ -25,29 +25,16 @@ const fetchLastTransactions = async () => {
 }
 
 export const useGetLastTransactions = () => {
-  const { data: response, isLoading } = useQuery({
+  const { data: response } = useSuspenseQuery({
     queryKey: ['lastTransactions'],
     queryFn: fetchLastTransactions
   })
-
-  /*   const CreditCardData = useMemo(() => {
-    return responseCard?.data.map(card => {
-      const matched = responseExpensebyCreditCard?.data.find(
-        res => res.creditCardId === card.id
-      )
-      return {
-        ...card,
-        spending: matched?._sum ?? 0
-      }
-    })
-  }, [responseCard?.data, responseExpensebyCreditCard?.data]) */
 
   const recentTransactions = useMemo(() => {
     return response?.data
   }, [response?.data])
 
   return {
-    isLoading,
     recentTransactions
   }
 }
