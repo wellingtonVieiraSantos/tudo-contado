@@ -15,8 +15,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalHeader,
-  ModalTitle,
-  ModalTrigger
+  ModalTitle
 } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import {
@@ -32,24 +31,14 @@ import { useEffect } from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
 import { IncomeProps } from '@/modules/incomes/incomes.types'
 import { incomeSchema } from '@/modules/incomes/incomes.schema'
+import { useModalPostPutStore } from '@/store/modalPostPutStore'
+import { usePostIncome } from '../_hooks/use-post-income'
+import { usePutIncome } from '../_hooks/use-put-income'
 
-type ModalIncomeProps = {
-  isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onSubmit: (data: IncomeProps) => Promise<void>
-  isPending: boolean
-  children?: React.ReactNode
-  selectedIncomeUpdate?: IncomeProps
-}
-
-export const ModalIncome = ({
-  isOpen,
-  setIsOpen,
-  onSubmit,
-  isPending,
-  selectedIncomeUpdate,
-  children
-}: ModalIncomeProps) => {
+export const ModalIncome = () => {
+  const { data, open, closeModal, type } = useModalPostPutStore()
+  const { handlePostIncome, isPending: isPendingPost } = usePostIncome()
+  const { handlePutIncome, isPending: isPendingPut } = usePutIncome()
   const {
     register,
     handleSubmit,
@@ -61,19 +50,35 @@ export const ModalIncome = ({
   })
 
   useEffect(() => {
-    if (selectedIncomeUpdate) {
+    if (open && type === 'PUT' && data) {
       reset({
-        value: selectedIncomeUpdate.value,
-        description: selectedIncomeUpdate.description,
-        type: selectedIncomeUpdate.type,
-        date: selectedIncomeUpdate.date
+        value: data.value,
+        description: data.description,
+        type: data.type,
+        date: data.date
       })
     }
-  }, [selectedIncomeUpdate, reset])
+
+    if (open && type === 'POST') {
+      reset({
+        value: undefined,
+        description: '',
+        type: 'ACTIVE',
+        date: new Date().toISOString().split('T')[0]
+      })
+    }
+  }, [open, type, data, reset])
 
   return (
-    <Modal open={isOpen} onOpenChange={setIsOpen}>
-      <ModalTrigger asChild>{children}</ModalTrigger>
+    <Modal
+      open={open}
+      onOpenChange={isOpen => {
+        if (!isOpen) {
+          reset()
+          closeModal()
+        }
+      }}
+    >
       <ModalContent>
         <ModalHeader>
           <ModalTitle>Cadastro de Ganhos</ModalTitle>
@@ -81,7 +86,12 @@ export const ModalIncome = ({
             Formulario para cadastro/atualizações de ganhos
           </ModalDescription>
         </ModalHeader>
-        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-2'>
+        <Form
+          onSubmit={handleSubmit(
+            type === 'POST' ? handlePostIncome : handlePutIncome
+          )}
+          className='grid gap-2'
+        >
           <FormField name='value'>
             <FormLabel>Valor</FormLabel>
             <FormControl asChild>
@@ -183,10 +193,24 @@ export const ModalIncome = ({
           </FormField>
           <FormSubmit asChild className='w-full mt-5'>
             <Button
-              disabled={isPending}
-              variant={isPending ? 'loading' : 'default'}
+              disabled={type === 'POST' ? isPendingPost : isPendingPut}
+              variant={
+                type === 'POST'
+                  ? isPendingPost
+                    ? 'loading'
+                    : 'default'
+                  : isPendingPut
+                    ? 'loading'
+                    : 'default'
+              }
             >
-              {isPending ? 'Cadastrando...' : 'Cadastrar'}
+              {type === 'POST'
+                ? isPendingPost
+                  ? 'Cadastrando...'
+                  : 'Cadastrar'
+                : isPendingPut
+                  ? 'Atualizando...'
+                  : 'Atualizar'}
               <Send />
             </Button>
           </FormSubmit>

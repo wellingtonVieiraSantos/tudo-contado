@@ -25,6 +25,8 @@ import {
 } from 'lucide-react'
 import { maskMonthYear } from '@/lib/maskMonthYear'
 import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
+import { useSearchParams } from 'next/navigation'
+import { ListIncomeQuery } from '@/modules/incomes/incomes.types'
 
 const typeICon = [BriefcaseBusiness, Percent, Hammer, TrendingUp]
 
@@ -33,16 +35,15 @@ export const categories = Object.keys(IncomeType).map((key, i) => ({
   icon: typeICon[i]
 }))
 
-export const FilterIncomes = ({
-  filters
-}: {
-  filters: {
-    page: number | undefined
-    month: number | undefined
-    year: number | undefined
-    type: IncomeType | undefined
+export const FilterIncomes = () => {
+  const searchParams = useSearchParams()
+
+  const filters = {
+    page: Number(searchParams.get('page')) || 1,
+    month: Number(searchParams.get('month')) || undefined,
+    year: Number(searchParams.get('year')) || undefined,
+    type: (searchParams.get('type') as ListIncomeQuery['type']) || undefined
   }
-}) => {
   const normalizeType = (
     value:
       | ''

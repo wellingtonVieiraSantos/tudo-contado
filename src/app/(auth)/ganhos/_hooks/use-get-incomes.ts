@@ -6,7 +6,7 @@ import {
   ListIncomeQueryDTO
 } from '@/modules/incomes/incomes.types'
 import { ApiResponse } from '@/types/api-response'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 const fetchIncomes = async (filters: ListIncomeQueryDTO) => {
@@ -39,10 +39,9 @@ export const useGetIncomes = (filters: ListExpensesQueryDTO) => {
     isLoading,
     error,
     refetch
-  } = useQuery({
+  } = useSuspenseQuery({
     queryKey: ['incomes', filters],
-    queryFn: () => fetchIncomes(filters),
-    staleTime: 5 * 60 * 1000
+    queryFn: () => fetchIncomes(filters)
   })
 
   const incomes = useMemo(() => {
