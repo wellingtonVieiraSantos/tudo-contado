@@ -37,6 +37,8 @@ import { Card, CardContent, CardDescription } from '@/components/ui/Card'
 import Image from 'next/image'
 import { useModalDelStore } from '@/store/modalDelStore'
 import { useModalPostPutStore } from '@/store/modalPostPutStore'
+import { useDelIncome } from '../_hooks/use-del-income'
+import { ModalDelete } from '@/components/ModalDelete'
 
 export const TableIncomes = () => {
   const searchParams = useSearchParams()
@@ -50,6 +52,7 @@ export const TableIncomes = () => {
   }
 
   const { incomes } = useGetIncomes(filters)
+  const { handleDeleteIncome } = useDelIncome()
   const { setPage } = useIncomeQuery()
   const { openDeleteModal } = useModalDelStore()
   const { openModal } = useModalPostPutStore()
@@ -175,6 +178,7 @@ export const TableIncomes = () => {
           </CardContent>
         </Card>
       )}
+      <ModalDelete text='Rendimento' handleDelete={handleDeleteIncome} />
     </>
   )
 }

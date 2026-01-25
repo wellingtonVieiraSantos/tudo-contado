@@ -36,7 +36,7 @@ import { usePostIncome } from '../_hooks/use-post-income'
 import { usePutIncome } from '../_hooks/use-put-income'
 
 export const ModalIncome = () => {
-  const { data, open, closeModal, type } = useModalPostPutStore()
+  const { data: prevData, open, closeModal, type } = useModalPostPutStore()
   const { handlePostIncome, isPending: isPendingPost } = usePostIncome()
   const { handlePutIncome, isPending: isPendingPut } = usePutIncome()
   const {
@@ -50,12 +50,12 @@ export const ModalIncome = () => {
   })
 
   useEffect(() => {
-    if (open && type === 'PUT' && data) {
+    if (open && type === 'PUT' && prevData) {
       reset({
-        value: data.value,
-        description: data.description,
-        type: data.type,
-        date: data.date
+        value: prevData.value,
+        description: prevData.description,
+        type: prevData.type,
+        date: prevData.date
       })
     }
 
@@ -67,7 +67,18 @@ export const ModalIncome = () => {
         date: new Date().toISOString().split('T')[0]
       })
     }
-  }, [open, type, data, reset])
+  }, [open, type, prevData, reset])
+
+  const onSubmit = (data: IncomeProps) => {
+    if (type === 'POST') {
+      handlePostIncome(data)
+      return
+    }
+
+    if (type === 'PUT') {
+      handlePutIncome({ id: prevData?.id, ...data })
+    }
+  }
 
   return (
     <Modal
@@ -86,12 +97,7 @@ export const ModalIncome = () => {
             Formulario para cadastro/atualizações de ganhos
           </ModalDescription>
         </ModalHeader>
-        <Form
-          onSubmit={handleSubmit(
-            type === 'POST' ? handlePostIncome : handlePutIncome
-          )}
-          className='grid gap-2'
-        >
+        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-2'>
           <FormField name='value'>
             <FormLabel>Valor</FormLabel>
             <FormControl asChild>

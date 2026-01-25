@@ -105,7 +105,9 @@ export const updateIncomeByIdService = async (rawData: IncomeProps) => {
     date: new Date(`${rawData.date}T00:00:00.000Z`)
   }
 
-  const income = await incomesRepository.update(data.id!, data)
+  const { id, ...dataUpdate } = data
+
+  const income = await incomesRepository.update(id!, dataUpdate)
 
   return income
 }

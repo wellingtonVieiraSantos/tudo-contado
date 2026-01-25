@@ -38,7 +38,6 @@ export default function FormLogin() {
         ...formData,
         redirect: false
       })
-      console.log(res)
 
       setIsPending(false)
       if (res?.error) {

@@ -7,11 +7,11 @@ import CreditCardDashboard from './_components/CreditCard'
 
 import { Suspense } from 'react'
 import BalanceSkeleton from './_components/skeletons/BalanceSkeleton'
-import BarSkeleton from './_components/skeletons/BarSkeleton'
 import ChartLineSkeleton from './_components/skeletons/ChartLineSkeleton'
 import ChartPieSkeleton from './_components/skeletons/ChartPieSkeleton'
 import CreditCardSkeleton from './_components/skeletons/CreditCardSkeleton'
 import LastTransSkeleton from './_components/skeletons/LastTransSkeleton'
+import BarSkeleton from '@/components/BarSkeleton'
 
 export default function Dashboard() {
   return (

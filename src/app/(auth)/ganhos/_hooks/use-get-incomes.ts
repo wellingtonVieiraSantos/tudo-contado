@@ -2,7 +2,7 @@
 
 import { ListExpensesQueryDTO } from '@/modules/expenses/expenses.types'
 import {
-  IncomeProps,
+  IncomeWithIdProps,
   ListIncomeQueryDTO
 } from '@/modules/incomes/incomes.types'
 import { ApiResponse } from '@/types/api-response'
@@ -22,7 +22,7 @@ const fetchIncomes = async (filters: ListIncomeQueryDTO) => {
   }
   return response.json() as Promise<
     ApiResponse<{
-      incomes: IncomeProps[]
+      incomes: IncomeWithIdProps[]
       meta: {
         total_items: number
         page: number

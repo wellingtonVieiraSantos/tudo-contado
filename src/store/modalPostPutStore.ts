@@ -1,13 +1,13 @@
-import { IncomeProps } from '@/modules/incomes/incomes.types'
+import { IncomeWithIdProps } from '@/modules/incomes/incomes.types'
 import { create } from 'zustand'
 
 type ModalType = 'POST' | 'PUT' | null
 
 type ModalStore = {
   open: boolean
-  data: IncomeProps | null
+  data: IncomeWithIdProps | null
   type: ModalType
-  openModal: (type: ModalType, data: IncomeProps | null) => void
+  openModal: (type: ModalType, data: IncomeWithIdProps | null) => void
   closeModal: () => void
 }
 

@@ -1,8 +1,8 @@
-import { ExpenseProps } from '@/modules/expenses/expenses.types'
-import { IncomeProps } from '@/modules/incomes/incomes.types'
+import { ExpenseWithIdProps } from '@/modules/expenses/expenses.types'
+import { IncomeWithIdProps } from '@/modules/incomes/incomes.types'
 import { create } from 'zustand'
 
-type DeletePayload = IncomeProps | ExpenseProps
+type DeletePayload = IncomeWithIdProps | ExpenseWithIdProps
 
 type ModalDelStore = {
   open: boolean

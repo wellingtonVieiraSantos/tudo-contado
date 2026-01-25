@@ -3,8 +3,9 @@ import { queryClient } from '@/lib/query-client'
 import { useMutation } from '@tanstack/react-query'
 
 const fetchIncome = async (id: string) => {
-  const res = await fetch(`api/income?id=${id}`, {
+  const res = await fetch(`api/income`, {
     method: 'DELETE',
+    body: JSON.stringify(id),
     headers: { 'Content-Type': 'application/json' }
   })
   if (!res.ok) throw new Error('Falha ao deletar rendimento')
