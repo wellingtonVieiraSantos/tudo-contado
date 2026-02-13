@@ -22,7 +22,7 @@ import { CreditCard } from 'lucide-react'
 import Image from 'next/image'
 import { useGetExpensesByCreditCard } from '../../despesas/_hooks/use-get-expense-by-creditCard'
 
-const cardBrand = [
+export const cardBrand = [
   { title: 'VISA', url: '/visa.png' },
   { title: 'MASTERCARD', url: '/mastercard.png' },
   { title: 'ELO', url: '/elo.png' },

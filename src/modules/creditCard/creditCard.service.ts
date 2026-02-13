@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import { CreditCardRepository } from './creditCard.repository'
 import { requireUser } from '@/lib/require-user'
 import { CreditCardProps } from './creditCard.types'
@@ -54,28 +53,23 @@ export const getAllCreditCardDeactivateService = async () => {
 
 /* POST */
 export const postCreditCardService = async (rawData: CreditCardProps) => {
-  const user = await requireUser()
+  const { id } = await requireUser()
 
   const data = {
-    ...rawData,
+    lastNumber: rawData.lastNumber,
     creditLimit: rawData.creditLimit * 100,
-    billingDay: Number(rawData.billingDay)
-  }
+    expMonth: rawData.expMonth,
+    expYear: rawData.expYear,
+    billingDay: Number(rawData.billingDay),
+    holder: rawData.holder,
+    cardBrand: rawData.cardBrand,
 
-  const creditCardData: Prisma.CreditCardCreateInput = {
-    lastNumber: data.lastNumber,
-    creditLimit: data.creditLimit,
-    expMonth: data.expMonth,
-    expYear: data.expYear,
-    billingDay: data.billingDay,
-    holder: data.holder,
-    cardBrand: data.cardBrand,
     user: {
-      connect: { id: user.id }
+      connect: { id: id! }
     }
   }
 
-  const creditCard = await creditCardRepository.create(creditCardData)
+  const creditCard = await creditCardRepository.create(data)
 
   return creditCard
 }
@@ -85,12 +79,17 @@ export const updateCreditCardByIdService = async (rawData: CreditCardProps) => {
   await requireUser()
 
   const data = {
-    ...rawData,
+    id: rawData.id!,
+    lastNumber: rawData.lastNumber,
     creditLimit: rawData.creditLimit * 100,
-    billingDay: Number(rawData.billingDay)
+    expMonth: rawData.expMonth,
+    expYear: rawData.expYear,
+    billingDay: Number(rawData.billingDay),
+    holder: rawData.holder,
+    cardBrand: rawData.cardBrand
   }
 
-  const creditCard = await creditCardRepository.update(data.id!, data)
+  const creditCard = await creditCardRepository.update(data.id, data)
 
   return creditCard
 }

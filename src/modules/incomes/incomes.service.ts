@@ -5,7 +5,7 @@ import {
   ListIncomeQuery,
   ListIncomeQueryDTO
 } from './incomes.types'
-import { Prisma } from '@prisma/client'
+import { stringToDateFormatter } from '@/lib/stringToDateFormatter'
 
 const incomesRepository = new IncomesRepository()
 
@@ -75,22 +75,18 @@ export const getSumIncomesValuesByMonthRangeService = async () => {
 
 /* POST */
 export const postIncomeService = async (rawData: IncomeProps) => {
-  const user = await requireUser()
+  const { id } = await requireUser()
 
   const data = {
-    ...rawData,
     value: rawData.value * 100,
-    date: new Date(`${rawData.date}T00:00:00.000Z`)
+    description: rawData.description,
+    type: rawData.type,
+    date: stringToDateFormatter(rawData.date),
+
+    user: { connect: { id: id! } }
   }
 
-  const incomeData: Prisma.IncomeCreateInput = {
-    ...data,
-    user: {
-      connect: { id: user.id }
-    }
-  }
-
-  const income = await incomesRepository.create(incomeData)
+  const income = await incomesRepository.create(data)
 
   return income
 }
@@ -100,21 +96,21 @@ export const updateIncomeByIdService = async (rawData: IncomeProps) => {
   await requireUser()
 
   const data = {
-    ...rawData,
+    id: rawData.id!,
     value: rawData.value * 100,
-    date: new Date(`${rawData.date}T00:00:00.000Z`)
+    description: rawData.description,
+    type: rawData.type,
+    date: stringToDateFormatter(rawData.date)
   }
 
-  const { id, ...dataUpdate } = data
-
-  const income = await incomesRepository.update(id!, dataUpdate)
+  const income = await incomesRepository.update(data.id, data)
 
   return income
 }
 
 /* DELETE */
-export const deleteIncomeByIdService = async (expenseId: string) => {
+export const deleteIncomeByIdService = async (incomeId: string) => {
   await requireUser()
 
-  return await incomesRepository.delete(expenseId)
+  return await incomesRepository.delete(incomeId)
 }

@@ -16,7 +16,7 @@ const SelectTrigger = forwardRef<
       className={twMerge(
         `border flex justify-between gap-2 items-center w-full min-h-8 px-2 rounded
          data-placeholder:text-foreground-secondary data-[state=open]:[&>svg]:rotate-180 [&>span]:line-clamp-1
-         data-disabled:cursor-not-allowed data-disabled:bg-disabled`,
+         data-disabled:cursor-not-allowed data-disabled:bg-disabled data-placeholder:text-sm`,
         className
       )}
       ref={ref}
@@ -123,7 +123,7 @@ const SelectItem = forwardRef<
       ref={ref}
       {...props}
     >
-      <span className='absolute right-4 top-1.5 size-3.5'>
+      <span className='absolute right-4 top-1/2 -translate-1/2 size-3.5'>
         <SelectRadix.ItemIndicator>
           <Check className='size-5' />
         </SelectRadix.ItemIndicator>

@@ -27,7 +27,7 @@ const SideBar = () => {
     <>
       {/* desktop */}
       <div
-        className={`hidden p-2 bg-card h-full lg:w-40 xl:w-60 border-r lg:grid grid-rows-[auto_1fr] fixed left-0`}
+        className={`hidden p-2 bg-card h-full lg:w-40 xl:w-60 border-r lg:grid grid-rows-[auto_1fr_auto] fixed left-0`}
       >
         <h1
           className={`w-full text-center pointer-events-none pt-5 flex flex-col gap-3 items-center justify-center`}
@@ -56,7 +56,11 @@ const SideBar = () => {
             </Link>
           ))}
         </div>
-        <Button className='w-full' onClick={() => signOut()}>
+        <Button
+          variant='border'
+          className='w-full mb-5'
+          onClick={() => signOut()}
+        >
           <LogOut />
           Sair
         </Button>

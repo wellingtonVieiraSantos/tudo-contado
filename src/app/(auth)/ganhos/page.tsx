@@ -5,9 +5,9 @@ import { Suspense } from 'react'
 import { TableIncomes } from './_components/TableIncomes'
 import { ModalIncome } from './_components/ModalIncome'
 import BarSkeleton from '@/components/BarSkeleton'
-import ResumeSkeleton from './_components/skeletons/ResumeSkeleton'
-import FilterSkeleton from './_components/skeletons/FilterSkeleton'
-import TableSkeleton from './_components/skeletons/TableSkeleton'
+import ResumeSkeleton from '@/components/skeletons/ResumeSkeleton'
+import FilterSkeleton from '@/components/skeletons/FilterSkeleton'
+import TableSkeleton from '@/components/skeletons/TableSkeleton'
 
 export default function Income() {
   return (

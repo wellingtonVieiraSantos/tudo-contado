@@ -1,4 +1,5 @@
 'use client'
+import { Card, CardContent, CardDescription } from '@/components/ui/Card'
 import {
   PaginationContent,
   PaginationPrev,
@@ -15,32 +16,26 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/Table'
-import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
-
-import { ptBR } from 'date-fns/locale'
-import {
-  ChevronsUpDown,
-  Trash,
-  Link,
-  RefreshCw,
-  BanknoteArrowUp
-} from 'lucide-react'
-import { categories } from './FilterIncomes'
-import { format, parse } from 'date-fns'
-import { Button } from '@/components/ui/Button'
-import valueFormatter from '@/lib/valueFormatter'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useIncomeQuery } from '../_hooks/use-query-income'
-import { useGetIncomes } from '../_hooks/use-get-incomes'
-import { ListIncomeQuery } from '@/modules/incomes/incomes.types'
-import { Card, CardContent, CardDescription } from '@/components/ui/Card'
+import { categoryFormatter } from '@/lib/categoryFormatter'
+import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 import Image from 'next/image'
-import { useModalDelStore } from '@/store/modalDelStore'
-import { useIncomeModalStore } from '@/store/modalPostPutStore'
-import { useDelIncome } from '../_hooks/use-del-income'
+import { ptBR } from 'date-fns/locale'
+import { ChevronsUpDown, Trash, RefreshCw, BanknoteArrowUp } from 'lucide-react'
+import valueFormatter from '@/lib/valueFormatter'
+import { Button } from '@/components/ui/Button'
+import { format, parse } from 'date-fns'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
+import { useGetExpenses } from '../_hooks/use-get-expenses'
+import { useExpenseQuery } from '../_hooks/use-query-expense'
+import { useDelExpense } from '../_hooks/use-del-expense'
 import { ModalDelete } from '@/components/ModalDelete'
+import { useModalDelStore } from '@/store/modalDelStore'
+import Link from 'next/link'
+import { categories } from './ModalExpense'
+import { useExpenseModalStore } from '@/store/modalPostPutStore'
 
-export const TableIncomes = () => {
+export const TableExpenses = () => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
@@ -48,18 +43,21 @@ export const TableIncomes = () => {
     page: Number(searchParams.get('page')) || 1,
     month: Number(searchParams.get('month')) || undefined,
     year: Number(searchParams.get('year')) || undefined,
-    type: (searchParams.get('type') as ListIncomeQuery['type']) || undefined
+    method:
+      (searchParams.get('method') as ListExpensesQuery['method']) || undefined,
+    category:
+      (searchParams.get('category') as ListExpensesQuery['category']) ||
+      undefined
   }
-
-  const { incomes } = useGetIncomes(filters)
-  const { handleDeleteIncome } = useDelIncome()
-  const { setPage } = useIncomeQuery()
+  const { expenses } = useGetExpenses(filters)
+  const { openModal } = useExpenseModalStore()
+  const { handleDeleteExpense } = useDelExpense()
+  const { setPage } = useExpenseQuery()
   const { openDeleteModal } = useModalDelStore()
-  const { openModal } = useIncomeModalStore()
 
   return (
     <>
-      {incomes.data.length !== 0 && (
+      {expenses.data.length !== 0 && (
         <>
           <Table>
             <TableHeader>
@@ -72,51 +70,56 @@ export const TableIncomes = () => {
                 <TableHead className='flex items-center gap-2'>
                   Data <ChevronsUpDown size={20} strokeWidth={1.3} />
                 </TableHead>
-                <TableHead>Tipo</TableHead>
+                <TableHead>Categoria</TableHead>
+                <TableHead>Pagamento</TableHead>
                 <TableHead className='flex justify-center'>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {incomes.data?.map(income => (
-                <TableRow key={income.id}>
+              {expenses.data?.map(expense => (
+                <TableRow key={expense.id}>
                   <TableCell>
                     {(() => {
                       const category = categories.find(
-                        c => c.type === income.type
+                        c => c.type === expense.category
                       )
                       const Icon = category?.icon
                       return Icon ? (
                         <Icon
-                          className='text-success/80'
+                          className='text-destructive/80'
                           size={35}
                           strokeWidth={1.5}
                         />
                       ) : null
                     })()}
                   </TableCell>
-                  <TableCell>{valueFormatter(income.value)}</TableCell>
-                  <TableCell>{income.description}</TableCell>
+                  <TableCell>{valueFormatter(expense.value)}</TableCell>
+                  <TableCell>{expense.description}</TableCell>
                   <TableCell>
                     {format(
-                      parse(income.date, 'yyyy-MM-dd', new Date()),
+                      parse(expense.date, 'yyyy-MM-dd', new Date()),
                       'dd-MM-yyyy',
                       { locale: ptBR }
                     )}
                   </TableCell>
-                  <TableCell>{incomeTypeFormatter(income.type)}</TableCell>
+                  <TableCell>{categoryFormatter(expense.category)}</TableCell>
+                  <TableCell>
+                    {paymentMethodFormatter(expense.method)}
+                  </TableCell>
                   <TableCell className='flex gap-3 justify-center'>
                     <Button
                       variant='border'
-                      onClick={() => openDeleteModal(income)}
+                      onClick={() => openDeleteModal(expense)}
                       className='self-end hover:bg-destructive/40 rounded-lg'
                     >
                       <Trash />
                       <span className='hidden md:inline-block'>Deletar</span>
                     </Button>
+
                     <Button
                       variant='border'
+                      onClick={() => openModal('PUT', expense)}
                       className='self-end bg-foreground text-background md:px-4 rounded-lg'
-                      onClick={() => openModal('PUT', income)}
                     >
                       <RefreshCw />
                       <span className='hidden md:inline-block'>Atualizar</span>
@@ -129,10 +132,10 @@ export const TableIncomes = () => {
           <Pagination>
             <PaginationContent>
               <PaginationPrev
-                disabled={incomes.meta.page === 1}
+                disabled={expenses.meta.page === 1}
                 href={`${pathname}?page=${filters.page - 1}`}
               />
-              {Array.from({ length: incomes.meta.totalPages }).map(
+              {Array.from({ length: expenses.meta.totalPages }).map(
                 (_, index) => (
                   <PaginationLink
                     key={index}
@@ -149,37 +152,37 @@ export const TableIncomes = () => {
                 )
               )}
               <PaginationNext
-                disabled={incomes.meta.page === incomes.meta.totalPages}
+                disabled={expenses.meta.page === expenses.meta.totalPages}
                 href={`${pathname}?page=${filters.page + 1}`}
               />
             </PaginationContent>
           </Pagination>
         </>
       )}
-      {incomes.data.length === 0 && (
-        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center lg:mt-10'>
+      {expenses.data?.length === 0 && (
+        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center lg:mt-10 '>
           <CardContent className='items-center gap-8'>
             <Image
               src='/empty-wallet.webp'
-              alt='mão colocando moeda no porquinho'
-              width={128}
-              height={128}
+              alt='mao colocando moeda no porquinho'
+              width={300}
+              height={390}
               className='size-50 grayscale-100'
             />
             <CardDescription className='text-center'>
-              Nenhuma receita ainda. Vamos registrar sua primeira entrada?
+              Nenhuma despesa registrada. Que tal adicionar a primeira?
             </CardDescription>
-            <Button
-              className='w-full max-w-xl lg:w-fit'
-              onClick={() => openModal('POST', null)}
-            >
-              <BanknoteArrowUp />
-              Cadastre um novo ganho
-            </Button>
+
+            <Link href='/despesas/cadastro'>
+              <Button className='w-full max-w-xl lg:w-fit'>
+                <BanknoteArrowUp />
+                Cadastre uma nova despesa
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       )}
-      <ModalDelete text='Rendimento' handleDelete={handleDeleteIncome} />
+      <ModalDelete text='Despesa' handleDelete={handleDeleteExpense} />
     </>
   )
 }

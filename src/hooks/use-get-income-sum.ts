@@ -14,7 +14,7 @@ const fetchIncomeSum = async () => {
 
 export const useGetIncomeSumByMonth = () => {
   const { data: response, isLoading } = useSuspenseQuery({
-    queryKey: ['incomesSum'],
+    queryKey: ['incomes'],
     queryFn: fetchIncomeSum
   })
 

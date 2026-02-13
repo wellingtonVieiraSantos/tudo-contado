@@ -48,14 +48,14 @@ export default function ChartLine() {
           }}
           series={[
             {
-              data: expense,
+              data: income,
               label: 'Rendimentos',
               showMark: false,
               color: 'oklch(0.8729 0.1535 163.22)',
               valueFormatter
             },
             {
-              data: income,
+              data: expense,
               label: 'Despesas',
               showMark: false,
               color: 'oklch(0.7368 0.2078 25.33)',

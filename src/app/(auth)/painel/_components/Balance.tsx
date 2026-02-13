@@ -51,7 +51,7 @@ export default function Balance() {
         </CardHeader>
         <CardContent className='items-start pl-5'>
           <h2
-            className={`text-3xl tracking-wide text-center ${
+            className={`text-2xl tracking-wide text-center ${
               sumIncomeActualMonth - sumExpenseActualMonth < 0
                 ? 'text-destructive'
                 : 'text-success'

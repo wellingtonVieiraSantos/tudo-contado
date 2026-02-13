@@ -1,5 +1,6 @@
+'use client'
 import { ApiResponse } from '@/types/api-response'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 const fetchSumExpensesByCreditCard = async () => {
@@ -18,7 +19,7 @@ const fetchSumExpensesByCreditCard = async () => {
 }
 
 export const useGetExpensesByCreditCard = () => {
-  const { data: response, isLoading } = useQuery({
+  const { data: response, isLoading } = useSuspenseQuery({
     queryKey: ['sumExpensesByCreditCard'],
     queryFn: fetchSumExpensesByCreditCard
   })

@@ -6,6 +6,7 @@ import {
   deleteExpenseByIdService
 } from '@/modules/expenses/expenses.service'
 import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
+import { error } from 'console'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
@@ -85,12 +86,14 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams
-
-  const id = searchParams.get('id')
-
   try {
-    if (!id) return NextResponse.json({ success: false }, { status: 404 })
+    const id: string = await req.json()
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Erro id não encontrado.' },
+        { status: 400 }
+      )
+    }
 
     const deletedExpense = await deleteExpenseByIdService(id)
 

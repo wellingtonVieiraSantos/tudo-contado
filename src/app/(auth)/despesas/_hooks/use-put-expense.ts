@@ -1,8 +1,8 @@
+'use client'
 import { queryClient } from '@/lib/query-client'
-import { ApiResponse } from '@/types/api-response'
-import { ExpenseProps } from '@/types/expense-data-props'
+import { ExpenseProps } from '@/modules/expenses/expenses.types'
 import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { useExpenseModalStore } from '@/store/modalPostPutStore'
 
 const fetchExpense = async (data: ExpenseProps) => {
   const res = await fetch('/api/expense/', {
@@ -11,26 +11,26 @@ const fetchExpense = async (data: ExpenseProps) => {
     headers: { 'Content-Type': 'application/json' }
   })
   if (!res.ok) throw new Error('Falha ao atualizar despesa')
-  return res.json() as Promise<ApiResponse<ExpenseProps>>
+  return res.json()
 }
 
 export const usePutExpense = () => {
-  const router = useRouter()
+  const { closeModal } = useExpenseModalStore()
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchExpense,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] })
-      router.replace('/despesas')
+      closeModal()
     }
   })
 
-  const handleUpdateExpense = async (data: ExpenseProps) => {
+  const handlePutExpense = async (data: ExpenseProps) => {
     mutate(data)
   }
 
   return {
     isPending,
-    handleUpdateExpense
+    handlePutExpense
   }
 }

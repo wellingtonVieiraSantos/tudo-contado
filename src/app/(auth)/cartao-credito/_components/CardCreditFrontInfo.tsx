@@ -1,14 +1,6 @@
 import { CreditCardDeactivateProps } from '@/types/creditcard-data-props'
 import Image from 'next/image'
 
-export const cardBrand = [
-  { title: 'VISA', url: '/visa.png' },
-  { title: 'MASTERCARD', url: '/mastercard.png' },
-  { title: 'ELO', url: '/elo.png' },
-  { title: 'HIPERCARD', url: '/hipercard.png' },
-  { title: 'AMEX', url: '/amex.png' }
-]
-
 export default function CardCreditFrontInfo({
   data
 }: {

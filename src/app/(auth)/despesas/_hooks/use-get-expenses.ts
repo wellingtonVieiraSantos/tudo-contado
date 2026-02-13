@@ -1,10 +1,10 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { ApiResponse } from '@/types/api-response'
 import {
-  ExpenseProps,
+  ExpenseWithIdProps,
   ListExpensesQueryDTO
 } from '@/modules/expenses/expenses.types'
 
@@ -23,7 +23,7 @@ const fetchExpenses = async (filters: ListExpensesQueryDTO) => {
 
   return response.json() as Promise<
     ApiResponse<{
-      expenses: ExpenseProps[]
+      expenses: ExpenseWithIdProps[]
       meta: {
         total_items: number
         page: number
@@ -40,10 +40,9 @@ export const useGetExpenses = (filters: ListExpensesQueryDTO) => {
     isLoading,
     error,
     refetch
-  } = useQuery({
+  } = useSuspenseQuery({
     queryKey: ['expenses', filters],
-    queryFn: () => fetchExpenses(filters),
-    staleTime: 5 * 60 * 1000
+    queryFn: () => fetchExpenses(filters)
   })
 
   const expenses = useMemo(() => {

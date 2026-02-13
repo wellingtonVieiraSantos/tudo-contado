@@ -31,12 +31,13 @@ import { useEffect } from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
 import { IncomeProps } from '@/modules/incomes/incomes.types'
 import { incomeSchema } from '@/modules/incomes/incomes.schema'
-import { useModalPostPutStore } from '@/store/modalPostPutStore'
+import { useIncomeModalStore } from '@/store/modalPostPutStore'
 import { usePostIncome } from '../_hooks/use-post-income'
 import { usePutIncome } from '../_hooks/use-put-income'
+import { maskMoney, unmaskMoney } from '@/lib/maskMoney'
 
 export const ModalIncome = () => {
-  const { data: prevData, open, closeModal, type } = useModalPostPutStore()
+  const { data: prevData, open, closeModal, type } = useIncomeModalStore()
   const { handlePostIncome, isPending: isPendingPost } = usePostIncome()
   const { handlePutIncome, isPending: isPendingPut } = usePutIncome()
   const {
@@ -92,7 +93,9 @@ export const ModalIncome = () => {
     >
       <ModalContent>
         <ModalHeader>
-          <ModalTitle>Cadastro de Ganhos</ModalTitle>
+          <ModalTitle>
+            {type === 'POST' ? 'Cadastro de Ganhos' : 'Atualização de Ganho'}
+          </ModalTitle>
           <ModalDescription className='text-sm text-foreground-secondary'>
             Formulario para cadastro/atualizações de ganhos
           </ModalDescription>
@@ -100,16 +103,19 @@ export const ModalIncome = () => {
         <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-2'>
           <FormField name='value'>
             <FormLabel>Valor</FormLabel>
-            <FormControl asChild>
-              <Input
-                icon={Wallet}
-                id='value'
-                {...register('value')}
-                type='number'
-                step='0.01'
-                placeholder='R$ 0000,00'
-              />
-            </FormControl>
+            <Controller
+              name='value'
+              control={control}
+              render={({ field }) => (
+                <Input
+                  icon={Wallet}
+                  {...field}
+                  placeholder='R$ 0000,00'
+                  value={maskMoney(field.value ?? 0)}
+                  onChange={e => field.onChange(unmaskMoney(e.target.value))}
+                />
+              )}
+            />
             {errors.value && (
               <FormMessage className='text-destructive'>
                 {errors.value?.message}

@@ -1,12 +1,12 @@
 import { ExpensesRepository } from './expenses.repository'
 import { requireUser } from '@/lib/require-user'
-import { Prisma } from '@prisma/client'
 import { endOfMonth, startOfMonth } from 'date-fns'
 import {
   ExpenseProps,
   ListExpensesQuery,
   ListExpensesQueryDTO
 } from './expenses.types'
+import { stringToDateFormatter } from '@/lib/stringToDateFormatter'
 
 const expensesRepository = new ExpensesRepository()
 
@@ -129,22 +129,22 @@ export const postExpenseService = async (rawData: ExpenseProps) => {
   const { id } = await requireUser()
 
   const data = {
-    ...rawData,
     value: rawData.value * 100,
-    expenseDate: new Date(`${rawData.date}T00:00:00.000Z`)
+    description: rawData.description,
+    category: rawData.category,
+    method: rawData.method,
+    installments: rawData.installments,
+    date: stringToDateFormatter(rawData.date),
+
+    user: { connect: { id: id! } },
+
+    creditCard:
+      rawData.method === 'CREDIT' && rawData.creditCardId
+        ? { connect: { id: rawData.creditCardId } }
+        : undefined
   }
 
-  const expenseData: Prisma.ExpenseCreateInput = {
-    ...data,
-    user: {
-      connect: { id: id! }
-    },
-    ...(data.method === 'CREDIT' && data.creditCardId
-      ? { creditCard: { connect: { id: data.creditCardId } } }
-      : {})
-  }
-
-  const expense = await expensesRepository.create(expenseData)
+  const expense = await expensesRepository.create(data)
 
   return expense
 }
@@ -154,12 +154,20 @@ export const updateExpenseByIdService = async (rawData: ExpenseProps) => {
   await requireUser()
 
   const data = {
-    ...rawData,
+    id: rawData.id!,
     value: rawData.value * 100,
-    expenseDate: new Date(`${rawData.date}T00:00:00.000Z`)
+    description: rawData.description,
+    category: rawData.category,
+    method: rawData.method,
+    installments: rawData.installments,
+    date: stringToDateFormatter(rawData.date),
+
+    creditCard: rawData.creditCardId
+      ? { connect: { id: rawData.creditCardId } }
+      : undefined
   }
 
-  const expense = await expensesRepository.update(data.id!, data)
+  const expense = await expensesRepository.update(data.id, data)
 
   return expense
 }

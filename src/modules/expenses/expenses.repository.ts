@@ -8,7 +8,8 @@ const expenseSelect = {
   category: true,
   date: true,
   method: true,
-  installments: true
+  installments: true,
+  creditCardId: true
 }
 
 export class ExpensesRepository {

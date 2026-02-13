@@ -1,5 +1,4 @@
 'use client'
-import { categories } from './FormStepTwo'
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import { Form, FormField } from '@/components/ui/Form'
 import { Controller, useForm } from 'react-hook-form'
@@ -20,18 +19,23 @@ import {
 import { useDebounce } from '@/hooks/useDebouce'
 import { Search } from 'lucide-react'
 import { CategoryType } from '@prisma/client'
+import { useSearchParams } from 'next/navigation'
+import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
+import { categories } from './ModalExpense'
 
-export const FilterExpenses = ({
-  filters
-}: {
-  filters: {
-    page: number | undefined
-    month: number | undefined
-    year: number | undefined
-    method: 'CREDIT' | 'DEBIT' | undefined
-    category: CategoryType | undefined
+export const FilterExpenses = () => {
+  const searchParams = useSearchParams()
+
+  const filters = {
+    page: Number(searchParams.get('page')) || 1,
+    month: Number(searchParams.get('month')) || undefined,
+    year: Number(searchParams.get('year')) || undefined,
+    method:
+      (searchParams.get('method') as ListExpensesQuery['method']) || undefined,
+    category:
+      (searchParams.get('category') as ListExpensesQuery['category']) ||
+      undefined
   }
-}) => {
   const normalizeMethod = (
     value: '' | 'ALL' | 'CREDIT' | 'DEBIT' | undefined
   ): 'CREDIT' | 'DEBIT' | undefined => {

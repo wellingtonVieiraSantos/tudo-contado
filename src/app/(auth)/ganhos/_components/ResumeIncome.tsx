@@ -11,18 +11,18 @@ import { Plus, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import valueFormatter from '@/lib/valueFormatter'
 import { useGetIncomeSumByMonth } from '@/hooks/use-get-income-sum'
-import { useModalPostPutStore } from '@/store/modalPostPutStore'
+import { useIncomeModalStore } from '@/store/modalPostPutStore'
 
 export const ResumeIncome = () => {
   const { incomeSum } = useGetIncomeSumByMonth()
-  const { openModal } = useModalPostPutStore()
+  const { openModal } = useIncomeModalStore()
 
   const incomeSumActual = incomeSum?.at(-1)?.total ?? null
   return (
     <Card className='w-full p-2'>
       <CardHeader>
         <CardTitle className=' flex items-center gap-3'>
-          <TrendingUp className='text-success' />
+          <TrendingUp className='text-success' size={35} />
           Total de rendimentos
         </CardTitle>
         <CardDescription>Resumo do total de ganhos do mês</CardDescription>

@@ -1,6 +1,5 @@
 'use client'
 
-import { ListExpensesQueryDTO } from '@/modules/expenses/expenses.types'
 import {
   IncomeWithIdProps,
   ListIncomeQueryDTO
@@ -33,7 +32,7 @@ const fetchIncomes = async (filters: ListIncomeQueryDTO) => {
   >
 }
 
-export const useGetIncomes = (filters: ListExpensesQueryDTO) => {
+export const useGetIncomes = (filters: ListIncomeQueryDTO) => {
   const {
     data: response,
     isLoading,

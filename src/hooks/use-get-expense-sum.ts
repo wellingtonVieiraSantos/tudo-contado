@@ -14,7 +14,7 @@ const fetchExpenseSum = async () => {
 
 export const useGetExpenseSumByMonth = () => {
   const { data: response, isLoading } = useSuspenseQuery({
-    queryKey: ['expensesSum'],
+    queryKey: ['expenses'],
     queryFn: fetchExpenseSum
   })
 
