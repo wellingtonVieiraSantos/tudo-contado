@@ -2,11 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { privateRoutes } from './lib/privateRoutes'
 import { publicRoutes } from './lib/publicRoutes'
-
-import NextAuth from 'next-auth'
-import authConfig from '../auth.config'
-
-const { auth } = NextAuth(authConfig)
+import { auth } from '../auth'
 
 export default auth(async req => {
   const isLogged = !!req.auth
