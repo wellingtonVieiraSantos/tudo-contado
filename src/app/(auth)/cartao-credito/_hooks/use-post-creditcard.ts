@@ -4,6 +4,7 @@ import {
   CreditCardProps,
   CreditCardWithIdProps
 } from '@/modules/creditCard/creditCard.types'
+import { useExpenseModalStore } from '@/store/modalPostPutStore'
 import { ApiResponse } from '@/types/api-response'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -23,20 +24,22 @@ const fetchCreditCard = async (data: CreditCardProps) => {
 }
 
 export const usePostCreditCard = () => {
+  const { closeModal } = useExpenseModalStore()
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreditCard,
     onSuccess: res => {
       toast.success(res.message)
       queryClient.invalidateQueries({ queryKey: ['creditCard'] })
+      closeModal()
     },
     onError: (error: Error) => {
       toast.error(error.message)
     }
   })
 
-  const onSubmit = async (data: CreditCardProps) => {
+  const handlePostCreditCard = async (data: CreditCardProps) => {
     mutate(data)
   }
 
-  return { onSubmit, isPending }
+  return { handlePostCreditCard, isPending }
 }

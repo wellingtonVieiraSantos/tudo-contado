@@ -22,6 +22,7 @@ import {
   TableRow
 } from '@/components/ui/Table'
 import { categoryFormatter } from '@/lib/categoryFormatter'
+import { dateStringFormatter } from '@/lib/dateStringFormatter'
 
 export default function LastTransactions() {
   const { recentTransactions } = useGetLastTransactions()
@@ -90,13 +91,7 @@ export default function LastTransactions() {
                   {incomeTypeFormatter(transaction.type) ||
                     categoryFormatter(transaction.category)}
                 </TableCell>
-                <TableCell>
-                  {format(
-                    parse(transaction.date, 'yyyy-MM-dd', new Date()),
-                    'dd-MM-yyyy',
-                    { locale: ptBR }
-                  )}
-                </TableCell>
+                <TableCell>{dateStringFormatter(transaction.date)}</TableCell>
                 <TableCell>{valueFormatter(transaction.value)}</TableCell>
               </TableRow>
             ))}

@@ -3,24 +3,58 @@ import { Prisma } from '@prisma/client'
 
 export class CreditCardRepository {
   async getAll(userId: string) {
-    return await prisma.creditCard.findMany({
-      where: {
-        user: { id: userId }
+    const [total_items, data] = await Promise.all([
+      prisma.creditCard.count({
+        where: {
+          user: { id: userId },
+          deletedAt: null
+        }
+      }),
+      prisma.creditCard.findMany({
+        where: {
+          user: { id: userId }
+        },
+        select: {
+          id: true,
+          lastNumber: true,
+          creditLimit: true,
+          expMonth: true,
+          expYear: true,
+          holder: true,
+          cardBrand: true,
+          deletedAt: true,
+          paymentDay: true,
+          expense: {
+            select: {
+              id: true,
+              value: true,
+              date: true,
+              installments: true,
+              category: true,
+              description: true
+            },
+            orderBy: {
+              date: 'desc'
+            }
+          }
+        },
+        orderBy: {
+          deletedAt: 'desc'
+        }
+      })
+    ])
+
+    return {
+      meta: {
+        total_items,
+        page: 1,
+        limit: 10,
+        total_pages: Math.ceil(total_items / 10)
       },
-      select: {
-        id: true,
-        lastNumber: true,
-        holder: true,
-        expMonth: true,
-        expYear: true,
-        cardBrand: true,
-        creditLimit: true
-      },
-      orderBy: {
-        expYear: 'desc'
-      }
-    })
+      data
+    }
   }
+
   async getById(id: string) {
     return await prisma.creditCard.findUnique({
       where: { id },
@@ -31,7 +65,8 @@ export class CreditCardRepository {
         holder: true,
         expMonth: true,
         expYear: true,
-        billingDay: true,
+        deletedAt: true,
+        paymentDay: true,
         cardBrand: true,
         expense: {
           select: {

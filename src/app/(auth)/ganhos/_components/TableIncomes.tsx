@@ -39,6 +39,7 @@ import { useModalDelStore } from '@/store/modalDelStore'
 import { useIncomeModalStore } from '@/store/modalPostPutStore'
 import { useDelIncome } from '../_hooks/use-del-income'
 import { ModalDelete } from '@/components/ModalDelete'
+import { dateStringFormatter } from '@/lib/dateStringFormatter'
 
 export const TableIncomes = () => {
   const searchParams = useSearchParams()
@@ -96,13 +97,7 @@ export const TableIncomes = () => {
                   </TableCell>
                   <TableCell>{valueFormatter(income.value)}</TableCell>
                   <TableCell>{income.description}</TableCell>
-                  <TableCell>
-                    {format(
-                      parse(income.date, 'yyyy-MM-dd', new Date()),
-                      'dd-MM-yyyy',
-                      { locale: ptBR }
-                    )}
-                  </TableCell>
+                  <TableCell>{dateStringFormatter(income.date)}</TableCell>
                   <TableCell>{incomeTypeFormatter(income.type)}</TableCell>
                   <TableCell className='flex gap-3 justify-center'>
                     <Button

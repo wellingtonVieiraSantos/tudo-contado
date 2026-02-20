@@ -3,16 +3,15 @@ import { queryClient } from '@/lib/query-client'
 import { useMutation } from '@tanstack/react-query'
 
 const fetchCreditCard = async (id: string) => {
-  const res = await fetch(`/api/credit-card`, {
-    method: 'DELETE',
-    body: JSON.stringify(id),
+  const res = await fetch(`/api/credit-card/${id}/deactivate`, {
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json' }
   })
-  if (!res.ok) throw new Error('Falha ao deletar despesa')
+  if (!res.ok) throw new Error('Falha ao desativar cartão de crédito')
   return res.json()
 }
 
-export const useDelCreditCard = () => {
+export const useDeactivateCreditCard = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreditCard,
     onSuccess: () => {
@@ -20,9 +19,9 @@ export const useDelCreditCard = () => {
     }
   })
 
-  const handleDeleteCreditCard = async (id: string) => {
+  const handleDeactivateCreditCard = async (id: string) => {
     mutate(id)
   }
 
-  return { handleDeleteCreditCard, isPending }
+  return { handleDeactivateCreditCard, isPending }
 }

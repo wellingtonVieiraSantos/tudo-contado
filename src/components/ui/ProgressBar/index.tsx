@@ -12,7 +12,7 @@ const ProgressBar = forwardRef<
     <div className='relative w-full'>
       <ProgressRadix.Root
         className={twMerge(
-          `relative w-full h-2 bg-disabled rounded-full overflow-hidden`,
+          `relative w-full h-2 bg-foreground/20 rounded-full overflow-hidden`,
           className
         )}
         ref={ref}

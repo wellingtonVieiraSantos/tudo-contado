@@ -6,15 +6,18 @@ const creditCardRepository = new CreditCardRepository()
 
 /* GET */
 export const getAllCreditCardService = async () => {
-  const user = await requireUser()
-  const rawCreditCard = await creditCardRepository.getAll(user.id!)
+  const { id } = await requireUser()
+  const rawCreditCard = await creditCardRepository.getAll(id!)
 
   //normalize value and amount to show in component, get in centavos, return in reais
-  const creditCard = rawCreditCard.map(cc => ({
+  const creditCard = rawCreditCard.data.map(cc => ({
     ...cc,
     creditLimit: cc.creditLimit / 100
   }))
-  return creditCard
+  return {
+    meta: rawCreditCard.meta,
+    data: creditCard
+  }
 }
 
 export const getCreditCardByIdService = async (id: string) => {
@@ -56,11 +59,11 @@ export const postCreditCardService = async (rawData: CreditCardProps) => {
   const { id } = await requireUser()
 
   const data = {
-    lastNumber: rawData.lastNumber,
+    lastNumber: Number(rawData.lastNumber),
     creditLimit: rawData.creditLimit * 100,
-    expMonth: rawData.expMonth,
-    expYear: rawData.expYear,
-    billingDay: Number(rawData.billingDay),
+    expMonth: Number(rawData.expMonth),
+    expYear: Number(rawData.expYear),
+    paymentDay: Number(rawData.paymentDay),
     holder: rawData.holder,
     cardBrand: rawData.cardBrand,
 
@@ -80,11 +83,11 @@ export const updateCreditCardByIdService = async (rawData: CreditCardProps) => {
 
   const data = {
     id: rawData.id!,
-    lastNumber: rawData.lastNumber,
+    lastNumber: Number(rawData.lastNumber),
     creditLimit: rawData.creditLimit * 100,
-    expMonth: rawData.expMonth,
-    expYear: rawData.expYear,
-    billingDay: Number(rawData.billingDay),
+    expMonth: Number(rawData.expMonth),
+    expYear: Number(rawData.expYear),
+    paymentDay: Number(rawData.paymentDay),
     holder: rawData.holder,
     cardBrand: rawData.cardBrand
   }

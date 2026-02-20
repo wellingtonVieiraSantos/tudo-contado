@@ -19,11 +19,9 @@ import {
 import { categoryFormatter } from '@/lib/categoryFormatter'
 import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 import Image from 'next/image'
-import { ptBR } from 'date-fns/locale'
 import { ChevronsUpDown, Trash, RefreshCw, BanknoteArrowUp } from 'lucide-react'
 import valueFormatter from '@/lib/valueFormatter'
 import { Button } from '@/components/ui/Button'
-import { format, parse } from 'date-fns'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
 import { useGetExpenses } from '../_hooks/use-get-expenses'
@@ -34,6 +32,7 @@ import { useModalDelStore } from '@/store/modalDelStore'
 import Link from 'next/link'
 import { categories } from './ModalExpense'
 import { useExpenseModalStore } from '@/store/modalPostPutStore'
+import { dateStringFormatter } from '@/lib/dateStringFormatter'
 
 export const TableExpenses = () => {
   const searchParams = useSearchParams()
@@ -95,13 +94,7 @@ export const TableExpenses = () => {
                   </TableCell>
                   <TableCell>{valueFormatter(expense.value)}</TableCell>
                   <TableCell>{expense.description}</TableCell>
-                  <TableCell>
-                    {format(
-                      parse(expense.date, 'yyyy-MM-dd', new Date()),
-                      'dd-MM-yyyy',
-                      { locale: ptBR }
-                    )}
-                  </TableCell>
+                  <TableCell>{dateStringFormatter(expense.date)}</TableCell>
                   <TableCell>{categoryFormatter(expense.category)}</TableCell>
                   <TableCell>
                     {paymentMethodFormatter(expense.method)}

@@ -58,7 +58,6 @@ import { usePostExpense } from '../_hooks/use-post-expense'
 import { usePutExpense } from '../_hooks/use-put-expense'
 import { useEffect } from 'react'
 import Link from 'next/link'
-import { toast } from 'sonner'
 
 const categoryICon = [
   House,
@@ -293,7 +292,7 @@ export const ModalExpense = () => {
           </FormField>
           {watch('method') === 'CREDIT' && (
             <>
-              {creditCard.length > 0 && (
+              {creditCard.cards.length > 0 && (
                 <div className='flex gap-3'>
                   <FormField name='creditCardId' className='flex-1'>
                     <FormLabel>Número do Cartão *</FormLabel>
@@ -309,7 +308,7 @@ export const ModalExpense = () => {
                             <SelectValue placeholder='Vincule a um cartão cadastrado' />
                           </SelectTrigger>
                           <SelectContent>
-                            {creditCard.map(card => (
+                            {creditCard.cards.map(card => (
                               <SelectItem key={card.id} value={card.id!}>
                                 {'**** **** **** ' + card.lastNumber}
                               </SelectItem>
@@ -344,7 +343,7 @@ export const ModalExpense = () => {
                 </div>
               )}
 
-              {creditCard.length === 0 && (
+              {creditCard.cards.length === 0 && (
                 <p className='text-sm text-foreground-secondary text-center pb-6'>
                   Nenhum cartão encontrado. É necessário cadastrar um cartão.
                 </p>

@@ -21,24 +21,30 @@ import { Button } from '@/components/ui/Button'
 import { CreditCard } from 'lucide-react'
 import Image from 'next/image'
 import { useGetExpensesByCreditCard } from '../../despesas/_hooks/use-get-expense-by-creditCard'
+import Link from 'next/link'
 
 export const cardBrand = [
-  { title: 'VISA', url: '/visa.png' },
-  { title: 'MASTERCARD', url: '/mastercard.png' },
-  { title: 'ELO', url: '/elo.png' },
-  { title: 'HIPERCARD', url: '/hipercard.png' },
-  { title: 'AMEX', url: '/amex.png' }
+  { title: 'VISA', url: '/visa.svg' },
+  { title: 'MASTERCARD', url: '/mastercard.svg' },
+  { title: 'ELO', url: '/elo.svg' },
+  { title: 'HIPERCARD', url: '/hipercard.svg' },
+  { title: 'AMEX', url: '/amex.svg' },
+  { title: 'OTHER', url: '/other.svg' }
 ]
 
 export default function CreditCardDashboard() {
   const { creditCard: CC } = useGetCreditCard()
   const { sumExpenseByCC } = useGetExpensesByCreditCard()
 
-  const creditCard = CC?.map(card => {
-    const matched = sumExpenseByCC?.find(res => res.creditCardId === card.id)
+  if (!CC) return
+
+  const creditCard = CC.cards.map(card => {
+    const spending =
+      sumExpenseByCC.find(expense => expense.creditCardId === card.id)?._sum ||
+      0
     return {
       ...card,
-      spending: matched?._sum ?? 0
+      spending
     }
   })
 
@@ -50,46 +56,47 @@ export default function CreditCardDashboard() {
         <Divider />
       </CardHeader>
       <CardContent className='items-center justify-center'>
-        {creditCard?.length === 0 ? (
-          <div className='flex flex-col gap-13 items-center text-center'>
+        {!CC?.meta.total_items ? (
+          <div className='flex flex-col gap-13 items-center text-center  pt-8'>
             <p className='text-foreground-secondary'>
               Nenhum cartão de crédito cadastrado...
             </p>
-            <Button type='button'>
-              <CreditCard />
-              Cadastrar novo cartão
-            </Button>
+            <Link href='/cartao-credito'>
+              <Button type='button'>
+                <CreditCard />
+                Cadastrar novo cartão
+              </Button>
+            </Link>
           </div>
         ) : (
           <Carousel>
             <CarouselContent>
-              {creditCard?.map((card, i) => (
+              {creditCard.map((card, i) => (
                 <CarouselItem
                   key={card.id}
                   className='flex flex-col items-center gap-3 cursor-pointer'
                 >
                   <div
-                    className={`relative m-auto w-full max-w-max h-45 aspect-video rounded-xl bg-radial
-                          from-sky-800 border border-disabled`}
+                    className={`relative m-auto w-full max-w-max h-45 aspect-video rounded-xl bg-radial from-sky-800 border border-disabled`}
                   >
                     <Image
                       src={'/chip.png'}
                       alt='chip cartão de crédito'
                       width={512}
                       height={512}
-                      className='w-8 absolute top-3 left-5'
+                      className='w-10 absolute top-9 left-8'
                     />
                     <Image
                       src={
                         cardBrand.find(b => b.title === card?.cardBrand)?.url ??
-                        ''
+                        cardBrand.find(b => b.title === 'OTHER')!.url
                       }
                       alt='bandeira do cartão de crédito'
                       width={512}
                       height={512}
-                      className='w-12 absolute top-2 right-5'
+                      className='w-16 absolute top-3 right-5'
                     />
-                    <div className='text-xl lg:text-base xl:text-xl absolute bottom-18 left-9 font-mono tracking-wider'>
+                    <div className='text-xl lg:text-base xl:text-xl absolute bottom-16 left-9 font-mono tracking-wider'>
                       **** **** **** {card?.lastNumber}
                     </div>
                     <div className='absolute bottom-3 left-7 flex flex-col'>

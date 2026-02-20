@@ -44,23 +44,41 @@ npm install
 yarn install
 ```
 
-Configure as variáveis de ambiente no arquivo .env conforme o .env.example.
+Configure as variáveis de ambiente. Ver [SETUP_AMBIENTE.md](./SETUP_AMBIENTE.md) para detalhes sobre configuração separada de Dev vs Produção.
 
-▶️ Executando o Projeto
+## ▶️ Executando o Projeto
 
-Ambiente de desenvolvimento:
+### Desenvolvimento
+
+Para setup automático:
 
 ```bash
-npm run dev
-# ou
-yarn dev
+pnpm setup
 ```
 
-Ambiente de produção:
+Ou manualmente:
 
 ```bash
-npm run build
-npm start
+pnpm install
+pnpm db:migrate
+pnpm db:seed
+pnpm dev
+```
+
+### Produção
+
+```bash
+pnpm build
+pnpm start
+```
+
+### Comandos de Banco de Dados
+
+```bash
+pnpm db:migrate      # Aplicar migrações
+pnpm db:seed         # Popular com dados de teste
+pnpm db:reset        # Resetar banco (CUIDADO!)
+pnpm db:studio       # Abrir Prisma Studio
 ```
 
 🛠️ Funcionalidades
