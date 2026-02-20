@@ -15,41 +15,31 @@ import {
   ModalContent,
   ModalDescription,
   ModalHeader,
-  ModalTitle,
-  ModalTrigger
+  ModalTitle
 } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import {
   Send,
   Wallet,
-  Briefcase,
-  Coins,
+  BriefcaseBusiness,
+  Percent,
   Hammer,
   TrendingUp
 } from 'lucide-react'
-import { incomeSchema } from '@/validators/formIncome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IncomeProps } from '@/types/income-data-props'
 import { useEffect } from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToogleGroup'
+import { IncomeProps } from '@/modules/incomes/incomes.types'
+import { incomeSchema } from '@/modules/incomes/incomes.schema'
+import { useIncomeModalStore } from '@/store/modalPostPutStore'
+import { usePostIncome } from '../_hooks/use-post-income'
+import { usePutIncome } from '../_hooks/use-put-income'
+import { maskMoney, unmaskMoney } from '@/lib/maskMoney'
 
-type ModalIncomeProps = {
-  isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onSubmit: (data: IncomeProps) => Promise<void>
-  isPending: boolean
-  children?: React.ReactNode
-  selectedIncomeUpdate?: IncomeProps
-}
-
-export const ModalIncome = ({
-  isOpen,
-  setIsOpen,
-  onSubmit,
-  isPending,
-  selectedIncomeUpdate,
-  children
-}: ModalIncomeProps) => {
+export const ModalIncome = () => {
+  const { data: prevData, open, closeModal, type } = useIncomeModalStore()
+  const { handlePostIncome, isPending: isPendingPost } = usePostIncome()
+  const { handlePutIncome, isPending: isPendingPut } = usePutIncome()
   const {
     register,
     handleSubmit,
@@ -57,49 +47,75 @@ export const ModalIncome = ({
     reset,
     formState: { errors }
   } = useForm<IncomeProps>({
-    resolver: zodResolver(incomeSchema),
-    defaultValues: {
-      value: undefined,
-      description: undefined,
-      type: 'ACTIVE',
-      date: new Date().toISOString().split('T')[0]
-    }
+    resolver: zodResolver(incomeSchema)
   })
 
   useEffect(() => {
-    if (selectedIncomeUpdate) {
+    if (open && type === 'PUT' && prevData) {
       reset({
-        value: selectedIncomeUpdate.value,
-        description: selectedIncomeUpdate.description,
-        type: selectedIncomeUpdate.type,
-        date: selectedIncomeUpdate.date
+        value: prevData.value,
+        description: prevData.description,
+        type: prevData.type,
+        date: prevData.date
       })
     }
-  }, [selectedIncomeUpdate, reset])
+
+    if (open && type === 'POST') {
+      reset({
+        value: undefined,
+        description: '',
+        type: 'ACTIVE',
+        date: new Date().toISOString().split('T')[0]
+      })
+    }
+  }, [open, type, prevData, reset])
+
+  const onSubmit = (data: IncomeProps) => {
+    if (type === 'POST') {
+      handlePostIncome(data)
+      return
+    }
+
+    if (type === 'PUT') {
+      handlePutIncome({ id: prevData?.id, ...data })
+    }
+  }
 
   return (
-    <Modal open={isOpen} onOpenChange={setIsOpen}>
-      <ModalTrigger asChild>{children}</ModalTrigger>
+    <Modal
+      open={open}
+      onOpenChange={isOpen => {
+        if (!isOpen) {
+          reset()
+          closeModal()
+        }
+      }}
+    >
       <ModalContent>
         <ModalHeader>
-          <ModalTitle>Cadastro de Ganhos</ModalTitle>
+          <ModalTitle>
+            {type === 'POST' ? 'Cadastro de Ganhos' : 'Atualização de Ganho'}
+          </ModalTitle>
           <ModalDescription className='text-sm text-foreground-secondary'>
             Formulario para cadastro/atualizações de ganhos
           </ModalDescription>
         </ModalHeader>
-        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-1'>
+        <Form onSubmit={handleSubmit(onSubmit)} className='grid gap-2'>
           <FormField name='value'>
             <FormLabel>Valor</FormLabel>
-            <FormControl asChild>
-              <Input
-                icon={Wallet}
-                id='value'
-                {...register('value')}
-                type='number'
-                step='0.01'
-                placeholder='R$ 0000,00'
-              />
-            </FormControl>
+            <Controller
+              name='value'
+              control={control}
+              render={({ field }) => (
+                <Input
+                  icon={Wallet}
+                  {...field}
+                  placeholder='R$ 0000,00'
+                  value={maskMoney(field.value ?? 0)}
+                  onChange={e => field.onChange(unmaskMoney(e.target.value))}
+                />
+              )}
+            />
             {errors.value && (
               <FormMessage className='text-destructive'>
                 {errors.value?.message}
@@ -138,14 +154,14 @@ export const ModalIncome = ({
                     value='ACTIVE'
                     className='text-[12px] flex-col'
                   >
-                    <Briefcase strokeWidth={1.5} size={20} />
+                    <BriefcaseBusiness strokeWidth={1.5} size={20} />
                     Ativa
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value='PASSIVE'
                     className='text-[12px] flex-col'
                   >
-                    <Coins strokeWidth={1.5} size={20} />
+                    <Percent strokeWidth={1.5} size={20} />
                     Passiva
                   </ToggleGroupItem>
                   <ToggleGroupItem
@@ -176,7 +192,7 @@ export const ModalIncome = ({
                   type='date'
                   className='text-foreground-secondary border p-1 px-2 w-fit'
                   {...field}
-                  value={field.value}
+                  value={field.value || new Date().toISOString().split('T')[0]}
                   onChange={e => field.onChange(e.target.value)}
                 />
               )}
@@ -189,10 +205,24 @@ export const ModalIncome = ({
           </FormField>
           <FormSubmit asChild className='w-full mt-5'>
             <Button
-              disabled={isPending}
-              variant={isPending ? 'loading' : 'default'}
+              disabled={type === 'POST' ? isPendingPost : isPendingPut}
+              variant={
+                type === 'POST'
+                  ? isPendingPost
+                    ? 'loading'
+                    : 'default'
+                  : isPendingPut
+                    ? 'loading'
+                    : 'default'
+              }
             >
-              {isPending ? 'Cadastrando...' : 'Cadastrar'}
+              {type === 'POST'
+                ? isPendingPost
+                  ? 'Cadastrando...'
+                  : 'Cadastrar'
+                : isPendingPut
+                  ? 'Atualizando...'
+                  : 'Atualizar'}
               <Send />
             </Button>
           </FormSubmit>

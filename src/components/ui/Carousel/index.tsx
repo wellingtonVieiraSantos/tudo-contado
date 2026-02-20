@@ -1,3 +1,4 @@
+'use client'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Children, forwardRef, useEffect, useState } from 'react'
 import { useCarousel, CarouselContext } from './carouselContext'

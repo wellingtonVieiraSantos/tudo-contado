@@ -18,7 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           id={id}
           ref={ref}
           className={twMerge(
-            `w-full h-9 text-sm appearance-none border rounded-full lg:rounded placeholder:text-sm
+            `w-full min-h-8 text-sm appearance-none border rounded placeholder:text-sm
            no-spinner peer disabled:bg-disabled disabled:cursor-not-allowed disabled:text-foreground-secondary`,
             Icon ? 'px-10' : 'pl-2 pr-8',
             className
@@ -39,7 +39,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ))}
         {Icon && (
           <Icon
-            className={`size-4.5 absolute bottom-2.5 left-3 pointer-events-none peer-disabled:text-foreground-secondary`}
+            className={`size-4.5 absolute bottom-2 left-3 pointer-events-none peer-disabled:text-foreground-secondary`}
           />
         )}
       </div>

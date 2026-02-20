@@ -5,14 +5,17 @@ const Spinner = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
       <div
-        className={twMerge(`grid place-items-center gap-8`, className)}
+        role='spinner'
+        className='flex flex-col justify-center items-center gap-2 font-inter text-lg text-foreground tracking-wide'
         ref={ref}
         {...props}
       >
-        <div className='size-30 rounded-full border-8 border-transparent border-b-foreground-secondary animate-spin' />
-        <p className='text-lg tracking-wider overflow-hidden whitespace-nowrap border-r-[0.12em] border-foreground-secondary w-0 animate-typing'>
-          Carregando...
-        </p>
+        <div
+          className={twMerge(
+            `size-14 rounded-full relative animate-spin after:absolute after:inset-0 after:rounded-full after:border-4 after:border-foreground after:animate-loader`,
+            className
+          )}
+        />
       </div>
     )
   }

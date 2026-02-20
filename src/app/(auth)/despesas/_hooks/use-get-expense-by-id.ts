@@ -1,9 +1,9 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-import { ExpenseProps } from '@/types/expense-data-props'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { ApiResponse } from '@/types/api-response'
 import { useMemo } from 'react'
+import { ExpenseProps } from '@/modules/expenses/expenses.types'
 
 const fetchExpense = async (id: string) => {
   const response = await fetch(`/api/expense/${id}`)
@@ -19,7 +19,7 @@ export const useGetExpenseById = (id: string) => {
     isLoading,
     error,
     refetch
-  } = useQuery({
+  } = useSuspenseQuery({
     queryKey: ['expenseById', id],
     queryFn: () => fetchExpense(id)
   })

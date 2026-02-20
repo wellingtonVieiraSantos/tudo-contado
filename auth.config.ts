@@ -3,10 +3,10 @@ import Credentials from 'next-auth/providers/credentials'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
-import { checkEmailExists } from '@/dal/user'
-import { loginSchema } from '@/validators/loginUser'
+import { loginSchema } from '@/modules/user/user.login.schema'
+import { checkEmailExists } from '@/modules/user/user.repository'
 
-export default {
+export const authConfig: NextAuthConfig = {
   providers: [
     GitHub,
     Google,

@@ -1,13 +1,25 @@
-import { deleteIncomeByIdService } from '@/services/incomes/deleteIncomeByIdService'
-import { getAllIncomesService } from '@/services/incomes/getAllIncomesService'
-import { postIncomeService } from '@/services/incomes/postIncomeService'
-import { updateIncomeByIdService } from '@/services/incomes/updateIncomeByIdService'
-import { incomeSchema } from '@/validators/formIncome'
+import { incomeSchema } from '@/modules/incomes/incomes.schema'
+import {
+  getAllIncomesService,
+  postIncomeService,
+  updateIncomeByIdService,
+  deleteIncomeByIdService
+} from '@/modules/incomes/incomes.service'
+import { ListIncomeQuery } from '@/modules/incomes/incomes.types'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams
+
+  const params = {
+    page: Number(searchParams.get('page')) || 1,
+    month: Number(searchParams.get('month')) || undefined,
+    year: Number(searchParams.get('year')) || undefined,
+    type: (searchParams.get('type') as ListIncomeQuery['type']) || undefined
+  }
+
   try {
-    const income = await getAllIncomesService()
+    const income = await getAllIncomesService(params)
 
     return NextResponse.json({ data: income, success: true }, { status: 200 })
   } catch (e) {
@@ -69,12 +81,14 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams
-
-  const id = searchParams.get('id')
-
   try {
-    if (!id) return NextResponse.json({ success: false }, { status: 404 })
+    const id: string = await req.json()
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Erro id não encontrado.' },
+        { status: 400 }
+      )
+    }
 
     const deletedIncome = await deleteIncomeByIdService(id)
 

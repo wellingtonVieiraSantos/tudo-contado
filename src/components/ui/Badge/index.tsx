@@ -21,7 +21,7 @@ const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     return (
       <div
         className={twMerge(
-          `min-w-5 h-5 w-fit px-2 text-sm flex justify-center items-center gap-1 border
+          `min-w-5 px-2 text-sm flex justify-center items-center gap-1 border
         rounded-md pointer-events-none`,
           variantClasses[variant],
           className

@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+
 }
 
 model User {
@@ -19,9 +19,9 @@ model User {
   updatedAt     DateTime        @updatedAt
   accounts      Account[]
   Authenticator Authenticator[]
+  creditCard    CreditCard[]
   expense       Expense[]
   income        Income[]
-  creditCard    CreditCard[]
   sessions      Session[]
 }
 
@@ -78,15 +78,18 @@ model Authenticator {
 model CreditCard {
   id          String    @id @default(cuid())
   userId      String
-  lastNumber  String
   creditLimit Int
-  expMonth    String
-  expYear     String
-  billingDay  String
   holder      String
   cardBrand   CardBrand @default(OTHER)
-  expense     Expense[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  paymentDay  Int       @default(5)
+  lastNumber  Int
+  expMonth    Int
+  expYear     Int
+  deletedAt   DateTime?
   user        User      @relation(fields: [userId], references: [id])
+  expense     Expense[]
 
   @@unique([userId, lastNumber, expMonth, expYear, cardBrand])
 }
@@ -109,14 +112,14 @@ model Expense {
   description  String
   category     CategoryType      @default(OTHER)
   value        Int
-  date         DateTime          @db.Date 
+  date         DateTime          @db.Date
   method       PaymentMethodType @default(DEBIT)
   creditCardId String?
   installments Int?
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
-  user         User              @relation(fields: [userId], references: [id])
   creditCard   CreditCard?       @relation(fields: [creditCardId], references: [id])
+  user         User              @relation(fields: [userId], references: [id])
 }
 
 enum IncomeType {

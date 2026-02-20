@@ -1,4 +1,4 @@
-import { getSumExpensesValuesByMonthRangeService } from '@/services/expenses/getSumExpenseValuesByMonthRangeService'
+import { getSumExpensesValuesByMonthRangeService } from '@/modules/expenses/expenses.service'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

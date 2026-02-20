@@ -1,7 +1,8 @@
+'use client'
 import { queryClient } from '@/lib/query-client'
-import { IncomeProps } from '@/types/income-data-props'
+import { IncomeProps } from '@/modules/incomes/incomes.types'
+import { useIncomeModalStore } from '@/store/modalPostPutStore'
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
 
 const fetchIncome = async (data: IncomeProps) => {
   const res = await fetch('api/income', {
@@ -14,19 +15,18 @@ const fetchIncome = async (data: IncomeProps) => {
 }
 
 export const usePostIncome = () => {
-  const [isOpen, setIsOpen] = useState(false)
-
+  const { closeModal } = useIncomeModalStore()
   const { mutate, isPending } = useMutation({
     mutationFn: fetchIncome,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['incomes'] })
+      closeModal()
     }
   })
 
-  const onSubmit = async (data: IncomeProps) => {
+  const handlePostIncome = async (data: IncomeProps) => {
     mutate(data)
-    setIsOpen(false)
   }
 
-  return { isOpen, setIsOpen, onSubmit, isPending }
+  return { handlePostIncome, isPending }
 }

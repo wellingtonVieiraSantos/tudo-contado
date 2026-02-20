@@ -40,7 +40,7 @@ const ModalContent = forwardRef<
         ref={ref}
         {...props}
         className={twMerge(
-          `fixed z-20 inset-1/2 -translate-1/2 w-full max-w-lg min-h-fit bg-card p-6
+          `fixed z-20 inset-1/2 -translate-1/2 w-full max-w-2xl min-h-fit bg-card p-6
           grid gap-4 data-[state=open]:animate-fadeIn data-[state=closed]:animate-fadeOut border rounded-xl`,
           className
         )}

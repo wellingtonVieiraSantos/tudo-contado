@@ -1,4 +1,4 @@
-import { getCreditCardByIdService } from '@/services/creditCard/getCreditCardByIdService'
+import { getCreditCardByIdService } from '@/modules/creditCard/creditCard.service'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
@@ -21,7 +21,7 @@ export async function GET(
       { status: 200 }
     )
   } catch (e) {
-    console.error('GET /credit-card/id', e)
+    console.error('GET /credit-card/:id/restore', e)
     return NextResponse.json(
       { error: 'Erro ao buscar dados do cartão de crédito.' },
       { status: 500 }

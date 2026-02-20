@@ -12,16 +12,24 @@ const PopoverPortal = PopoverRadix.Portal
 const PopoverContent = forwardRef<
   React.ComponentRef<typeof PopoverRadix.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverRadix.Content>
->(({ className, ...props }, ref) => {
+>(({ className, children, ...props }, ref) => {
   return (
-    <PopoverRadix.Content
-      className={twMerge(
-        `relative bg-card min-w-[350px] z-20 h-fit border rounded p-2 focus-visible:ring-0`,
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
+    <PopoverPortal>
+      <PopoverRadix.Content
+        align='start'
+        sideOffset={3}
+        className={twMerge(
+          `relative bg-card w-full z-20 border flex text-foreground rounded p-3 focus-visible:ring-0 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp`,
+          className
+        )}
+        ref={ref}
+        {...props}
+      >
+        {children}
+        <PopoverArrow className='fill-card' height={12} width={16} />
+        <PopoverClose />
+      </PopoverRadix.Content>
+    </PopoverPortal>
   )
 })
 

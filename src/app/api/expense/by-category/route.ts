@@ -1,4 +1,4 @@
-import { getActualMonthExpensesByCategoryService } from '@/services/expenses/getActualMonthExpensesByCategoryService'
+import { getActualMonthExpensesByCategoryService } from '@/modules/expenses/expenses.service'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

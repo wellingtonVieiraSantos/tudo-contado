@@ -1,4 +1,4 @@
-import { getLastTransactionsService } from '@/services/dashboard/getLastTransactionsService'
+import { getLastTransactionsService } from '@/modules/dashboard/dashboard.service'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

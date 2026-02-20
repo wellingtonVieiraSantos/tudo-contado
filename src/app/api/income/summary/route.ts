@@ -1,4 +1,4 @@
-import { getSumIncomesValuesByMonthRangeService } from '@/services/incomes/getSumIncomesValuesByMonthRangeService'
+import { getSumIncomesValuesByMonthRangeService } from '@/modules/incomes/incomes.service'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

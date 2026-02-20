@@ -1,241 +1,35 @@
 'use client'
-
-import { format, parse } from 'date-fns'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/Card'
-import { Badge } from '@/components/ui/Badge'
-import formatedCurrency from '@/lib/valueFormatter'
-import { UserBarSettings } from '@/components/UserBarSettings'
-import { Button } from '@/components/ui/Button'
-import {
-  BanknoteArrowUp,
-  Plus,
-  RefreshCw,
-  Trash,
-  TrendingDown,
-  TriangleAlert
-} from 'lucide-react'
+import UserBarSettings from '@/components/UserBarSettings'
 import { FilterExpenses } from './_components/FilterExpenses'
-import Image from 'next/image'
-import {
-  Modal,
-  ModalActions,
-  ModalContent,
-  ModalDescription,
-  ModalHeader,
-  ModalTitle
-} from '@/components/ui/Modal'
-import { Divider } from '@/components/ui/Divider'
-import { categoryFormatter } from '@/lib/categoryFormatter'
-import Loading from './loading'
-import { useGetExpenses } from './_hooks/use-get-expenses'
-import { useDelExpense } from './_hooks/use-del-expense'
-import Link from 'next/link'
-import { ptBR } from 'date-fns/locale'
-import { categories } from './_components/FormStepTwo'
-import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
+import { Suspense } from 'react'
+import BarSkeleton from '@/components/BarSkeleton'
+import { ResumeExpense } from './_components/ResumeExpense'
+import ResumeSkeleton from '@/components/skeletons/ResumeSkeleton'
+import FilterSkeleton from '@/components/skeletons/FilterSkeleton'
+import TableSkeleton from '@/components/skeletons/TableSkeleton'
+import { TableExpenses } from './_components/TableExpenses'
+import { ModalExpense } from './_components/ModalExpense'
 
 export default function Expense() {
-  const {
-    filteredExpenses,
-    months,
-    totals,
-    filters,
-    updateFilters,
-    isLoading
-  } = useGetExpenses()
-
-  const {
-    handleDeleteExpense,
-    isOpen,
-    setIsOpen,
-    openDeleteModal,
-    selectedExpense
-  } = useDelExpense()
-
-  if (isLoading) return <Loading />
-
   return (
     <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 lg:pb-0'>
-      <UserBarSettings title='Despesas' />
-      {filteredExpenses?.length !== 0 && (
-        <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
-          <Card className='w-full p-2 lg:bg-none lg:bg-card bg-gradient-to-br from-button to-badge pb-8'>
-            <CardHeader>
-              <CardTitle className=' flex items-center gap-3'>
-                <TrendingDown className='text-destructive' />
-                Total de Despesas
-              </CardTitle>
-              <CardDescription className='hidden lg:flex'>
-                Somátorio de todas as despesas
-              </CardDescription>
-              <Divider className='hidden lg:flex' />
-            </CardHeader>
-            <CardContent className='py-3 text-center text-4xl font-montserrat'>
-              {formatedCurrency(totals.total)}
-              <Link href='/despesas/cadastro'>
-                <Button className='bg-white rounded-lg text-background absolute right-2 bottom-2 hover:scale-105 hover:bg-button-foreground font-poppins'>
-                  <Plus />
-                  <span className='hidden md:inline-block'>Nova despesa</span>
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-      <FilterExpenses
-        months={months}
-        filteredExpenses={filteredExpenses}
-        filters={filters}
-        updateFilters={updateFilters}
-      />
-      <h2>Gastos</h2>
-      <p className='text-foreground-secondary text-sm -mt-2'>
+      <Suspense fallback={<BarSkeleton />}>
+        <UserBarSettings title='Despesas' />
+      </Suspense>
+      <Suspense fallback={<ResumeSkeleton />}>
+        <ResumeExpense />
+      </Suspense>
+      <Suspense fallback={<FilterSkeleton />}>
+        <FilterExpenses />
+      </Suspense>
+      <h2 className='pl-2'>Gastos</h2>
+      <p className='text-foreground-secondary text-sm -mt-2 pl-2 mb-2'>
         Acompanhamento de gastos detalhadamente
       </p>
-      <div className='grid grid-cols-1 lg:grid-cols-2 place-items-center gap-3'>
-        {filteredExpenses?.length !== 0 &&
-          filteredExpenses?.map(expense => (
-            <Card
-              key={expense.id}
-              className={`w-full py-3 ${
-                expense.method === 'CREDIT'
-                  ? 'border-warning/50'
-                  : 'border-success/50'
-              }`}
-            >
-              <CardHeader>
-                <CardTitle>
-                  {format(
-                    parse(expense.date, 'yyyy-MM-dd', new Date()),
-                    "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR }
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  {categoryFormatter(expense.category)}
-                </CardDescription>
-                <Divider />
-              </CardHeader>
-              <CardContent className='gap-2'>
-                <div className='flex items-center gap-3'>
-                  <div className='size-20 shrink-0 grid place-items-center rounded-xl bg-hover border border-disabled'>
-                    {(() => {
-                      const category = categories.find(
-                        c => c.type === expense.category
-                      )
-                      const Icon = category?.icon
-                      return Icon ? (
-                        <Icon
-                          className='text-destructive/80'
-                          size={35}
-                          strokeWidth={1.5}
-                        />
-                      ) : null
-                    })()}
-                  </div>
-                  <div className='grid gap-2 w-full'>
-                    <p className='text-2xl font-montserrat tracking-wider'>
-                      {formatedCurrency(expense.value)}
-                    </p>
-                    <p className='text-foreground-secondary line-clamp-1'>
-                      {expense.description}
-                    </p>
-                  </div>
-                </div>
-                <Badge className='absolute top-3 right-3'>
-                  {paymentMethodFormatter(expense.method)}
-                </Badge>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  variant='border'
-                  onClick={() => openDeleteModal(expense)}
-                  className='self-end bg-destructive/40 md:px-4'
-                >
-                  <Trash />
-                  <span className='hidden md:inline-block'>Deletar</span>
-                </Button>
-
-                <Link href={`/despesas/${expense.id}`}>
-                  <Button
-                    variant='border'
-                    className='self-end bg-info/40 md:px-4'
-                  >
-                    <RefreshCw />
-                    <span className='hidden md:inline-block'>Atualizar</span>
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
-          ))}
-      </div>
-
-      <Modal open={isOpen} onOpenChange={setIsOpen}>
-        <ModalContent>
-          <ModalHeader>
-            <ModalTitle>Apagar a despesa</ModalTitle>
-            <ModalDescription className='text-sm text-foreground-secondary'>
-              Essa ação apagará permanentemente essa despesa, deseja mesmo fazer
-              isso?
-            </ModalDescription>
-          </ModalHeader>
-
-          <Badge variant='warning' className='justify-self-center gap-4 my-4'>
-            <TriangleAlert size={18} strokeWidth={1.5} />
-            {selectedExpense?.description} -{' '}
-            {formatedCurrency(selectedExpense?.value || 0)}
-          </Badge>
-          <ModalActions>
-            <Button
-              variant='border'
-              onClick={() => setIsOpen(false)}
-              className='w-full lg:flex-1'
-            >
-              Cancelar
-            </Button>
-            <Button
-              onClick={() => {
-                if (selectedExpense) handleDeleteExpense(selectedExpense.id!)
-                setIsOpen(false)
-              }}
-              className='w-full lg:flex-1 bg-destructive/70 hover:bg-destructive/40'
-            >
-              <Trash />
-              Apagar despesa
-            </Button>
-          </ModalActions>
-        </ModalContent>
-      </Modal>
-      {filteredExpenses?.length === 0 && (
-        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center lg:mt-10 '>
-          <CardContent className='items-center gap-8'>
-            <Image
-              src='/empty-wallet.webp'
-              alt='mao colocando moeda no porquinho'
-              width={300}
-              height={390}
-              className='size-50 grayscale-100'
-            />
-            <CardDescription className='text-center'>
-              Nenhuma despesa registrada. Que tal adicionar a primeira?
-            </CardDescription>
-
-            <Link href='/despesas/cadastro'>
-              <Button className='w-full max-w-xl lg:w-fit'>
-                <BanknoteArrowUp />
-                Cadastre uma nova despesa
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-      )}
+      <Suspense fallback={<TableSkeleton />}>
+        <TableExpenses />
+      </Suspense>
+      <ModalExpense />
     </div>
   )
 }

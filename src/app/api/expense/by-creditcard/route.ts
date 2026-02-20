@@ -1,4 +1,4 @@
-import { getActualMonthCreditCardExpenseSumService } from '@/services/expenses/getActualMonthCreditCardExpenseSumService'
+import { getActualMonthCreditCardExpenseSumService } from '@/modules/expenses/expenses.service'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
