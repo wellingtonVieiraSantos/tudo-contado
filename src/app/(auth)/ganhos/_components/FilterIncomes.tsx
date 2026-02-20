@@ -85,7 +85,7 @@ export const FilterIncomes = () => {
       year: year ? Number(year) : undefined,
       page: 1
     })
-  }, [type, debouncedDate])
+  }, [type, debouncedDate, setFilters])
 
   return (
     <div className='w-full flex items-center justify-between pl-2 pr-5 py-2 bg-card rounded-lg border'>

@@ -266,9 +266,9 @@ export const ModalCreditCard = () => {
                     maxLength={5}
                     value={displayValue}
                     onChange={e => {
-                      let raw = e.target.value.replace(/\D/g, '').slice(0, 4)
+                      const raw = e.target.value.replace(/\D/g, '').slice(0, 4)
 
-                      let formatted =
+                      const formatted =
                         raw.length > 2
                           ? `${raw.slice(0, 2)}/${raw.slice(2)}`
                           : raw

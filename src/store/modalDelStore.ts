@@ -4,9 +4,9 @@ import { IncomeWithIdProps } from '@/modules/incomes/incomes.types'
 import { create } from 'zustand'
 
 type DeletePayload =
-  | IncomeWithIdProps
-  | ExpenseWithIdProps
-  | CreditCardWithIdProps
+  | { type: 'income'; data: IncomeWithIdProps }
+  | { type: 'expense'; data: ExpenseWithIdProps }
+  | { type: 'creditCard'; data: CreditCardWithIdProps }
 
 type ModalDelStore = {
   open: boolean

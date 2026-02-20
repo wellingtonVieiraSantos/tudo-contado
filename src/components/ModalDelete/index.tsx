@@ -22,6 +22,8 @@ type DeleteModalProps = {
 export const ModalDelete = ({ text, handleDelete }: DeleteModalProps) => {
   const { open, closeDeleteModal, data } = useModalDelStore()
 
+  if (!data) return null
+
   return (
     <Modal open={open} onOpenChange={closeDeleteModal}>
       <ModalContent>
@@ -35,12 +37,16 @@ export const ModalDelete = ({ text, handleDelete }: DeleteModalProps) => {
             Atenção, essa ação não poderá ser desfeita, deseja mesmo fazer isso?
           </ModalDescription>
         </ModalHeader>
-        <Card className='px4 py-6 flex justify-evenly'>
+        <Card className='px-4 py-6 flex justify-evenly'>
           <span className='text-center flex-1 line-clamp-1'>
-            {data?.description}
+            {data.type === 'creditCard'
+              ? `**** **** **** ${data.data.lastNumber}`
+              : data.data.description}
           </span>
           <span className='text-center flex-1'>
-            {valueFormatter(data?.value || 0)}
+            {data.type === 'creditCard'
+              ? data.data.cardBrand
+              : valueFormatter(data?.data.value)}
           </span>
         </Card>
         <ModalActions>
@@ -53,7 +59,7 @@ export const ModalDelete = ({ text, handleDelete }: DeleteModalProps) => {
           </Button>
           <Button
             onClick={() => {
-              if (data) handleDelete(data.id)
+              if (data) handleDelete(data.data.id)
               closeDeleteModal()
             }}
             className='w-full lg:flex-1 bg-destructive/70 hover:bg-destructive/40'

@@ -102,7 +102,9 @@ export const TableIncomes = () => {
                   <TableCell className='flex gap-3 justify-center'>
                     <Button
                       variant='border'
-                      onClick={() => openDeleteModal(income)}
+                      onClick={() =>
+                        openDeleteModal({ type: 'income', data: income })
+                      }
                       className='self-end hover:bg-destructive/40 rounded-lg'
                     >
                       <Trash />

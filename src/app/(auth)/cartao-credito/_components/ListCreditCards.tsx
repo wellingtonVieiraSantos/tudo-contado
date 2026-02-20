@@ -156,7 +156,9 @@ export const ListCreditCards = () => {
                   <Button
                     variant='border'
                     className='w-full lg:w-fit lg:ml-auto border-destructive/70 text-destructive hover:bg-destructive/10 hover:border-destructive'
-                    onClick={() => openDeleteModal(card)}
+                    onClick={() =>
+                      openDeleteModal({ type: 'creditCard', data: card })
+                    }
                   >
                     <Trash className='mr-2' />
                     Deletar
