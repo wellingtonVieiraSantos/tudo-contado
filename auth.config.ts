@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs'
 import { loginSchema } from '@/modules/user/user.login.schema'
 import { checkEmailExists } from '@/modules/user/user.repository'
 
-export default {
+export const authConfig: NextAuthConfig = {
   providers: [
     GitHub,
     Google,

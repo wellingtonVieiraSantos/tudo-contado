@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server'
 
 import { privateRoutes } from './lib/privateRoutes'
 import { publicRoutes } from './lib/publicRoutes'
-import { auth } from '../auth'
+import { authMiddleware } from '../auth.middleware'
 
-export default auth(async req => {
+export default authMiddleware(async req => {
   const isLogged = !!req.auth
 
   const isPrivateRoute = privateRoutes.includes(req.nextUrl.pathname)
