@@ -10,8 +10,6 @@ import { Divider } from '@/components/ui/Divider'
 import { useGetLastTransactions } from '../_hooks/use-get-lastTransactions'
 import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
 import valueFormatter from '@/lib/valueFormatter'
-import { format, parse } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
 import { ChevronsUpDown, TrendingDown, TrendingUp } from 'lucide-react'
 import {
   Table,

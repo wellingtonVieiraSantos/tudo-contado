@@ -93,7 +93,7 @@ export const FilterExpenses = () => {
       year: year ? Number(year) : undefined,
       page: 1
     })
-  }, [method, category, debouncedDate, setFilters])
+  }, [method, category, debouncedDate])
 
   return (
     <div className='w-full flex items-center justify-between pl-2 pr-5 py-2 bg-card rounded-lg border'>
