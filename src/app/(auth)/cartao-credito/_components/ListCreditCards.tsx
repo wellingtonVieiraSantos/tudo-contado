@@ -17,7 +17,14 @@ import {
 } from '@/components/ui/Card'
 import { useGetExpensesByCreditCard } from '../../despesas/_hooks/use-get-expense-by-creditCard'
 import { Button } from '@/components/ui/Button'
-import { Ban, Edit, RotateCcw, Trash, X } from 'lucide-react'
+import {
+  Ban,
+  BanknoteArrowUp,
+  CreditCard,
+  Edit,
+  RotateCcw,
+  Trash
+} from 'lucide-react'
 import valueFormatter from '@/lib/valueFormatter'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Badge } from '@/components/ui/Badge'
@@ -68,106 +75,129 @@ export const ListCreditCards = () => {
         <Divider />
       </CardHeader>
       <CardContent>
-        <Accordion type='single' collapsible className='grid gap-1'>
-          {creditCard.map(card => (
-            <AccordionItem value={card.id!} key={card.id}>
-              <AccordionTrigger
-                className={`bg-background rounded border ${card.deletedAt ? 'opacity-50 border-destructive' : 'border-button/70'}`}
-              >
-                <div className='flex items-center gap-4'>
-                  <Image
-                    src={
-                      cardBrand.find(c => c.title === card.cardBrand)?.url ??
-                      cardBrand.find(c => c.title === 'OTHER')!.url
-                    }
-                    alt={
-                      cardBrand.find(c => c.title === card.cardBrand)?.title ??
-                      cardBrand.find(c => c.title === 'OTHER')!.title
-                    }
-                    width={512}
-                    height={512}
-                    className='w-20 h-16 object-contain border p-2 rounded'
-                  />
-                  <div className='flex flex-col items-start'>
-                    <span className='font-medium'>{card.holder}</span>
-                    <span className='text-sm text-foreground-secondary'>
-                      **** **** **** {card.lastNumber}
-                    </span>
-                    <span className='text-sm text-foreground-secondary'>
-                      {card.expMonth}/{card.expYear}
-                    </span>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className='relative bg-background py-3 px-4 border'>
-                <div className='w-full'>
-                  <ProgressBar
-                    className='h-10 rounded-lg mt-8'
-                    value={(card.spending / card.creditLimit) * 100}
-                  />
-                  <div className='flex justify-between items-center pt-1'>
-                    <div className='flex flex-col text-sm pl-2'>
-                      <span className='text-foreground-secondary'>
-                        Utilizado
-                      </span>
-                      <span className='text-lg'>
-                        {valueFormatter(card.spending)}
-                      </span>
-                    </div>
-                    <div className='flex flex-col text-sm pr-2'>
-                      <span className='text-foreground-secondary text-right'>
-                        Limite
-                      </span>
-                      <span className='text-lg'>
-                        {valueFormatter(card.creditLimit)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <Badge
-                  className='absolute top-2 right-2'
-                  variant={card.deletedAt ? 'error' : 'success'}
+        {!CC.meta.total_items ? (
+          <div className='max-w-3xl w-full m-auto flex flex-col gap-4 p-3 justify-center items-center xl:mt-10 '>
+            <Image
+              src='/empty-wallet.webp'
+              alt='mao colocando moeda no porquinho'
+              width={300}
+              height={390}
+              className='size-50 grayscale-100'
+            />
+            <p className='text-foreground-secondary text-center'>
+              Nenhum cartão de crédito cadastrado...
+            </p>
+            <Button
+              className='w-full max-w-xl'
+              onClick={() => openModal('POST', null)}
+            >
+              <CreditCard />
+              Cadastre um novo cartão
+            </Button>
+          </div>
+        ) : (
+          <Accordion type='single' collapsible className='grid gap-1'>
+            {creditCard.map(card => (
+              <AccordionItem value={card.id!} key={card.id}>
+                <AccordionTrigger
+                  className={`bg-background rounded border ${card.deletedAt ? 'opacity-50 border-destructive' : 'border-button/70'}`}
                 >
-                  Cartão {card.deletedAt ? 'Inativo' : 'Ativo'}
-                </Badge>
-                <div className='flex flex-col lg:flex-row gap-2 mt-5'>
-                  <Button
-                    variant='border'
-                    className='w-full lg:w-fit hover:bg-foreground/10'
-                    onClick={() => openModal('PUT', card)}
+                  <div className='flex items-center gap-4'>
+                    <Image
+                      src={
+                        cardBrand.find(c => c.title === card.cardBrand)?.url ??
+                        cardBrand.find(c => c.title === 'OTHER')!.url
+                      }
+                      alt={
+                        cardBrand.find(c => c.title === card.cardBrand)
+                          ?.title ??
+                        cardBrand.find(c => c.title === 'OTHER')!.title
+                      }
+                      width={512}
+                      height={512}
+                      className='w-20 h-16 object-contain border p-2 rounded'
+                    />
+                    <div className='flex flex-col items-start'>
+                      <span className='font-medium'>{card.holder}</span>
+                      <span className='text-sm text-foreground-secondary'>
+                        **** **** **** {card.lastNumber}
+                      </span>
+                      <span className='text-sm text-foreground-secondary'>
+                        {card.expMonth}/{card.expYear}
+                      </span>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className='relative bg-background py-3 px-4 border'>
+                  <div className='w-full'>
+                    <ProgressBar
+                      className='h-10 rounded-lg mt-8'
+                      value={(card.spending / card.creditLimit) * 100}
+                    />
+                    <div className='flex justify-between items-center pt-1'>
+                      <div className='flex flex-col text-sm pl-2'>
+                        <span className='text-foreground-secondary'>
+                          Utilizado
+                        </span>
+                        <span className='text-lg'>
+                          {valueFormatter(card.spending)}
+                        </span>
+                      </div>
+                      <div className='flex flex-col text-sm pr-2'>
+                        <span className='text-foreground-secondary text-right'>
+                          Limite
+                        </span>
+                        <span className='text-lg'>
+                          {valueFormatter(card.creditLimit)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <Badge
+                    className='absolute top-2 right-2'
+                    variant={card.deletedAt ? 'error' : 'success'}
                   >
-                    <Edit className='mr-2' />
-                    Atualizar
-                  </Button>
-                  <Button
-                    variant='border'
-                    className='w-full lg:w-fit border-warning/70 text-warning hover:bg-warning/10 hover:border-warning'
-                    onClick={() =>
-                      handleStatusCreditCard(card.id, card.deletedAt)
-                    }
-                  >
-                    {card.deletedAt ? (
-                      <RotateCcw className='mr-2' />
-                    ) : (
-                      <Ban className='mr-2' />
-                    )}
-                    {card.deletedAt ? 'Reativar' : 'Desativar'}
-                  </Button>
-                  <Button
-                    variant='border'
-                    className='w-full lg:w-fit lg:ml-auto border-destructive/70 text-destructive hover:bg-destructive/10 hover:border-destructive'
-                    onClick={() =>
-                      openDeleteModal({ type: 'creditCard', data: card })
-                    }
-                  >
-                    <Trash className='mr-2' />
-                    Deletar
-                  </Button>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+                    Cartão {card.deletedAt ? 'Inativo' : 'Ativo'}
+                  </Badge>
+                  <div className='flex flex-col xl:flex-row gap-2 mt-5'>
+                    <Button
+                      variant='border'
+                      className='w-full xl:w-fit hover:bg-foreground/10'
+                      onClick={() => openModal('PUT', card)}
+                    >
+                      <Edit className='mr-2' />
+                      Atualizar
+                    </Button>
+                    <Button
+                      variant='border'
+                      className='w-full xl:w-fit border-warning/70 text-warning hover:bg-warning/10 hover:border-warning'
+                      onClick={() =>
+                        handleStatusCreditCard(card.id, card.deletedAt)
+                      }
+                    >
+                      {card.deletedAt ? (
+                        <RotateCcw className='mr-2' />
+                      ) : (
+                        <Ban className='mr-2' />
+                      )}
+                      {card.deletedAt ? 'Reativar' : 'Desativar'}
+                    </Button>
+                    <Button
+                      variant='border'
+                      className='w-full xl:w-fit xl:ml-auto border-destructive/70 text-destructive hover:bg-destructive/10 hover:border-destructive'
+                      onClick={() =>
+                        openDeleteModal({ type: 'creditCard', data: card })
+                      }
+                    >
+                      <Trash className='mr-2' />
+                      Deletar
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        )}
       </CardContent>
       <ModalDelete
         text='Cartão de crédito'
