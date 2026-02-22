@@ -348,7 +348,7 @@ export const ModalExpense = () => {
                   Nenhum cartão encontrado. É necessário cadastrar um cartão.
                 </p>
               )}
-              <span className='hidden text-sm text-center text-foreground-secondary lg:flex items-center gap-2 justify-center border border-destructive/30 px-4 py-2 rounded-md'>
+              <span className='hidden text-sm text-center text-foreground-secondary xl:flex items-center gap-2 justify-center border border-destructive/30 px-4 py-2 rounded-md'>
                 <AlertTriangle
                   strokeWidth={1.5}
                   className='size-15 text-destructive'

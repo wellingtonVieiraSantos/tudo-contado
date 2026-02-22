@@ -29,7 +29,6 @@ import { useExpenseQuery } from '../_hooks/use-query-expense'
 import { useDelExpense } from '../_hooks/use-del-expense'
 import { ModalDelete } from '@/components/ModalDelete'
 import { useModalDelStore } from '@/store/modalDelStore'
-import Link from 'next/link'
 import { categories } from './ModalExpense'
 import { useExpenseModalStore } from '@/store/modalPostPutStore'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
@@ -158,7 +157,7 @@ export const TableExpenses = () => {
         </>
       )}
       {expenses.data?.length === 0 && (
-        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center lg:mt-10 '>
+        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center xl:mt-10 '>
           <CardContent className='items-center gap-8'>
             <Image
               src='/empty-wallet.webp'
@@ -170,13 +169,13 @@ export const TableExpenses = () => {
             <CardDescription className='text-center'>
               Nenhuma despesa registrada. Que tal adicionar a primeira?
             </CardDescription>
-
-            <Link href='/despesas/cadastro'>
-              <Button className='w-full max-w-xl lg:w-fit'>
-                <BanknoteArrowUp />
-                Cadastre uma nova despesa
-              </Button>
-            </Link>
+            <Button
+              className='w-full max-w-xl'
+              onClick={() => openModal('POST', null)}
+            >
+              <BanknoteArrowUp />
+              Cadastre uma nova despesa
+            </Button>
           </CardContent>
         </Card>
       )}
