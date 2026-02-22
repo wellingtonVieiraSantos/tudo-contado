@@ -33,9 +33,10 @@ export const ResumeExpense = () => {
         </p>
         <Button
           onClick={() => openModal('POST', null)}
-          className='bg-white rounded-lg text-background absolute right-2 top-2 lg:right-6 lg:top-4 hover:scale-105 hover:bg-button-foreground font-poppins'
+          className='bg-white rounded-lg text-background absolute right-2 top-2 xl:right-6 xl:top-4 hover:scale-105 hover:bg-button-foreground font-poppins'
         >
           <Plus />
+          <span className='hidden xl:block'>Nova Despesa</span>
         </Button>
       </CardContent>
     </Card>

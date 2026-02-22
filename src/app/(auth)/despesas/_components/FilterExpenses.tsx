@@ -22,6 +22,7 @@ import { CategoryType } from '@prisma/client'
 import { useSearchParams } from 'next/navigation'
 import { ListExpensesQuery } from '@/modules/expenses/expenses.types'
 import { categories } from './ModalExpense'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 
 export const FilterExpenses = () => {
   const searchParams = useSearchParams()
@@ -96,74 +97,86 @@ export const FilterExpenses = () => {
   }, [method, category, debouncedDate])
 
   return (
-    <div className='w-full flex items-center justify-between pl-2 pr-5 py-2 bg-card rounded-lg border'>
-      <h1>Filtros</h1>
-      <Form className='flex gap-6'>
-        <FormField name='method'>
-          <Controller
-            name='method'
-            control={control}
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder='Pagamento' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='ALL' className='text-foreground-secondary'>
-                    Sem filtro
-                  </SelectItem>
-                  <SelectSeparator />
-                  <SelectItem value='DEBIT'>Débito</SelectItem>
-                  <SelectItem value='CREDIT'>Crédito</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </FormField>
-        <FormField name='category'>
-          <Controller
-            name='category'
-            control={control}
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder='Categoria' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='ALL' className='text-foreground-secondary'>
-                    Sem filtro
-                  </SelectItem>
-                  <SelectSeparator />
-                  {categories.map(category => (
-                    <SelectItem
-                      key={category.type}
-                      value={category.type}
-                      className=''
-                    >
-                      {categoryFormatter(category.type)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </FormField>
-        <FormField name='date' className='flex-row items-center'>
-          <Controller
-            name='date'
-            control={control}
-            render={({ field }) => (
-              <Input
-                icon={Search}
-                {...field}
-                placeholder='Busque mês ex: MM/AA'
-                className='border'
-                onChange={e => field.onChange(maskMonthYear(e.target.value))}
+    <Card className='w-full p-2 flex flex-col xl:items-center xl:justify-between xl:flex-row'>
+      <CardHeader className='text-left'>
+        <CardTitle>Filtros</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form className='flex flex-col sm:flex-row gap-6'>
+          <div className='flex w-full gap-4'>
+            <FormField name='method' className='flex-1 sm:flex-auto'>
+              <Controller
+                name='method'
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Pagamento' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem
+                        value='ALL'
+                        className='text-foreground-secondary'
+                      >
+                        Sem filtro
+                      </SelectItem>
+                      <SelectSeparator />
+                      <SelectItem value='DEBIT'>Débito</SelectItem>
+                      <SelectItem value='CREDIT'>Crédito</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               />
-            )}
-          />
-        </FormField>
-      </Form>
-    </div>
+            </FormField>
+            <FormField name='category' className='flex-1 sm:flex-auto'>
+              <Controller
+                name='category'
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Categoria' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem
+                        value='ALL'
+                        className='text-foreground-secondary'
+                      >
+                        Sem filtro
+                      </SelectItem>
+                      <SelectSeparator />
+                      {categories.map(category => (
+                        <SelectItem
+                          key={category.type}
+                          value={category.type}
+                          className=''
+                        >
+                          {categoryFormatter(category.type)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </FormField>
+          </div>
+          <FormField name='date' className='sm:w-fit w-full '>
+            <Controller
+              name='date'
+              control={control}
+              render={({ field }) => (
+                <Input
+                  icon={Search}
+                  {...field}
+                  placeholder='Busque mês ex: MM/AA'
+                  className='border'
+                  onChange={e => field.onChange(maskMonthYear(e.target.value))}
+                />
+              )}
+            />
+          </FormField>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }
