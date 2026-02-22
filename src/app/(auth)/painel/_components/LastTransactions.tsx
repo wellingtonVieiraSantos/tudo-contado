@@ -43,25 +43,10 @@ export default function LastTransactions() {
         <Table className='w-full'>
           <TableHeader className='bg-hover sticky top-0 z-10'>
             <TableRow className='table w-full table-fixed'>
-              <TableHead>Categoria</TableHead>
-              <TableHead>
-                <div className='flex items-center gap-2'>
-                  Tipo
-                  <ChevronsUpDown size={22} />
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className='flex items-center gap-2'>
-                  Data
-                  <ChevronsUpDown size={22} />
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className='flex items-center gap-2'>
-                  Valor
-                  <ChevronsUpDown size={22} />
-                </div>
-              </TableHead>
+              <TableHead className='hidden xl:block'>Categoria</TableHead>
+              <TableHead className='hidden xl:block'>Tipo</TableHead>
+              <TableHead>Data</TableHead>
+              <TableHead>Valor</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className='block max-h-50 overflow-y-auto scrollbar-custom'>
@@ -70,7 +55,7 @@ export default function LastTransactions() {
                 key={transaction.id}
                 className='table w-full table-fixed'
               >
-                <TableCell>
+                <TableCell className='hidden xl:block'>
                   {transaction.transationKind === 'income' ? (
                     <TrendingUp
                       size={35}
@@ -85,7 +70,7 @@ export default function LastTransactions() {
                     />
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className='hidden xl:block'>
                   {incomeTypeFormatter(transaction.type) ||
                     categoryFormatter(transaction.category)}
                 </TableCell>

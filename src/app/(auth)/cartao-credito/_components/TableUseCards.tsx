@@ -20,6 +20,7 @@ import { useGetCreditCard } from '../_hooks/use-get-creditcards'
 import valueFormatter from '@/lib/valueFormatter'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
+import Image from 'next/image'
 
 export const TableUseCards = () => {
   const { creditCard, lastCreditTransactions } = useGetCreditCard()
@@ -34,47 +35,57 @@ export const TableUseCards = () => {
         <Divider />
       </CardHeader>
       <CardContent>
-        {!creditCard.meta.total_items && (
-          <p className='lg:mt-20 text-foreground-secondary text-center'>
-            Nenhuma transação recente...
-          </p>
-        )}
-        <Table>
-          <TableHeader className='bg-hover'>
-            <TableRow>
-              <TableHead>Data</TableHead>
-              <TableHead>Valor</TableHead>
-              <TableHead>Descrição</TableHead>
-              <TableHead>Categoria</TableHead>
-              <TableHead>Cartão</TableHead>
-              <TableHead className='text-center'>Parcelas</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {lastCreditTransactions.map(card => (
-              <TableRow key={card.id}>
-                <TableCell>
-                  <span>{dateStringFormatter(card.date)}</span>
-                </TableCell>
-                <TableCell>
-                  <span>{valueFormatter(card.value)}</span>
-                </TableCell>
-                <TableCell>
-                  <span>{card.description}</span>
-                </TableCell>
-                <TableCell>
-                  <span>{categoryFormatter(card.category)}</span>
-                </TableCell>
-                <TableCell>
-                  <span>**** **** **** {card.lastNumber}</span>
-                </TableCell>
-                <TableCell className='text-center'>
-                  <span>{card.installments}x</span>
-                </TableCell>
+        {!creditCard.meta.total_items ? (
+          <div className='max-w-3xl w-full m-auto flex flex-col gap-4 p-3 justify-center items-center xl:mt-10 '>
+            <Image
+              src='/empty-wallet.webp'
+              alt='mao colocando moeda no porquinho'
+              width={300}
+              height={390}
+              className='size-50 grayscale-100'
+            />
+            <p className='text-foreground-secondary text-center'>
+              Nenhuma transação recente...
+            </p>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader className='bg-hover'>
+              <TableRow>
+                <TableHead>Data</TableHead>
+                <TableHead>Valor</TableHead>
+                <TableHead>Descrição</TableHead>
+                <TableHead>Categoria</TableHead>
+                <TableHead>Cartão</TableHead>
+                <TableHead className='text-center'>Parcelas</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {lastCreditTransactions.map(card => (
+                <TableRow key={card.id}>
+                  <TableCell>
+                    <span>{dateStringFormatter(card.date)}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span>{valueFormatter(card.value)}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span>{card.description}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span>{categoryFormatter(card.category)}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span>**** **** **** {card.lastNumber}</span>
+                  </TableCell>
+                  <TableCell className='text-center'>
+                    <span>{card.installments}x</span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
     </Card>
   )

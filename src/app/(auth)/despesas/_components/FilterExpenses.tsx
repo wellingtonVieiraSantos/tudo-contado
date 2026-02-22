@@ -102,7 +102,7 @@ export const FilterExpenses = () => {
         <CardTitle>Filtros</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form className='flex flex-col sm:flex-row gap-6'>
+        <Form className='flex flex-col sm:flex-row gap-4'>
           <div className='flex w-full gap-4'>
             <FormField name='method' className='flex-1 sm:flex-auto'>
               <Controller
