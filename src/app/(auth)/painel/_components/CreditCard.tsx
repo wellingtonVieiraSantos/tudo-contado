@@ -49,7 +49,7 @@ export default function CreditCardDashboard() {
   })
 
   return (
-    <Card className='relative p-2 row-start-5 col-start-3 row-span-2'>
+    <Card className='relative p-2 xl:row-start-5 xl:col-start-3 xl:row-span-2'>
       <CardHeader>
         <CardTitle>Cartões de crédito</CardTitle>
         <CardDescription>Acompanhamento das faturas</CardDescription>

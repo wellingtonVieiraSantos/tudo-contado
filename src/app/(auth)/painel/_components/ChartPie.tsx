@@ -28,7 +28,7 @@ export default function ChartPie() {
   const total = pieChartData.reduce((acc, cur) => acc + cur._sum, 0)
 
   return (
-    <Card className='flex flex-col p-2 col-span-3 lg:col-span-1 lg:row-start-2 row-span-3'>
+    <Card className='flex flex-col p-2 xl:col-span-1 xl:row-start-2 xl:row-span-3'>
       <CardHeader>
         <CardTitle>Gastos por categoria</CardTitle>
         <CardDescription>Principais categorias do mês</CardDescription>
