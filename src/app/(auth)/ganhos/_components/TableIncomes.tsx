@@ -16,17 +16,8 @@ import {
   TableRow
 } from '@/components/ui/Table'
 import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
-
-import { ptBR } from 'date-fns/locale'
-import {
-  ChevronsUpDown,
-  Trash,
-  Link,
-  RefreshCw,
-  BanknoteArrowUp
-} from 'lucide-react'
+import { ChevronsUpDown, Trash, RefreshCw, BanknoteArrowUp } from 'lucide-react'
 import { categories } from './FilterIncomes'
-import { format, parse } from 'date-fns'
 import { Button } from '@/components/ui/Button'
 import valueFormatter from '@/lib/valueFormatter'
 import { usePathname, useSearchParams } from 'next/navigation'
@@ -154,7 +145,7 @@ export const TableIncomes = () => {
         </>
       )}
       {incomes.data.length === 0 && (
-        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center lg:mt-10'>
+        <Card className='max-w-3xl w-full m-auto flex p-3 justify-center items-center xl:mt-10'>
           <CardContent className='items-center gap-8'>
             <Image
               src='/empty-wallet.webp'
@@ -167,7 +158,7 @@ export const TableIncomes = () => {
               Nenhuma receita ainda. Vamos registrar sua primeira entrada?
             </CardDescription>
             <Button
-              className='w-full max-w-xl lg:w-fit'
+              className='w-full max-w-xl '
               onClick={() => openModal('POST', null)}
             >
               <BanknoteArrowUp />
