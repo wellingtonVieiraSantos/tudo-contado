@@ -27,6 +27,7 @@ import { maskMonthYear } from '@/lib/maskMonthYear'
 import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
 import { useSearchParams } from 'next/navigation'
 import { ListIncomeQuery } from '@/modules/incomes/incomes.types'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 
 const typeICon = [BriefcaseBusiness, Percent, Hammer, TrendingUp]
 
@@ -88,54 +89,61 @@ export const FilterIncomes = () => {
   }, [type, debouncedDate])
 
   return (
-    <div className='w-full flex items-center justify-between pl-2 pr-5 py-2 bg-card rounded-lg border'>
-      <h1>Filtros</h1>
-      <Form className='flex gap-6'>
-        <FormField name='type'>
-          <Controller
-            name='type'
-            control={control}
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder='Tipo' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='ALL' className='text-foreground-secondary'>
-                    Sem filtro
-                  </SelectItem>
-                  <SelectSeparator />
-                  {categories.map(categorie => (
+    <Card className='w-full p-2 flex flex-col xl:items-center xl:justify-between xl:flex-row'>
+      <CardHeader className='text-left'>
+        <CardTitle>Filtros</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form className='flex gap-6'>
+          <FormField name='type'>
+            <Controller
+              name='type'
+              control={control}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Tipo' />
+                  </SelectTrigger>
+                  <SelectContent>
                     <SelectItem
-                      key={categorie.type}
-                      value={categorie.type}
-                      className=''
+                      value='ALL'
+                      className='text-foreground-secondary'
                     >
-                      {incomeTypeFormatter(categorie.type)}
+                      Sem filtro
                     </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </FormField>
+                    <SelectSeparator />
+                    {categories.map(categorie => (
+                      <SelectItem
+                        key={categorie.type}
+                        value={categorie.type}
+                        className=''
+                      >
+                        {incomeTypeFormatter(categorie.type)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </FormField>
 
-        <FormField name='date' className='flex-row items-center'>
-          <Controller
-            name='date'
-            control={control}
-            render={({ field }) => (
-              <Input
-                icon={Search}
-                {...field}
-                placeholder='Busque mês ex: MM/AA'
-                className='border'
-                onChange={e => field.onChange(maskMonthYear(e.target.value))}
-              />
-            )}
-          />
-        </FormField>
-      </Form>
-    </div>
+          <FormField name='date'>
+            <Controller
+              name='date'
+              control={control}
+              render={({ field }) => (
+                <Input
+                  icon={Search}
+                  {...field}
+                  placeholder='Busque mês ex: MM/AA'
+                  className='border'
+                  onChange={e => field.onChange(maskMonthYear(e.target.value))}
+                />
+              )}
+            />
+          </FormField>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }
