@@ -27,7 +27,7 @@ const SideBar = () => {
     <>
       {/* desktop */}
       <div
-        className={`hidden p-2 bg-card h-full lg:w-40 xl:w-60 border-r lg:grid grid-rows-[auto_1fr_auto] fixed left-0`}
+        className={`hidden p-2 bg-card h-full xl:w-60 border-r xl:grid grid-rows-[auto_1fr_auto] fixed left-0`}
       >
         <h1
           className={`w-full text-center pointer-events-none pt-5 flex flex-col gap-3 items-center justify-center`}
@@ -66,7 +66,7 @@ const SideBar = () => {
         </Button>
       </div>
       {/* mobile */}
-      <div className='flex items-center justify-center w-full h-20 z-10 fixed bottom-0 left-0 bg-card lg:hidden border-t'>
+      <div className='flex items-center justify-center w-full h-20 z-10 fixed bottom-0 left-0 bg-card xl:hidden border-t'>
         {pages.map((page, i) => (
           <Link href={page.url} className='flex-1' key={i}>
             <div

@@ -10,7 +10,7 @@ export default function UserBarSettings({ title }: { title: string }) {
   return (
     <>
       {/* mobile */}
-      <div className='lg:hidden flex justify-between items-center text-sm'>
+      <div className='xl:hidden flex justify-between items-center text-sm'>
         <div className='flex items-center gap-2 text-right'>
           <Avatar className='size-10'>
             <AvatarImage src={session?.user?.image || ''}></AvatarImage>
@@ -25,7 +25,7 @@ export default function UserBarSettings({ title }: { title: string }) {
         </div>
       </div>
       {/* desktop */}
-      <div className='hidden lg:flex justify-between items-center h-15 text-sm p-2 col-span-3'>
+      <div className='hidden xl:flex justify-between items-center h-15 text-sm p-2 col-span-3'>
         <div className='text-xl text-left'>
           <h2 className=''>{title}</h2>
           <p className='text-sm text-foreground-secondary'>

@@ -26,7 +26,7 @@ export default function LastTransactions() {
   const { recentTransactions } = useGetLastTransactions()
 
   return (
-    <Card className='h-full overflow-hidden p-2 row-start-5 col-span-2 row-span-2'>
+    <Card className='h-full overflow-hidden p-2 xl:row-start-5 xl:col-span-2 xl:row-span-2'>
       <CardHeader>
         <CardTitle>Movimentações Financeiras</CardTitle>
         <CardDescription>
@@ -36,7 +36,7 @@ export default function LastTransactions() {
       </CardHeader>
       <CardContent className='h-max'>
         {!recentTransactions && (
-          <p className='lg:mt-20 text-foreground-secondary text-center'>
+          <p className='xl:mt-20 text-foreground-secondary text-center'>
             Nenhuma transação recente...
           </p>
         )}
