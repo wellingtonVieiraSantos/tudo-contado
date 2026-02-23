@@ -192,7 +192,7 @@ export const ModalExpense = () => {
               </FormMessage>
             )}
           </FormField>
-          <div className='flex gap-3'>
+          <div className='flex flex-col sm:flex-row gap-3'>
             <FormField name='date' className='flex-1'>
               <FormLabel>Data de compra *</FormLabel>
               <Controller
@@ -293,7 +293,7 @@ export const ModalExpense = () => {
           {watch('method') === 'CREDIT' && (
             <>
               {creditCard.cards.length > 0 && (
-                <div className='flex gap-3'>
+                <div className='flex flex-col sm:flex-row gap-3'>
                   <FormField name='creditCardId' className='flex-1'>
                     <FormLabel>Número do Cartão *</FormLabel>
                     <Controller
@@ -348,7 +348,7 @@ export const ModalExpense = () => {
                   Nenhum cartão encontrado. É necessário cadastrar um cartão.
                 </p>
               )}
-              <span className='hidden text-sm text-center text-foreground-secondary xl:flex items-center gap-2 justify-center border border-destructive/30 px-4 py-2 rounded-md'>
+              <span className='text-sm text-center text-foreground-secondary flex items-center gap-2 justify-center border border-destructive/30 px-4 py-2 rounded-md'>
                 <AlertTriangle
                   strokeWidth={1.5}
                   className='size-15 text-destructive'
@@ -361,7 +361,7 @@ export const ModalExpense = () => {
                 <Button
                   type='button'
                   variant='border'
-                  className='justify-self-center px-8'
+                  className='w-full justify-self-center px-8'
                 >
                   <CreditCardIcon />
                   Cadastrar cartão de crédito

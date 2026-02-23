@@ -137,7 +137,7 @@ export const ModalCreditCard = () => {
             height={512}
             className='w-16 absolute top-3 right-5'
           />
-          <div className='text-xl lg:text-base xl:text-xl absolute bottom-16 left-9 font-mono tracking-wider'>
+          <div className='text-xl xl:text-xl absolute bottom-16 left-9 font-mono tracking-wider'>
             **** **** **** {watch('lastNumber') || '****'}
           </div>
           <div className='absolute bottom-3 left-7 flex flex-col'>
@@ -176,7 +176,7 @@ export const ModalCreditCard = () => {
               </FormMessage>
             )}
           </FormField>
-          <div className='flex gap-4'>
+          <div className='flex flex-col sm:flex-row gap-4'>
             <FormField name='lastNumber' className='flex-1'>
               <FormLabel>Ultimos números *</FormLabel>
               <Controller
@@ -230,7 +230,7 @@ export const ModalCreditCard = () => {
               )}
             </FormField>
           </div>
-          <div className='flex gap-4'>
+          <div className='flex flex-col sm:flex-row gap-4'>
             <FormField name='creditLimit' className='flex-1'>
               <FormLabel>Limite de crédito *</FormLabel>
               <Controller
