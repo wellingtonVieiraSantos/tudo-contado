@@ -35,51 +35,54 @@ export default function LastTransactions() {
         <Divider />
       </CardHeader>
       <CardContent className='h-max'>
-        {!recentTransactions && (
+        {recentTransactions.length === 0 ? (
           <p className='xl:mt-20 text-foreground-secondary text-center'>
             Nenhuma transação recente...
           </p>
-        )}
-        <Table className='w-full'>
-          <TableHeader className='bg-hover sticky top-0 z-10'>
-            <TableRow className='table w-full table-fixed'>
-              <TableHead className='hidden xl:table-cell'>Categoria</TableHead>
-              <TableHead className='hidden xl:table-cell'>Tipo</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Valor</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className='block max-h-50 overflow-y-auto scrollbar-custom'>
-            {recentTransactions?.map(transaction => (
-              <TableRow
-                key={transaction.id}
-                className='table w-full table-fixed'
-              >
-                <TableCell className='hidden xl:table-cell'>
-                  {transaction.transationKind === 'income' ? (
-                    <TrendingUp
-                      size={35}
-                      strokeWidth={1.5}
-                      className='text-success'
-                    />
-                  ) : (
-                    <TrendingDown
-                      size={35}
-                      strokeWidth={1.5}
-                      className='text-destructive'
-                    />
-                  )}
-                </TableCell>
-                <TableCell className='hidden xl:table-cell'>
-                  {incomeTypeFormatter(transaction.type) ||
-                    categoryFormatter(transaction.category)}
-                </TableCell>
-                <TableCell>{dateStringFormatter(transaction.date)}</TableCell>
-                <TableCell>{valueFormatter(transaction.value)}</TableCell>
+        ) : (
+          <Table className='w-full'>
+            <TableHeader className='bg-hover sticky top-0 z-10'>
+              <TableRow className='table w-full table-fixed'>
+                <TableHead className='hidden xl:table-cell'>
+                  Categoria
+                </TableHead>
+                <TableHead className='hidden xl:table-cell'>Tipo</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Valor</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody className='block max-h-50 overflow-y-auto scrollbar-custom'>
+              {recentTransactions?.map(transaction => (
+                <TableRow
+                  key={transaction.id}
+                  className='table w-full table-fixed'
+                >
+                  <TableCell className='hidden xl:table-cell'>
+                    {transaction.transationKind === 'income' ? (
+                      <TrendingUp
+                        size={35}
+                        strokeWidth={1.5}
+                        className='text-success'
+                      />
+                    ) : (
+                      <TrendingDown
+                        size={35}
+                        strokeWidth={1.5}
+                        className='text-destructive'
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell className='hidden xl:table-cell'>
+                    {incomeTypeFormatter(transaction.type) ||
+                      categoryFormatter(transaction.category)}
+                  </TableCell>
+                  <TableCell>{dateStringFormatter(transaction.date)}</TableCell>
+                  <TableCell>{valueFormatter(transaction.value)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
     </Card>
   )
