@@ -2,6 +2,6 @@ import Skeleton from '@/components/ui/Skeleton'
 
 export default function ChartPieSkeleton() {
   return (
-    <Skeleton className='col-span-3 lg:col-span-1 lg:row-start-2 row-span-3' />
+    <Skeleton className='min-h-75 col-span-3 xl:col-span-1 xl:row-span-2' />
   )
 }

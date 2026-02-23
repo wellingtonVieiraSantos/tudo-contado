@@ -10,7 +10,7 @@ import { Divider } from '@/components/ui/Divider'
 import { useGetLastTransactions } from '../_hooks/use-get-lastTransactions'
 import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
 import valueFormatter from '@/lib/valueFormatter'
-import { ChevronsUpDown, TrendingDown, TrendingUp } from 'lucide-react'
+import { TrendingDown, TrendingUp } from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -26,7 +26,7 @@ export default function LastTransactions() {
   const { recentTransactions } = useGetLastTransactions()
 
   return (
-    <Card className='h-full overflow-hidden p-2 xl:row-start-5 xl:col-span-2 xl:row-span-2'>
+    <Card className='h-full p-2 col-span-3 xl:col-span-2'>
       <CardHeader>
         <CardTitle>Movimentações Financeiras</CardTitle>
         <CardDescription>

@@ -41,7 +41,7 @@ export default function Balance() {
   const incomeConfig = useBadgeBalanceConfig(incomeBalance)
 
   return (
-    <div className='xl:h-34 xl:col-span-2 xl:row-start-2 gap-3 flex flex-col xl:flex-row'>
+    <div className='col-span-3 xl:col-span-2 gap-3 flex flex-col xl:flex-row'>
       <Card className='flex-1 '>
         <CardHeader>
           <CardTitle className='flex gap-3 items-center tracking-wide'>

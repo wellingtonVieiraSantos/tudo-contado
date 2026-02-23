@@ -10,7 +10,7 @@ export default function UserBarSettings({ title }: { title: string }) {
   return (
     <>
       {/* mobile */}
-      <div className='xl:hidden flex justify-between items-center text-sm'>
+      <div className='xl:hidden flex justify-between items-center text-sm col-span-3'>
         <div className='flex items-center gap-2 text-right'>
           <Avatar className='size-10'>
             <AvatarImage src={session?.user?.image || ''}></AvatarImage>
