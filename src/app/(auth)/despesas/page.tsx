@@ -1,4 +1,3 @@
-'use client'
 import UserBarSettings from '@/components/UserBarSettings'
 import { FilterExpenses } from './_components/FilterExpenses'
 import { Suspense } from 'react'
@@ -12,7 +11,7 @@ import { ModalExpense } from './_components/ModalExpense'
 
 export default function Expense() {
   return (
-    <div className='xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
+    <div className='w-full xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Despesas' />
       </Suspense>
