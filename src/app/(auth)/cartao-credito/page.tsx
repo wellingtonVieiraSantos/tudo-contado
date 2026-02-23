@@ -9,7 +9,7 @@ import { TableUseCards } from './_components/TableUseCards'
 
 export default function CartaoCredito() {
   return (
-    <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 xl:pb-0'>
+    <div className='xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Cartão de Crédito' />
       </Suspense>

@@ -12,7 +12,7 @@ import { ModalExpense } from './_components/ModalExpense'
 
 export default function Expense() {
   return (
-    <div className='flex flex-col flex-wrap p-3 gap-3 pb-22 xl:pb-0'>
+    <div className='xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Despesas' />
       </Suspense>

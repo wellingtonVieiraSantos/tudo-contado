@@ -15,18 +15,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/Table'
-
 import { useGetCreditCard } from '../_hooks/use-get-creditcards'
 import valueFormatter from '@/lib/valueFormatter'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import Image from 'next/image'
 
 export const TableUseCards = () => {
   const { creditCard, lastCreditTransactions } = useGetCreditCard()
 
   return (
-    <Card className='w-full p-2'>
+    <Card className='w-full p-2 xl:h-full'>
       <CardHeader>
         <CardTitle>Transações no crédito</CardTitle>
         <CardDescription>
@@ -36,14 +34,7 @@ export const TableUseCards = () => {
       </CardHeader>
       <CardContent>
         {!creditCard.meta.total_items ? (
-          <div className='max-w-3xl w-full m-auto flex flex-col gap-4 p-3 justify-center items-center xl:mt-10 '>
-            <Image
-              src='/empty-wallet.webp'
-              alt='mao colocando moeda no porquinho'
-              width={300}
-              height={390}
-              className='size-50 grayscale-100'
-            />
+          <div className='w-full m-auto flex justify-center items-center xl:h-[200px]'>
             <p className='text-foreground-secondary text-center'>
               Nenhuma transação recente...
             </p>
