@@ -17,6 +17,7 @@ export const ResumeExpense = () => {
   const { openModal } = useExpenseModalStore()
 
   const expenseSumActual = expenseSum?.at(-1)?.total ?? null
+
   return (
     <Card className='w-full p-2'>
       <CardHeader>

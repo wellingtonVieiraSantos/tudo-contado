@@ -18,6 +18,7 @@ export const ResumeIncome = () => {
   const { openModal } = useIncomeModalStore()
 
   const incomeSumActual = incomeSum?.at(-1)?.total ?? null
+
   return (
     <Card className='w-full p-2'>
       <CardHeader>

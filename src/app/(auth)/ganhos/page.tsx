@@ -11,7 +11,7 @@ import TableSkeleton from '@/components/skeletons/TableSkeleton'
 
 export default function Income() {
   return (
-    <div className='xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
+    <div className='w-full xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Renda' />
       </Suspense>
