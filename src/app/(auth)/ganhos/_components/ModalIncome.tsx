@@ -190,7 +190,7 @@ export const ModalIncome = () => {
               render={({ field }) => (
                 <input
                   type='date'
-                  className='text-foreground-secondary border p-1 px-2 w-fit'
+                  className='text-foreground-secondary border p-1 px-2'
                   {...field}
                   value={field.value || new Date().toISOString().split('T')[0]}
                   onChange={e => field.onChange(e.target.value)}

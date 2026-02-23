@@ -21,7 +21,7 @@ export const ResumeCardCredit = () => {
         <CardTitle className=' flex items-center gap-3'>
           Gastos no cartão de crédito
         </CardTitle>
-        <CardDescription>
+        <CardDescription className='pt-2'>
           Resumo do total de gastos nos cartões no mês
         </CardDescription>
         <Divider />

@@ -49,7 +49,7 @@ export default function Balance() {
             Balança Financeira
           </CardTitle>
         </CardHeader>
-        <CardContent className='xl:items-start pl-5'>
+        <CardContent className='xl:items-start pl-5 pb-3'>
           <h2
             className={`text-2xl tracking-wide text-center ${
               sumIncomeActualMonth - sumExpenseActualMonth < 0
@@ -75,7 +75,7 @@ export default function Balance() {
             Rendimentos
           </CardTitle>
         </CardHeader>
-        <CardContent className='xl:items-start pl-5'>
+        <CardContent className='xl:items-start pl-5 pb-3'>
           <h2 className={`text-2xl text-center font-poppins tracking-wide`}>
             {valueFormatter(sumIncomeActualMonth)}
           </h2>
@@ -98,7 +98,7 @@ export default function Balance() {
             Despesas
           </CardTitle>
         </CardHeader>
-        <CardContent className='xl:items-start pl-5'>
+        <CardContent className='xl:items-start pl-5 pb-3'>
           <h2 className={`text-2xl text-center font-poppins tracking-wide`}>
             {valueFormatter(sumExpenseActualMonth)}
           </h2>

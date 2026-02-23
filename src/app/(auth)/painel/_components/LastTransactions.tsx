@@ -43,8 +43,8 @@ export default function LastTransactions() {
         <Table className='w-full'>
           <TableHeader className='bg-hover sticky top-0 z-10'>
             <TableRow className='table w-full table-fixed'>
-              <TableHead className='hidden xl:block'>Categoria</TableHead>
-              <TableHead className='hidden xl:block'>Tipo</TableHead>
+              <TableHead className='hidden xl:table-cell'>Categoria</TableHead>
+              <TableHead className='hidden xl:table-cell'>Tipo</TableHead>
               <TableHead>Data</TableHead>
               <TableHead>Valor</TableHead>
             </TableRow>
@@ -55,7 +55,7 @@ export default function LastTransactions() {
                 key={transaction.id}
                 className='table w-full table-fixed'
               >
-                <TableCell className='hidden xl:block'>
+                <TableCell className='hidden xl:table-cell'>
                   {transaction.transationKind === 'income' ? (
                     <TrendingUp
                       size={35}
@@ -70,7 +70,7 @@ export default function LastTransactions() {
                     />
                   )}
                 </TableCell>
-                <TableCell className='hidden xl:block'>
+                <TableCell className='hidden xl:table-cell'>
                   {incomeTypeFormatter(transaction.type) ||
                     categoryFormatter(transaction.category)}
                 </TableCell>
