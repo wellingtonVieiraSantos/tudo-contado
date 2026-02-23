@@ -15,7 +15,7 @@ import BarSkeleton from '@/components/BarSkeleton'
 
 export default function Dashboard() {
   return (
-    <div className='w-full xl:h-full grid grid-cols-1 xl:grid-cols-3 xl:grid-rows-[auto_auto_1fr_1fr_1fr_1fr] gap-3 p-3 pb-22 xl:pb-1'>
+    <div className='w-full xl:h-full grid grid-cols-1 xl:grid-cols-3 gap-3 p-3 pb-22 xl:pb-1'>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Dashboard' />
       </Suspense>
@@ -28,11 +28,11 @@ export default function Dashboard() {
       <Suspense fallback={<ChartLineSkeleton />}>
         <ChartLine />
       </Suspense>
-      <Suspense fallback={<CreditCardSkeleton />}>
-        <CreditCardDashboard />
-      </Suspense>
       <Suspense fallback={<LastTransSkeleton />}>
         <LastTransactions />
+      </Suspense>
+      <Suspense fallback={<CreditCardSkeleton />}>
+        <CreditCardDashboard />
       </Suspense>
     </div>
   )

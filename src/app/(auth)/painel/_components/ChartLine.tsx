@@ -33,7 +33,7 @@ export default function ChartLine() {
   })
 
   return (
-    <Card className='overflow-hidden flex flex-col p-2 xl:col-span-2 xl:row-start-3 xl:row-span-2'>
+    <Card className='flex flex-col p-2 col-span-3 xl:col-span-2'>
       <CardHeader>
         <CardTitle>Controle mensal</CardTitle>
         <CardDescription>Dados dos ultimos 6 meses</CardDescription>

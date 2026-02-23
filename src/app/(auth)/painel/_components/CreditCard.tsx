@@ -49,13 +49,13 @@ export default function CreditCardDashboard() {
   })
 
   return (
-    <Card className='relative p-2 xl:row-start-5 xl:col-start-3 xl:row-span-2'>
+    <Card className='h-full p-2 col-span-3 xl:col-span-1'>
       <CardHeader>
         <CardTitle>Cartões de crédito</CardTitle>
         <CardDescription>Acompanhamento das faturas</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='items-center justify-center'>
+      <CardContent className='items-center justify-center overflow-y-auto'>
         {!CC?.meta.total_items ? (
           <div className='flex flex-col gap-13 items-center text-center  pt-8'>
             <p className='text-foreground-secondary'>
