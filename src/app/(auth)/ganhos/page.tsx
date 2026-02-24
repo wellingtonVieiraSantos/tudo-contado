@@ -8,10 +8,11 @@ import BarSkeleton from '@/components/BarSkeleton'
 import ResumeSkeleton from '@/components/skeletons/ResumeSkeleton'
 import FilterSkeleton from '@/components/skeletons/FilterSkeleton'
 import TableSkeleton from '@/components/skeletons/TableSkeleton'
+import Wrapper from '@/components/Wrapper'
 
 export default function Income() {
   return (
-    <div className='w-full xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
+    <Wrapper>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Renda' />
       </Suspense>
@@ -29,6 +30,6 @@ export default function Income() {
         <TableIncomes />
       </Suspense>
       <ModalIncome />
-    </div>
+    </Wrapper>
   )
 }
