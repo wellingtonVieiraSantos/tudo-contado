@@ -8,10 +8,11 @@ import FilterSkeleton from '@/components/skeletons/FilterSkeleton'
 import TableSkeleton from '@/components/skeletons/TableSkeleton'
 import { TableExpenses } from './_components/TableExpenses'
 import { ModalExpense } from './_components/ModalExpense'
+import Wrapper from '@/components/Wrapper'
 
 export default function Expense() {
   return (
-    <div className='w-full xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
+    <Wrapper>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Despesas' />
       </Suspense>
@@ -29,6 +30,6 @@ export default function Expense() {
         <TableExpenses />
       </Suspense>
       <ModalExpense />
-    </div>
+    </Wrapper>
   )
 }

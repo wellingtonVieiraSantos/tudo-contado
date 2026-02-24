@@ -8,10 +8,11 @@ import { ListCreditCards } from './_components/ListCreditCards'
 import { TableUseCards } from './_components/TableUseCards'
 import ListCreditCardsSkeleton from './_components/skeletons/ListCreditCardsSkeleton'
 import TableUseCardsSkeleton from './_components/skeletons/TableUseCardsSkeleton'
+import Wrapper from '@/components/Wrapper'
 
 export default function CartaoCredito() {
   return (
-    <div className='w-full xl:h-full flex flex-col p-3 gap-3 pb-22 xl:pb-1'>
+    <Wrapper>
       <Suspense fallback={<BarSkeleton />}>
         <UserBarSettings title='Cartão de Crédito' />
       </Suspense>
@@ -25,6 +26,6 @@ export default function CartaoCredito() {
         <TableUseCards />
       </Suspense>
       <ModalCreditCard />
-    </div>
+    </Wrapper>
   )
 }
