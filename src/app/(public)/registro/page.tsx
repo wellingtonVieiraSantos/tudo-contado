@@ -7,10 +7,7 @@ import {
 } from '@/components/ui/Card'
 import FormRegister from './_components/FormRegister'
 import { Divider } from '@/components/ui/Divider'
-import { Button } from '@/components/ui/Button'
-import { Form } from '@/components/ui/Form'
-import Image from 'next/image'
-import { signIn } from 'next-auth/react'
+import OAuthButtons from '@/components/OAuthButtons'
 
 export default function RegisterUser() {
   return (
@@ -33,42 +30,7 @@ export default function RegisterUser() {
               <span>ou</span>{' '}
               <Divider className='flex-1 bg-gradient-to-l from-transparent to-foreground-secondary' />
             </div>
-            <Form
-              action={async () => {
-                'use server'
-                await signIn('google', { redirectTo: '/painel' })
-              }}
-              className='flex-1'
-            >
-              <Button type='submit' variant='border' className='w-full gap-4'>
-                <Image
-                  src={'/google.svg'}
-                  alt='logo google'
-                  width={48}
-                  height={48}
-                  className='size-6 '
-                />
-                Entrar com Google
-              </Button>
-            </Form>
-            <Form
-              action={async () => {
-                'use server'
-                await signIn('github', { redirectTo: '/painel' })
-              }}
-              className='flex-1'
-            >
-              <Button type='submit' variant='border' className='w-full gap-4'>
-                <Image
-                  src={'/github.svg'}
-                  alt='logo google'
-                  width={48}
-                  height={48}
-                  className='size-6 invert-100'
-                />
-                Continuar com Github
-              </Button>
-            </Form>
+            <OAuthButtons />
           </div>
         </CardContent>
       </Card>

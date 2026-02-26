@@ -35,8 +35,8 @@ export default function Home() {
         </Link>
       </nav>
 
-      <section className='h-full flex flex-col lg:flex-row p-4 lg:p-8 bg-card lg:bg-radial from-disabled via-card to-background'>
-        <Card className='flex flex-col justify-center items-center flex-1 p-3 bg-transparent border-none gap-8'>
+      <section className='h-full flex flex-col xl:flex-row p-4 lg:p-8 bg-card lg:bg-radial from-disabled via-card to-background'>
+        <Card className='flex flex-col justify-center items-center flex-auto xl:flex-1 p-3 bg-transparent border-none gap-8'>
           <CardHeader className='text-center text-6xl lg:text-8xl gap-3 lg:gap-8'>
             <CardTitle>
               Tome o{' '}

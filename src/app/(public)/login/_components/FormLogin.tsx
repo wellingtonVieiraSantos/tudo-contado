@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import {
   Form,
   FormControl,
@@ -18,6 +17,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { loginSchema, loginUserType } from '@/modules/user/user.login.schema'
+import { signIn } from 'next-auth/react'
 
 export default function FormLogin() {
   const [isPending, setIsPending] = useState(false)
