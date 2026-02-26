@@ -33,11 +33,11 @@ export const useRegisterUser = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchNewUser,
-    onSuccess: async variables => {
+    onSuccess: async (_, variables) => {
       await signIn('credentials', {
         redirect: true,
-        email: variables.data.email,
-        password: variables.data.rawPassword,
+        email: variables.email,
+        password: variables.password,
         callbackUrl: '/painel'
       })
     },

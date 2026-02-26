@@ -10,7 +10,7 @@ import Form from 'next/form'
 import { Divider } from '@/components/ui/Divider'
 import { Button } from '@/components/ui/Button'
 import Image from 'next/image'
-import { signIn } from 'next-auth/react'
+import { signIn } from '../../../../auth'
 
 export default async function Login() {
   return (
