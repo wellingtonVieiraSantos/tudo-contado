@@ -6,11 +6,8 @@ import {
   CardTitle
 } from '@/components/ui/Card'
 import FormLogin from './_components/FormLogin'
-import Form from 'next/form'
 import { Divider } from '@/components/ui/Divider'
-import { Button } from '@/components/ui/Button'
-import Image from 'next/image'
-import { signIn } from '../../../../auth'
+import OAuthButtons from '@/components/OAuthButtons'
 
 export default async function Login() {
   return (
@@ -33,43 +30,8 @@ export default async function Login() {
               <span>ou</span>{' '}
               <Divider className='flex-1 bg-gradient-to-l from-transparent to-foreground-secondary' />
             </div>
-            <Form
-              action={async () => {
-                'use server'
-                await signIn('google', { redirectTo: '/painel' })
-              }}
-              className='flex-1'
-            >
-              <Button type='submit' variant='border' className='w-full gap-4'>
-                <Image
-                  src={'/google.svg'}
-                  alt='logo google'
-                  width={48}
-                  height={48}
-                  className='size-6 '
-                />
-                Entrar com Google
-              </Button>
-            </Form>
-            <Form
-              action={async () => {
-                'use server'
-                await signIn('github', { redirectTo: '/painel' })
-              }}
-              className='flex-1'
-            >
-              <Button type='submit' variant='border' className='w-full gap-4'>
-                <Image
-                  src={'/github.svg'}
-                  alt='logo google'
-                  width={48}
-                  height={48}
-                  className='size-6 invert-100'
-                />
-                Continuar com Github
-              </Button>
-            </Form>
           </div>
+          <OAuthButtons />
         </CardContent>
       </Card>
     </div>

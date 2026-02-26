@@ -3,18 +3,20 @@ import Credentials from 'next-auth/providers/credentials'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 
-// Config mínimo para o middleware - sem Prisma, sem bcryptjs
 export const { auth: authMiddleware } = NextAuth({
-  providers: [GitHub, Google, Credentials({
-    credentials: {
-      email: {},
-      password: {}
-    },
-    authorize: async () => {
-      // O middleware só precisa validar o JWT, não precisa fazer authorize
-      return null
-    }
-  })],
+  providers: [
+    GitHub,
+    Google,
+    Credentials({
+      credentials: {
+        email: {},
+        password: {}
+      },
+      authorize: async () => {
+        return null
+      }
+    })
+  ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -42,4 +44,3 @@ export const { auth: authMiddleware } = NextAuth({
     strategy: 'jwt'
   }
 })
-
