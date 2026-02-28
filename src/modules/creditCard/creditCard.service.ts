@@ -63,7 +63,7 @@ export const postCreditCardService = async (rawData: CreditCardProps) => {
     creditLimit: rawData.creditLimit * 100,
     expMonth: Number(rawData.expMonth),
     expYear: Number(rawData.expYear),
-    paymentDay: Number(rawData.paymentDay),
+    paymentDay: Number(rawData.paymentDay) ?? 5,
     holder: rawData.holder,
     cardBrand: rawData.cardBrand,
 

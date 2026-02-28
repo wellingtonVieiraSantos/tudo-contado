@@ -81,7 +81,8 @@ export const ModalCreditCard = () => {
         cardBrand: 'OTHER',
         creditLimit: 0,
         expMonth: undefined,
-        expYear: undefined
+        expYear: undefined,
+        paymentDay: '5'
       })
     }
   }, [open, type, prevData, reset])
