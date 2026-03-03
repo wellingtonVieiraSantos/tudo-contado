@@ -55,7 +55,9 @@ export const getAllCreditCardDeactivateService = async () => {
 }
 
 /* POST */
-export const postCreditCardService = async (rawData: CreditCardProps) => {
+export const postCreditCardService = async (
+  rawData: CreditCardProps & { paymentDay: number }
+) => {
   const { id } = await requireUser()
 
   const data = {
@@ -63,7 +65,7 @@ export const postCreditCardService = async (rawData: CreditCardProps) => {
     creditLimit: rawData.creditLimit * 100,
     expMonth: Number(rawData.expMonth),
     expYear: Number(rawData.expYear),
-    paymentDay: Number(rawData.paymentDay) ?? 5,
+    paymentDay: Number(rawData.paymentDay) || 5,
     holder: rawData.holder,
     cardBrand: rawData.cardBrand,
 
@@ -78,7 +80,9 @@ export const postCreditCardService = async (rawData: CreditCardProps) => {
 }
 
 /* UPDATE */
-export const updateCreditCardByIdService = async (rawData: CreditCardProps) => {
+export const updateCreditCardByIdService = async (
+  rawData: CreditCardProps & { paymentDay: number }
+) => {
   await requireUser()
 
   const data = {
@@ -87,7 +91,7 @@ export const updateCreditCardByIdService = async (rawData: CreditCardProps) => {
     creditLimit: rawData.creditLimit * 100,
     expMonth: Number(rawData.expMonth),
     expYear: Number(rawData.expYear),
-    paymentDay: Number(rawData.paymentDay),
+    paymentDay: Number(rawData.paymentDay) || 5,
     holder: rawData.holder,
     cardBrand: rawData.cardBrand
   }

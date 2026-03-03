@@ -118,7 +118,9 @@ export const ListCreditCards = () => {
                       className='w-20 h-16 object-contain border p-2 rounded'
                     />
                     <div className='flex flex-col items-start'>
-                      <span className='font-medium'>{card.holder}</span>
+                      <span className='font-medium'>
+                        {card.holder.toUpperCase()}
+                      </span>
                       <span className='text-sm text-foreground-secondary'>
                         **** **** **** {card.lastNumber}
                       </span>

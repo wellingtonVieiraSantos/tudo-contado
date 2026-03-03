@@ -63,7 +63,7 @@ export const ModalCreditCard = () => {
     if (open && type === 'PUT' && prevData) {
       reset({
         holder: prevData.holder,
-        lastNumber: prevData.lastNumber,
+        lastNumber: String(prevData.lastNumber),
         cardBrand: prevData.cardBrand,
         creditLimit: prevData.creditLimit,
         expMonth: prevData.expMonth,
@@ -81,8 +81,7 @@ export const ModalCreditCard = () => {
         cardBrand: 'OTHER',
         creditLimit: 0,
         expMonth: undefined,
-        expYear: undefined,
-        paymentDay: '5'
+        expYear: undefined
       })
     }
   }, [open, type, prevData, reset])
@@ -93,7 +92,11 @@ export const ModalCreditCard = () => {
       return
     }
     if (type === 'PUT') {
-      handlePutCreditCard(data)
+      const creditCard = {
+        ...data,
+        id: prevData?.id
+      }
+      handlePutCreditCard(creditCard)
     }
   }
   return (
@@ -189,6 +192,7 @@ export const ModalCreditCard = () => {
                     {...field}
                     placeholder='Últimos 4 dígitos do cartão'
                     className='border'
+                    value={field.value ?? ''}
                     onChange={e =>
                       field.onChange(maskOnlyNumbers(e.target.value, 4))
                     }
@@ -304,6 +308,7 @@ export const ModalCreditCard = () => {
           </div>
           <FormSubmit asChild className='w-full mt-5'>
             <Button
+              type='submit'
               disabled={type === 'POST' ? isPendingPost : isPendingPut}
               variant={
                 type === 'POST'

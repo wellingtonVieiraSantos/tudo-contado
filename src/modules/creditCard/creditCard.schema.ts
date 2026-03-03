@@ -21,12 +21,13 @@ export const creditCardSchema = z
     expYear: z
       .number({ required_error: 'Ano é obrigatório' })
       .min(new Date().getFullYear(), `Cartão expirado.`),
-    paymentDay: z
+    /*     paymentDay: z
       .string({ message: 'Campo obrigatório' })
-      .regex(/^(0?[1-9]|[12][0-9]|3[01])$/, {
+      .transform(v => (v === '' ? undefined : v))
+      .optional()
+      .refine(v => !v || /^(0?[1-9]|[12][0-9]|3[01])$/.test(v), {
         message: 'Dia de vencimento deve ser de 1 à 31'
-      })
-      .optional(),
+      }), */
     cardBrand: z.nativeEnum(CardBrand)
   })
   .refine(

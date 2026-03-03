@@ -47,8 +47,6 @@ export const useGetCreditCard = () => {
     )
   }, [creditCard.cards])
 
-  console.log(lastCreditTransactions)
-
   return {
     ...query,
     creditCard,
