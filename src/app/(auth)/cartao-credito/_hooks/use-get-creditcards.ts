@@ -1,10 +1,7 @@
 'use client'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { ApiResponse } from '@/types/api-response'
-import {
-  CreditCardWithExpensesProps,
-  CreditCardWithIdProps
-} from '@/modules/creditCard/creditCard.types'
+import { CreditCardWithExpensesProps } from '@/modules/creditCard/creditCard.types'
 import { useMemo } from 'react'
 
 const fetchCreditCard = async () => {
