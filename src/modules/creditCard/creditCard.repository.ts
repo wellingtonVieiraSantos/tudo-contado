@@ -23,7 +23,6 @@ export class CreditCardRepository {
           holder: true,
           cardBrand: true,
           deletedAt: true,
-          paymentDay: true,
           expense: {
             select: {
               id: true,
@@ -66,7 +65,6 @@ export class CreditCardRepository {
         expMonth: true,
         expYear: true,
         deletedAt: true,
-        paymentDay: true,
         cardBrand: true,
         expense: {
           select: {
