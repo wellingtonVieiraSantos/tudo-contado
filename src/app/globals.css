@@ -98,8 +98,8 @@
   --animate-slideUp: slideUp 0.3s ease-in-out;
   --animate-slideDown: slideDown 0.3s ease-in-out;
 
-  --animate-fadeIn: fadeIn 0.2s linear;
-  --animate-fadeOut: fadeOut 0.2s linear;
+  --animate-fadeIn: fadeIn 0.1s linear;
+  --animate-fadeOut: fadeOut 0.1s linear;
 
   --animate-skeletonShimmer: SkeletonShimmer 1.5s linear infinite;
   --animate-loader:

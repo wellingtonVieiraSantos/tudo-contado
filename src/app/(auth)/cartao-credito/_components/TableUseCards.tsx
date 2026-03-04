@@ -67,9 +67,9 @@ export const TableUseCards = () => {
                     <span>{valueFormatter(card.value)}</span>
                   </TableCell>
                   <TableCell>
-                    <TooltipProvider delayDuration={200}>
+                    <TooltipProvider delayDuration={100}>
                       <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger asChild>
                           <span>{card.description}</span>
                         </TooltipTrigger>
                         <TooltipContent>{card.description}</TooltipContent>

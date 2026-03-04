@@ -31,6 +31,12 @@ import { useIncomeModalStore } from '@/store/modalPostPutStore'
 import { useDelIncome } from '../_hooks/use-del-income'
 import { ModalDelete } from '@/components/ModalDelete'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/Tooltip'
 
 export const TableIncomes = () => {
   const searchParams = useSearchParams()
@@ -87,10 +93,19 @@ export const TableIncomes = () => {
                     })()}
                   </TableCell>
                   <TableCell>{valueFormatter(income.value)}</TableCell>
-                  <TableCell>{income.description}</TableCell>
+                  <TableCell>
+                    <TooltipProvider delayDuration={100}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span>{income.description}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>{income.description}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </TableCell>
                   <TableCell>{dateStringFormatter(income.date)}</TableCell>
                   <TableCell>{incomeTypeFormatter(income.type)}</TableCell>
-                  <TableCell className='flex gap-3 justify-center'>
+                  <TableCell className='flex gap-3 justify-center m-auto'>
                     <Button
                       variant='border'
                       onClick={() =>

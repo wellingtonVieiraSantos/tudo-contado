@@ -5,7 +5,7 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
     <div
       data-slot='table-container'
-      className='relative w-full overflow-x-auto'
+      className='relative w-full overflow-x-auto cursor-default'
     >
       <table
         data-slot='table'
@@ -77,7 +77,7 @@ function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
     <td
       data-slot='table-cell'
       className={twMerge(
-        'p-3 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] overflow-hidden truncate',
+        'max-w-[250px] p-3 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] truncate',
         className
       )}
       {...props}

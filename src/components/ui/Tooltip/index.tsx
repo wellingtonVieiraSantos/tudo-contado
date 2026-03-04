@@ -5,18 +5,20 @@ import { twMerge } from 'tailwind-merge'
 const TooltipProvider = TooltipRadix.Provider
 const Tooltip = TooltipRadix.Root
 const TooltipTrigger = TooltipRadix.Trigger
+const TooltipArrow = TooltipRadix.Arrow
 
 const TooltipContent = forwardRef<
   React.ComponentRef<typeof TooltipRadix.Content>,
   React.ComponentPropsWithoutRef<typeof TooltipRadix.Content>
->(({ children, sideOffset = 2, className, ...props }, ref) => {
+>(({ children, sideOffset = 8, className, ...props }, ref) => {
   return (
     <TooltipRadix.Portal>
       <TooltipRadix.Content
+        align='start'
         className={twMerge(
-          `z-50 w-fit max-w-md overflow-hidden flex justify-center px-4 py-3 items-center
-           bg-background  data-[state=delayed-open]:animate-fadeIn
-          data-[state=closed]:animate-fadeOut`,
+          `z-50 w-fit max-w-md overflow-hidden flex justify-center px-4 py-2 items-center
+           bg-background data-[state=delayed-open]:animate-fadeIn
+          data-[state=closed]:animate-fadeOut border`,
           className
         )}
         sideOffset={sideOffset}
@@ -24,7 +26,6 @@ const TooltipContent = forwardRef<
         {...props}
       >
         {children}
-        <TooltipRadix.Arrow className='w-4 h-2 fill-background' />
       </TooltipRadix.Content>
     </TooltipRadix.Portal>
   )
@@ -32,4 +33,10 @@ const TooltipContent = forwardRef<
 
 TooltipContent.displayName = TooltipRadix.Content.displayName
 
-export { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent }
+export {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipArrow
+}
