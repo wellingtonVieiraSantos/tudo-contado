@@ -12,7 +12,11 @@ export const getAllCreditCardService = async () => {
   //normalize value and amount to show in component, get in centavos, return in reais
   const creditCard = rawCreditCard.data.map(cc => ({
     ...cc,
-    creditLimit: cc.creditLimit / 100
+    creditLimit: cc.creditLimit / 100,
+    expense: cc.expense.map(exp => ({
+      ...exp,
+      value: exp.value / 100
+    }))
   }))
   return {
     meta: rawCreditCard.meta,
@@ -63,7 +67,6 @@ export const postCreditCardService = async (rawData: CreditCardProps) => {
     creditLimit: rawData.creditLimit * 100,
     expMonth: Number(rawData.expMonth),
     expYear: Number(rawData.expYear),
-    paymentDay: Number(rawData.paymentDay),
     holder: rawData.holder,
     cardBrand: rawData.cardBrand,
 
@@ -87,7 +90,6 @@ export const updateCreditCardByIdService = async (rawData: CreditCardProps) => {
     creditLimit: rawData.creditLimit * 100,
     expMonth: Number(rawData.expMonth),
     expYear: Number(rawData.expYear),
-    paymentDay: Number(rawData.paymentDay),
     holder: rawData.holder,
     cardBrand: rawData.cardBrand
   }

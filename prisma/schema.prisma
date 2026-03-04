@@ -83,7 +83,7 @@ model CreditCard {
   cardBrand   CardBrand @default(OTHER)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  paymentDay  Int       @default(5)
+  paymentDay  Int?      @default(5)
   lastNumber  Int
   expMonth    Int
   expYear     Int

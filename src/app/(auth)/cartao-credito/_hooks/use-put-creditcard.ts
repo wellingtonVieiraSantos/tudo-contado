@@ -1,7 +1,7 @@
 'use client'
 import { queryClient } from '@/lib/query-client'
 import { useMutation } from '@tanstack/react-query'
-import { useExpenseModalStore } from '@/store/modalPostPutStore'
+import { useCreditCardModalStore } from '@/store/modalPostPutStore'
 import { CreditCardProps } from '@/modules/creditCard/creditCard.types'
 
 const fetchCreditCard = async (data: CreditCardProps) => {
@@ -15,7 +15,7 @@ const fetchCreditCard = async (data: CreditCardProps) => {
 }
 
 export const usePutCreditCard = () => {
-  const { closeModal } = useExpenseModalStore()
+  const { closeModal } = useCreditCardModalStore()
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreditCard,

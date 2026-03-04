@@ -98,9 +98,34 @@
   --animate-slideUp: slideUp 0.3s ease-in-out;
   --animate-slideDown: slideDown 0.3s ease-in-out;
 
+  --animate-fadeIn: fadeIn 0.1s linear;
+  --animate-fadeOut: fadeOut 0.1s linear;
+
   --animate-skeletonShimmer: SkeletonShimmer 1.5s linear infinite;
   --animate-loader:
     loader-p1 2s infinite linear alternate, loader-p2 4s infinite linear;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
 
   @keyframes slideUp {
     from {

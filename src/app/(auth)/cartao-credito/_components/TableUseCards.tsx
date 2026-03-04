@@ -19,6 +19,12 @@ import { useGetCreditCard } from '../_hooks/use-get-creditcards'
 import valueFormatter from '@/lib/valueFormatter'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/Tooltip'
 
 export const TableUseCards = () => {
   const { creditCard, lastCreditTransactions } = useGetCreditCard()
@@ -61,7 +67,14 @@ export const TableUseCards = () => {
                     <span>{valueFormatter(card.value)}</span>
                   </TableCell>
                   <TableCell>
-                    <span>{card.description}</span>
+                    <TooltipProvider delayDuration={100}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span>{card.description}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>{card.description}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </TableCell>
                   <TableCell>
                     <span>{categoryFormatter(card.category)}</span>

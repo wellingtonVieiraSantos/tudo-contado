@@ -32,6 +32,12 @@ import { useModalDelStore } from '@/store/modalDelStore'
 import { categories } from './ModalExpense'
 import { useExpenseModalStore } from '@/store/modalPostPutStore'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/Tooltip'
 
 export const TableExpenses = () => {
   const searchParams = useSearchParams()
@@ -92,13 +98,22 @@ export const TableExpenses = () => {
                     })()}
                   </TableCell>
                   <TableCell>{valueFormatter(expense.value)}</TableCell>
-                  <TableCell>{expense.description}</TableCell>
+                  <TableCell>
+                    <TooltipProvider delayDuration={100}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span>{expense.description}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>{expense.description}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </TableCell>
                   <TableCell>{dateStringFormatter(expense.date)}</TableCell>
                   <TableCell>{categoryFormatter(expense.category)}</TableCell>
                   <TableCell>
                     {paymentMethodFormatter(expense.method)}
                   </TableCell>
-                  <TableCell className='flex gap-3 justify-center'>
+                  <TableCell className='flex gap-3 justify-center m-auto'>
                     <Button
                       variant='border'
                       onClick={() =>
