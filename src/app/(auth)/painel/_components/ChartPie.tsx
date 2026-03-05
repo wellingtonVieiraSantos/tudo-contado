@@ -28,13 +28,13 @@ export default function ChartPie() {
   const total = pieChartData.reduce((acc, cur) => acc + cur._sum, 0)
 
   return (
-    <Card className='flex flex-col p-2 col-span-3 xl:col-span-1 xl:row-span-2'>
+    <Card className='flex flex-col col-span-3 xl:col-span-1 xl:row-span-2'>
       <CardHeader>
         <CardTitle>Gastos por categoria</CardTitle>
         <CardDescription>Principais categorias do mês</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='h-full'>
+      <CardContent className='flex-1'>
         <PieChart
           localeText={{
             loading: 'Carregando dados...',

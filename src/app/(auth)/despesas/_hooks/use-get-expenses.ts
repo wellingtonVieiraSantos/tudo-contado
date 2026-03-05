@@ -35,32 +35,25 @@ const fetchExpenses = async (filters: ListExpensesQueryDTO) => {
 }
 
 export const useGetExpenses = (filters: ListExpensesQueryDTO) => {
-  const {
-    data: response,
-    isLoading,
-    error,
-    refetch
-  } = useSuspenseQuery({
+  const query = useSuspenseQuery({
     queryKey: ['expenses', filters],
     queryFn: () => fetchExpenses(filters)
   })
 
   const expenses = useMemo(() => {
-    const totalPages = response?.data.meta.totalPages ?? 1
+    const totalPages = query.data?.data.meta.totalPages ?? 1
 
-    if (response?.success && response.data.meta.total_items > 0)
+    if (query.data?.success && query.data.data.meta.total_items > 0)
       return {
-        data: response.data.expenses,
-        meta: { ...response?.data.meta, totalPages }
+        data: query.data.data.expenses,
+        meta: { ...query.data?.data.meta, totalPages }
       }
 
-    return { data: [], meta: { ...response?.data.meta, totalPages } }
-  }, [response])
+    return { data: [], meta: { ...query.data?.data.meta, totalPages } }
+  }, [query.data?.data])
 
   return {
-    isLoading,
-    expenses,
-    error,
-    refetch
+    ...query,
+    expenses
   }
 }

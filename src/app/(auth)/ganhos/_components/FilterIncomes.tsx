@@ -89,7 +89,7 @@ export const FilterIncomes = () => {
   }, [type, debouncedDate])
 
   return (
-    <Card className='w-full p-2 flex flex-col xl:items-center xl:justify-between xl:flex-row'>
+    <Card className='w-full flex flex-col xl:items-center xl:justify-between xl:flex-row'>
       <CardHeader className='text-left'>
         <CardTitle>Filtros</CardTitle>
       </CardHeader>

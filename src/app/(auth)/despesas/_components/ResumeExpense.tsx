@@ -19,7 +19,7 @@ export const ResumeExpense = () => {
   const expenseSumActual = expenseSum?.at(-1)?.total ?? null
 
   return (
-    <Card className='w-full p-2'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle className=' flex items-center gap-3'>
           <TrendingDown className='text-destructive' size={35} />

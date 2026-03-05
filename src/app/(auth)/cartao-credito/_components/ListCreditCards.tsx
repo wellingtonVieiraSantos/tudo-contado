@@ -66,7 +66,7 @@ export const ListCreditCards = () => {
   }
 
   return (
-    <Card className='w-full p-2'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Seus cartões de crédito</CardTitle>
         <CardDescription>
@@ -115,7 +115,7 @@ export const ListCreditCards = () => {
                       }
                       width={512}
                       height={512}
-                      className='w-20 h-16 object-contain border p-2 rounded'
+                      className='w-20 h-16 object-contain border p-1 rounded'
                     />
                     <div className='flex flex-col items-start'>
                       <span className='font-medium'>

@@ -33,13 +33,13 @@ export default function ChartLine() {
   })
 
   return (
-    <Card className='flex flex-col p-2 col-span-3 xl:col-span-2'>
+    <Card className='flex flex-col col-span-3 xl:col-span-2'>
       <CardHeader>
         <CardTitle>Controle mensal</CardTitle>
         <CardDescription>Dados dos ultimos 6 meses</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='h-full'>
+      <CardContent className='flex-1'>
         <LineChart
           className=''
           localeText={{

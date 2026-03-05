@@ -16,7 +16,7 @@ export const ResumeCardCredit = () => {
     sumExpenseByCC?.reduce((acc, curr) => acc + curr._sum, 0) ?? 0
 
   return (
-    <Card className='w-full p-2'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle className=' flex items-center gap-3'>
           Gastos no cartão de crédito

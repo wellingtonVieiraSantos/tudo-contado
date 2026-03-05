@@ -5,10 +5,10 @@ import { ResumeCardCredit } from './_components/ResumeCardCredit'
 import ResumeSkeleton from '@/components/skeletons/ResumeSkeleton'
 import { ModalCreditCard } from './_components/ModalCreditCard'
 import { ListCreditCards } from './_components/ListCreditCards'
-import { TableUseCards } from './_components/TableUseCards'
 import ListCreditCardsSkeleton from './_components/skeletons/ListCreditCardsSkeleton'
 import TableUseCardsSkeleton from './_components/skeletons/TableUseCardsSkeleton'
 import Wrapper from '@/components/Wrapper'
+import { Transactions } from './_components/Transactions'
 
 export default function CartaoCredito() {
   return (
@@ -23,7 +23,7 @@ export default function CartaoCredito() {
         <ListCreditCards />
       </Suspense>
       <Suspense fallback={<TableUseCardsSkeleton />}>
-        <TableUseCards />
+        <Transactions />
       </Suspense>
       <ModalCreditCard />
     </Wrapper>

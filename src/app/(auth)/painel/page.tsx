@@ -2,9 +2,7 @@ import UserBarSettings from '@/components/UserBarSettings'
 import ChartPie from './_components/ChartPie'
 import ChartLine from './_components/ChartLine'
 import Balance from './_components/Balance'
-import LastTransactions from './_components/LastTransactions'
 import CreditCardDashboard from './_components/CreditCard'
-
 import { Suspense } from 'react'
 import BalanceSkeleton from './_components/skeletons/BalanceSkeleton'
 import ChartLineSkeleton from './_components/skeletons/ChartLineSkeleton'
@@ -12,6 +10,7 @@ import ChartPieSkeleton from './_components/skeletons/ChartPieSkeleton'
 import CreditCardSkeleton from './_components/skeletons/CreditCardSkeleton'
 import LastTransSkeleton from './_components/skeletons/LastTransSkeleton'
 import BarSkeleton from '@/components/BarSkeleton'
+import { Transactions } from './_components/Transactions'
 
 export default function Dashboard() {
   return (
@@ -29,7 +28,7 @@ export default function Dashboard() {
         <ChartLine />
       </Suspense>
       <Suspense fallback={<LastTransSkeleton />}>
-        <LastTransactions />
+        <Transactions />
       </Suspense>
       <Suspense fallback={<CreditCardSkeleton />}>
         <CreditCardDashboard />
