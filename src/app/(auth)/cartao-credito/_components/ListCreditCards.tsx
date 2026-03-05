@@ -76,15 +76,15 @@ export const ListCreditCards = () => {
       </CardHeader>
       <CardContent>
         {!CC.meta.total_items ? (
-          <div className='max-w-3xl w-full m-auto flex flex-col gap-4 p-3 justify-center items-center xl:mt-10 '>
+          <div className='h-full flex flex-col items-center justify-center gap-3 p-1'>
             <Image
               src='/empty-wallet.webp'
               alt='mao colocando moeda no porquinho'
               width={300}
               height={390}
-              className='size-50 grayscale-100'
+              className='size-40 lg:size-50 grayscale-100'
             />
-            <p className='text-foreground-secondary text-center'>
+            <p className='text-foreground-secondary text-sm text-center'>
               Nenhum cartão de crédito cadastrado...
             </p>
             <Button
