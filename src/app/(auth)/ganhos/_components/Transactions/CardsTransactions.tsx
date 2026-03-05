@@ -9,7 +9,6 @@ import {
 import valueFormatter from '@/lib/valueFormatter'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
 import { categoryFormatter } from '@/lib/categoryFormatter'
-import { categories } from '@/app/(auth)/despesas/_components/ModalExpense'
 import { Divider } from '@/components/ui/Divider'
 import { Badge } from '@/components/ui/Badge'
 import {
@@ -21,18 +20,24 @@ import {
   Trash
 } from 'lucide-react'
 import { useModalDelStore } from '@/store/modalDelStore'
-import { useExpenseModalStore } from '@/store/modalPostPutStore'
+import {
+  useExpenseModalStore,
+  useIncomeModalStore
+} from '@/store/modalPostPutStore'
 import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
 import { Button } from '@/components/ui/Button'
 import { ExpenseWithIdProps } from '@/modules/expenses/expenses.types'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { IncomeWithIdProps } from '@/modules/incomes/incomes.types'
+import { categories } from '../FilterIncomes'
+import { incomeTypeFormatter } from '@/lib/incomeTypeFormatter'
 
 export default function CardsTransactions({
-  expenses
+  incomes
 }: {
-  expenses: {
-    data: ExpenseWithIdProps[]
+  incomes: {
+    data: IncomeWithIdProps[]
     meta: {
       totalPages: number
       total_items: number
@@ -42,52 +47,45 @@ export default function CardsTransactions({
   }
 }) {
   const pathname = usePathname()
-  const { openModal } = useExpenseModalStore()
+  const { openModal } = useIncomeModalStore()
   const { openDeleteModal } = useModalDelStore()
 
   return (
     <div className='flex flex-col gap-3 lg:hidden'>
-      {expenses.data.map(exp => (
-        <Card className='bg-background rounded' key={exp.id}>
+      {incomes.data.map(inc => (
+        <Card className='bg-background rounded' key={inc.id}>
           <CardHeader>
             <CardTitle>
-              <p className='flex items-center gap-3 text-sm mb-3 text-foreground-secondary justify-self-end'>
+              <p className='flex items-center gap-3 text-sm text-foreground-secondary mb-3 justify-self-end'>
                 <Calendar size={20} strokeWidth={1.1} />
-                {dateStringFormatter(exp.date)}
+                {dateStringFormatter(inc.date)}
               </p>
               <span className='flex items-center gap-4 font-poppins'>
                 {(() => {
-                  const category = categories.find(c => c.type === exp.category)
+                  const category = categories.find(c => c.type === inc.type)
                   const Icon = category?.icon
                   return Icon ? (
                     <Icon
-                      className='text-destructive'
+                      className='text-success'
                       size={30}
                       strokeWidth={1.1}
                     />
                   ) : null
                 })()}
-                {categoryFormatter(exp.category)}
+                {incomeTypeFormatter(inc.type)}
               </span>
             </CardTitle>
             <Divider />
             <CardDescription className='text-balance'>
-              {exp.description}
+              {inc.description}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className='text-xl font-montserrat'>
-              {valueFormatter(exp.value)}
+              {valueFormatter(inc.value)}
             </p>
-            <p className='flex items-center gap-3 text-sm py-1'>
-              <BanknoteArrowDown strokeWidth={1.1} />
-              {paymentMethodFormatter(exp.method)}
-            </p>
-            <Badge variant='info' className='ml-auto'>
-              {exp.installments ?? 1}x
-            </Badge>
             <Button
-              onClick={() => openModal('PUT', exp)}
+              onClick={() => openModal('PUT', inc)}
               className='w-full mt-2 bg-foreground text-background hover:bg-foreground/80'
             >
               <RefreshCcw />
@@ -97,8 +95,8 @@ export default function CardsTransactions({
               variant='border'
               onClick={() =>
                 openDeleteModal({
-                  type: 'expense',
-                  data: exp
+                  type: 'income',
+                  data: inc
                 })
               }
               className='w-full mt-2 hover:border-destructive hover:bg-destructive/20'
@@ -110,9 +108,9 @@ export default function CardsTransactions({
         </Card>
       ))}
       <div className='flex items-center justify-evenly'>
-        <Link href={`${pathname}?page=${expenses.meta.page - 1}`}>
+        <Link href={`${pathname}?page=${incomes.meta.page - 1}`}>
           <Button
-            disabled={expenses.meta.page === 1}
+            disabled={incomes.meta.page === 1}
             variant='border'
             className='border-foreground'
           >
@@ -120,11 +118,11 @@ export default function CardsTransactions({
           </Button>
         </Link>
         <span>
-          {expenses.meta.page} de {expenses.meta.totalPages}
+          {incomes.meta.page} de {incomes.meta.totalPages}
         </span>
-        <Link href={`${pathname}?page=${expenses.meta.page + 1}`}>
+        <Link href={`${pathname}?page=${incomes.meta.page + 1}`}>
           <Button
-            disabled={expenses.meta.page === expenses.meta.totalPages}
+            disabled={incomes.meta.page === incomes.meta.totalPages}
             variant='border'
             className='border-foreground'
           >

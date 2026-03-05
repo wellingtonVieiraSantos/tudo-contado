@@ -26,7 +26,7 @@ export default function LastTransactions() {
   const { recentTransactions } = useGetLastTransactions()
 
   return (
-    <Card className='h-full p-2 col-span-3 xl:col-span-2'>
+    <Card className='h-full col-span-3 xl:col-span-2'>
       <CardHeader>
         <CardTitle>Movimentações Financeiras</CardTitle>
         <CardDescription>

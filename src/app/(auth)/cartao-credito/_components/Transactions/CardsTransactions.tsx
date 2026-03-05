@@ -21,15 +21,23 @@ export default function CardsTransactions() {
   return (
     <div className='flex flex-col gap-3 lg:hidden'>
       {lastCreditTransactions.map(cct => (
-        <Card className='bg-background rounded p-2' key={cct.id}>
+        <Card className='bg-background rounded' key={cct.id}>
           <CardHeader>
             <CardTitle>
+              <p className='flex items-center gap-3 text-sm mb-3 text-foreground-secondary justify-self-end'>
+                <Calendar size={20} strokeWidth={1.1} />
+                {dateStringFormatter(cct.date)}
+              </p>
               <span className='flex items-center gap-4 font-poppins'>
                 {(() => {
                   const category = categories.find(c => c.type === cct.category)
                   const Icon = category?.icon
                   return Icon ? (
-                    <Icon className='text-info' size={30} strokeWidth={1.1} />
+                    <Icon
+                      className='text-destructive'
+                      size={30}
+                      strokeWidth={1.1}
+                    />
                   ) : null
                 })()}
                 {categoryFormatter(cct.category)}
@@ -48,13 +56,9 @@ export default function CardsTransactions() {
               <CreditCard strokeWidth={1.1} />
               **** **** **** {cct.lastNumber}
             </p>
-            <div className='flex justify-between text-foreground-secondary text-sm'>
-              <p className='flex items-center gap-3 text-sm py-1'>
-                <Calendar size={20} strokeWidth={1.1} />
-                {dateStringFormatter(cct.date)}
-              </p>
-              <Badge variant='info'>{cct.installments}x</Badge>
-            </div>
+            <Badge variant='info' className='ml-auto'>
+              {cct.installments}x
+            </Badge>
           </CardContent>
         </Card>
       ))}

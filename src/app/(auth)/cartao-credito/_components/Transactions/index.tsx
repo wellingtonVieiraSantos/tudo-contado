@@ -15,7 +15,7 @@ export const Transactions = () => {
   const { creditCard } = useGetCreditCard()
 
   return (
-    <Card className='w-full p-2 xl:h-full'>
+    <Card className='w-full xl:h-full'>
       <CardHeader>
         <CardTitle>Transações no crédito</CardTitle>
         <CardDescription>
@@ -23,7 +23,7 @@ export const Transactions = () => {
         </CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent>
+      <CardContent className=' flex-1'>
         {!creditCard.meta.total_items && (
           <div className='w-full m-auto flex justify-center items-center xl:h-[200px]'>
             <p className='text-foreground-secondary text-center'>
