@@ -6,9 +6,9 @@ import { ResumeExpense } from './_components/ResumeExpense'
 import ResumeSkeleton from '@/components/skeletons/ResumeSkeleton'
 import FilterSkeleton from '@/components/skeletons/FilterSkeleton'
 import TableSkeleton from '@/components/skeletons/TableSkeleton'
-import { TableExpenses } from './_components/TableExpenses'
 import { ModalExpense } from './_components/ModalExpense'
 import Wrapper from '@/components/Wrapper'
+import { Transactions } from './_components/Transactions'
 
 export default function Expense() {
   return (
@@ -22,12 +22,8 @@ export default function Expense() {
       <Suspense fallback={<FilterSkeleton />}>
         <FilterExpenses />
       </Suspense>
-      <h2 className='pl-2'>Gastos</h2>
-      <p className='text-foreground-secondary text-sm -mt-2 pl-2 mb-2'>
-        Acompanhamento de gastos detalhadamente
-      </p>
       <Suspense fallback={<TableSkeleton />}>
-        <TableExpenses />
+        <Transactions />
       </Suspense>
       <ModalExpense />
     </Wrapper>
