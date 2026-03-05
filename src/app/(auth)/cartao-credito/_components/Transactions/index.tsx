@@ -31,7 +31,7 @@ export const Transactions = () => {
             </p>
           </div>
         )}
-        {creditCard.meta.total_items && (
+        {creditCard.meta.total_items > 0 && (
           <>
             <TableTransactions />
             <CardsTransactions />
