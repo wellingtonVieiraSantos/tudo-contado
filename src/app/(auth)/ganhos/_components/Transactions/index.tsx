@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import { BanknoteArrowUp } from 'lucide-react'
 import { ModalDelete } from '@/components/ModalDelete'
 import { useSearchParams } from 'next/navigation'
-import { useExpenseModalStore } from '@/store/modalPostPutStore'
+import { useIncomeModalStore } from '@/store/modalPostPutStore'
 import { useGetIncomes } from '../../_hooks/use-get-incomes'
 import { useDelIncome } from '../../_hooks/use-del-income'
 import { ListIncomeQuery } from '@/modules/incomes/incomes.types'
@@ -30,7 +30,7 @@ export const Transactions = () => {
   }
 
   const { incomes } = useGetIncomes(filters)
-  const { openModal } = useExpenseModalStore()
+  const { openModal } = useIncomeModalStore()
   const { handleDeleteIncome } = useDelIncome()
 
   return (
@@ -57,7 +57,7 @@ export const Transactions = () => {
                 Nenhuma receita ainda. Vamos registrar sua primeira entrada?
               </p>
               <Button
-                className='w-full max-w-lg'
+                className='w-full max-w-xl'
                 onClick={() => openModal('POST', null)}
               >
                 <BanknoteArrowUp />

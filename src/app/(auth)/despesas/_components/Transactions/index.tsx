@@ -61,7 +61,7 @@ export const Transactions = () => {
                 Nenhuma despesa registrada. Que tal adicionar a primeira?
               </p>
               <Button
-                className='w-full max-w-lg'
+                className='w-full max-w-xl'
                 onClick={() => openModal('POST', null)}
               >
                 <BanknoteArrowUp />
