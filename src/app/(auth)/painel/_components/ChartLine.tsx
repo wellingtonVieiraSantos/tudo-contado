@@ -39,7 +39,7 @@ export default function ChartLine() {
         <CardDescription>Dados dos ultimos 6 meses</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='h-full'>
+      <CardContent className='flex-1'>
         <LineChart
           className=''
           localeText={{

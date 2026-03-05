@@ -8,11 +8,8 @@ import {
 } from '@/components/ui/Card'
 import valueFormatter from '@/lib/valueFormatter'
 import { dateStringFormatter } from '@/lib/dateStringFormatter'
-import { categoryFormatter } from '@/lib/categoryFormatter'
 import { Divider } from '@/components/ui/Divider'
-import { Badge } from '@/components/ui/Badge'
 import {
-  BanknoteArrowDown,
   Calendar,
   ChevronLeft,
   ChevronRight,
@@ -20,13 +17,8 @@ import {
   Trash
 } from 'lucide-react'
 import { useModalDelStore } from '@/store/modalDelStore'
-import {
-  useExpenseModalStore,
-  useIncomeModalStore
-} from '@/store/modalPostPutStore'
-import { paymentMethodFormatter } from '@/lib/paymentMethodFormatter'
+import { useIncomeModalStore } from '@/store/modalPostPutStore'
 import { Button } from '@/components/ui/Button'
-import { ExpenseWithIdProps } from '@/modules/expenses/expenses.types'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { IncomeWithIdProps } from '@/modules/incomes/incomes.types'

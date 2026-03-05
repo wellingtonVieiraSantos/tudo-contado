@@ -55,14 +55,14 @@ export default function CreditCardDashboard() {
         <CardDescription>Acompanhamento das faturas</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='items-center justify-center overflow-y-auto'>
+      <CardContent className='items-center justify-center flex-1'>
         {!CC?.meta.total_items ? (
           <div className='flex flex-col gap-13 items-center text-center  pt-8'>
             <p className='text-foreground-secondary'>
-              Nenhum cartão de crédito cadastrado...
+              Nenhum cartão de crédito cadastrado ainda...
             </p>
-            <Link href='/cartao-credito'>
-              <Button type='button'>
+            <Link href='/cartao-credito' className='w-full'>
+              <Button type='button' className='w-full'>
                 <CreditCard />
                 Cadastrar novo cartão
               </Button>

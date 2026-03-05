@@ -34,7 +34,7 @@ export default function ChartPie() {
         <CardDescription>Principais categorias do mês</CardDescription>
         <Divider />
       </CardHeader>
-      <CardContent className='h-full'>
+      <CardContent className='flex-1'>
         <PieChart
           localeText={{
             loading: 'Carregando dados...',
