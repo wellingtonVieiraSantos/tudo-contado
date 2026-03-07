@@ -9,7 +9,7 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
     >
       <table
         data-slot='table'
-        className={twMerge('w-full caption-bottom', className)}
+        className={twMerge('w-full caption-bottom border', className)}
         {...props}
       />
     </div>
@@ -20,7 +20,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
     <thead
       data-slot='table-header'
       className={twMerge(
-        '[&_tr]:border-b font-montserrat text-base bg-card',
+        '[&_tr]:border-b font-montserrat text-base bg-hover',
         className
       )}
       {...props}

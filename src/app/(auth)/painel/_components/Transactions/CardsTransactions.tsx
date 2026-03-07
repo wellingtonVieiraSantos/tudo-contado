@@ -44,7 +44,7 @@ export default function CardsTransactions({
                       strokeWidth={1.1}
                       className='text-success'
                     />
-                    Entrada de capital
+                    Entrada
                   </span>
                 ) : (
                   <span className='flex items-center gap-3'>
@@ -53,7 +53,7 @@ export default function CardsTransactions({
                       strokeWidth={1.1}
                       className='text-destructive'
                     />
-                    Saída de capital
+                    Saída
                   </span>
                 )}
               </span>
@@ -64,7 +64,7 @@ export default function CardsTransactions({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className='text-xl font-montserrat'>
+            <p className='text-xl pl-2 font-montserrat'>
               {valueFormatter(transaction.value)}
             </p>
           </CardContent>

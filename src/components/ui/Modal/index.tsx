@@ -46,7 +46,7 @@ const ModalContent = forwardRef<
       >
         {children}
         <ModalClose
-          className='text-foreground-secondary hover:text-foreground absolute top-2 right-2 cursor-pointer
+          className='text-foreground-secondary hover:text-foreground absolute top-2 right-3 cursor-pointer
         transition duration-300'
         >
           <X className='size-5' />
@@ -65,7 +65,10 @@ const ModalHeader = ({
   return (
     <div
       {...props}
-      className={twMerge(`grid text-center space-y-2 sm:text-left`, className)}
+      className={twMerge(
+        `grid text-center space-y-2 sm:text-left pt-4`,
+        className
+      )}
     />
   )
 }

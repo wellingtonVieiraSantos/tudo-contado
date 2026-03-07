@@ -76,10 +76,10 @@ export default function CardsTransactions({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className='text-xl font-montserrat'>
+            <p className='text-xl pl-2 font-montserrat'>
               {valueFormatter(exp.value)}
             </p>
-            <p className='flex items-center gap-3 text-sm py-1'>
+            <p className='flex pl-2 items-center gap-3 text-sm py-1'>
               <BanknoteArrowDown strokeWidth={1.1} />
               {paymentMethodFormatter(exp.method)}
             </p>
