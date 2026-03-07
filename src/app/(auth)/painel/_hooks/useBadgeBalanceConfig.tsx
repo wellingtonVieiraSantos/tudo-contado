@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { ChevronDown, ChevronUp, Equal, Search } from 'lucide-react'
 
 export const useBadgeBalanceConfig = (percentage: number | null) => {
   return useMemo(() => {
@@ -6,14 +7,15 @@ export const useBadgeBalanceConfig = (percentage: number | null) => {
       return {
         variant: 'outline' as const,
         className: 'text-foreground-secondary text-center text-sm',
-        message: 'Mês anterior sem dados'
+        message: 'Sem dados'
       }
     }
     if (percentage > 0) {
       return {
         variant: 'success' as const,
         className: '',
-        message: `${percentage}% à mais que mês anterior`
+        message: `${percentage}%`,
+        icon: <ChevronUp size={20} />
       }
     }
 
@@ -21,14 +23,16 @@ export const useBadgeBalanceConfig = (percentage: number | null) => {
       return {
         variant: 'error' as const,
         className: '',
-        message: `${Math.abs(percentage)}% à menos que mês anterior`
+        message: ` ${Math.abs(percentage)}%`,
+        icon: <ChevronDown size={20} />
       }
     }
 
     return {
       variant: 'warning' as const,
       className: '',
-      message: 'Rendimento igual ao mês anterior'
+      message: `${percentage}%`,
+      icon: <Equal size={20} />
     }
   }, [percentage])
 }

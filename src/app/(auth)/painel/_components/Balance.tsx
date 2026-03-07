@@ -46,10 +46,10 @@ export default function Balance() {
         <CardHeader>
           <CardTitle className='flex gap-3 items-center tracking-wide'>
             <Sigma size={26} strokeWidth={1.3} className='text-warning' />
-            Balança Financeira
+            Balança
           </CardTitle>
         </CardHeader>
-        <CardContent className='xl:items-start pl-5 pb-3'>
+        <CardContent className='flex-row justify-evenly items-center pl-5 pb-3 gap-3'>
           <h2
             className={`text-2xl tracking-wide text-center ${
               sumIncomeActualMonth - sumExpenseActualMonth < 0
@@ -63,6 +63,7 @@ export default function Balance() {
             variant={balanceConfig.variant}
             className={balanceConfig.className}
           >
+            {balanceConfig.icon}
             {balanceConfig.message}
           </Badge>
         </CardContent>
@@ -75,7 +76,7 @@ export default function Balance() {
             Rendimentos
           </CardTitle>
         </CardHeader>
-        <CardContent className='xl:items-start pl-5 pb-3'>
+        <CardContent className='flex-row justify-evenly items-center pl-5 pb-3'>
           <h2 className={`text-2xl text-center font-poppins tracking-wide`}>
             {valueFormatter(sumIncomeActualMonth)}
           </h2>
@@ -83,6 +84,7 @@ export default function Balance() {
             variant={incomeConfig.variant}
             className={incomeConfig.className}
           >
+            {incomeConfig.icon}
             {incomeConfig.message}
           </Badge>
         </CardContent>
@@ -98,7 +100,7 @@ export default function Balance() {
             Despesas
           </CardTitle>
         </CardHeader>
-        <CardContent className='xl:items-start pl-5 pb-3'>
+        <CardContent className='flex-row justify-evenly items-center pl-5 pb-3 gap-3'>
           <h2 className={`text-2xl text-center font-poppins tracking-wide`}>
             {valueFormatter(sumExpenseActualMonth)}
           </h2>
@@ -106,6 +108,7 @@ export default function Balance() {
             variant={expenseConfig.variant}
             className={expenseConfig.className}
           >
+            {expenseConfig.icon}
             {expenseConfig.message}
           </Badge>
         </CardContent>

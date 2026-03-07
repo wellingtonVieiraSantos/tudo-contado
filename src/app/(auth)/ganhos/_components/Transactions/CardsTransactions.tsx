@@ -73,7 +73,7 @@ export default function CardsTransactions({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className='text-xl font-montserrat'>
+            <p className='text-xl pl-2 font-montserrat'>
               {valueFormatter(inc.value)}
             </p>
             <Button

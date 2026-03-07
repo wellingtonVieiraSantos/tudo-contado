@@ -49,10 +49,10 @@ export default function CardsTransactions() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className='text-xl font-montserrat'>
+            <p className='text-xl pl-2 font-montserrat'>
               {valueFormatter(cct.value)}
             </p>
-            <p className='flex items-center gap-3 text-sm py-1 font-mono'>
+            <p className='flex pl-2 items-center gap-3 text-sm py-1 font-mono'>
               <CreditCard strokeWidth={1.1} />
               **** **** **** {cct.lastNumber}
             </p>
